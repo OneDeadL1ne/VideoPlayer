@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 
-import { api, apiYandex } from './api'
+import { api, } from './api'
 import authReducer from './reducers/authSlice'
 import homeReducer from './reducers/homeSlice'
 
@@ -9,10 +9,10 @@ export const store = configureStore({
         auth: authReducer,
         home: homeReducer,
         [api.reducerPath]: api.reducer,
-        [apiYandex.reducerPath]: apiYandex.reducer,
+        
     },
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(api.middleware).concat(apiYandex.middleware),
+        getDefaultMiddleware().concat(api.middleware)
         
 })
 

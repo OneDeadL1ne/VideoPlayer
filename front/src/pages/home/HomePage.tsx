@@ -1,26 +1,79 @@
 import { SelectDemo } from "@/components/Select";
-import { useEffect, useReducer, useState } from "react";
+import { Button } from "@/components/ui/button";
+import useEscape from "@/hooks/use-escape";
+import { useEffect, useRef, useState } from "react";
+import ReactPlayer from "react-player";
+import BaseReactPlayer from "react-player/base";
+import screenfull from "screenfull";
+import { TVPlayer, TVPlayerButtonProps, TVPlayerUI } from "react-tv-player";
+import { VideoPlayer } from "@/components/Video";
+
+import ReactHlsPlayer from "react-hls-player";
+
+//import VideoPlayer from "@/components/Video";
 
 export default function HomePage() {
 	document.title = "Видео плеер";
-	const [settings, setSettings] = useState("3");
 
-	const [_, forceUpdate] = useReducer(
-		(x) => `http://localhost:3002/trailer/stream/${settings}`,
-		`http://localhost:3002/trailer/stream/${settings}`
-	);
-	useEffect(() => {
-		forceUpdate();
-	}, [settings]);
+	//const player = useRef<BaseReactPlayer<ReactPlayer>>(null);
+
+	const [video, setVideo] = useState("http://localhost:3002/trailer/stream/3.m3u8");
+	const full = () => {};
+	const [open, setOpen] = useState(true);
+	useEscape(() => {
+		if (screenfull.isFullscreen) {
+			setOpen(!open);
+		}
+	});
+
+	const customButtons: TVPlayerButtonProps[] = [
+		{ action: "like", align: "left" },
+		{ action: "mute", align: "left" },
+		{ action: "playpause", align: "center" },
+
+		{ action: "fullscreen", align: "right", onRelease: full },
+	];
+
+	useEffect(() => {}, []);
 	return (
-		<div className="h-screen flex justify-center items-center ">
-			<div className="relative">
-				<video className="h-[700px]" controls muted autoPlay>
-					<source src={_} />
-				</video>
+		<div className="h-screen flex justify-center items-center  ">
+			<div className={"bg-black h-[200px] w-[200px	]"}>
+				{/* <TVPlayer
+					url={video}
+					className=""
+					muted
+					hideControlsOnArrowUp
+					title="ТЕST"
+					subTitle="Test"
+					customButtons={customButtons}
+				/> */}
+
+				<VideoPlayer />
+
+				{/* <ReactPlayer
+					url={video}
+					className=""
+					muted
+					controls
+					config={{
+						file: {
+							attributes: {
+								controlsList: "nodownload",
+							},
+						},
+					}}
+				/> */}
+
+				{/* <ReactHlsPlayer
+					playerRef={player}
+					src={video}
+					muted
+					autoPlay={false}
+					controls={true}
+					width="100%"
+					height="auto"
+				/> */}
 			</div>
-			<div className="w-full  top-5 flex items-center justify-center"></div>
-			<SelectDemo value={settings} setValue={setSettings} />
 		</div>
 	);
 }
