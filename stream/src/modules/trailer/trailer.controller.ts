@@ -1,11 +1,11 @@
 import { Controller, Get, Header, HttpStatus,Headers, Param, Res } from '@nestjs/common';
 import { TrailerService } from './trailer.service';
 import { ApiTags } from '@nestjs/swagger';
-import { createReadStream, createWriteStream} from 'fs';
+import * as fs from 'fs';
 import { Response } from 'express';
 import {exec} from 'child_process';
 
-import m3u8stream from 'm3u8stream';
+
 
 
 
@@ -112,7 +112,7 @@ export class TrailerController {
 			
 			
 			
-			const readStreamfile = createReadStream(videoPath);
+			const readStreamfile = fs.createReadStream(videoPath);
 				
 			res.writeHead(HttpStatus.PARTIAL_CONTENT); //206
 				
@@ -141,8 +141,14 @@ export class TrailerController {
 			
 		];
 		const videoPath = `assets/3.mp4`;
-		const outputDirectory = 'assets/output';
+		const videoName = "Film"
 
+		const outputDirectory = `assets/${videoName}`;
+		fs.mkdir(`${outputDirectory}`,err => {
+			if(err) throw err; // не удалось создать папки
+			
+		 })
+		 
 		resolutions.map(({ resolution, name, file }) => {
 			const outputHLS = `${outputDirectory}/${file}_${name}.m3u8`;
 			const ffmpegCommand = `ffmpeg -i ${videoPath} -c:v libx264 -c:a aac -vf scale=${resolution} -hls_time 10 -hls_list_size 0 -hls_segment_filename ${outputDirectory}/${file}_${name}_%03d.ts ${outputHLS}`;
