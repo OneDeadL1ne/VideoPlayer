@@ -1,0 +1,15 @@
+export const AppError = {
+  WRONG_CREDENTIALS: 'Данные не совпадают!',
+  INVALID_JWT: 'Неправильный токен!',
+  FILE_TYPE_NOT_FOUND: 'Тип файла не найден!',
+  FILE_NOT_FOUND: 'Файл не найден!',
+  PERSON_NOT_FOUND: 'Данные пользователя не найдены!',
+  ROLE_NOT_FOUND: 'Роль не найдена!',
+  USER_NOT_FOUND: 'Пользователь не найден!',
+  USER_DEACTIVATED: 'Пользователь деактивирован!',
+  USER_SELF_DEACTIVATE: 'Вы не можете изменить статус своего пользователя!',
+  USER_EMAIL_EXISTS: 'Пользователь с таким email уже существует!',
+  PERSON_STATUS_NOT_FOUND: 'Статус пользователя не найден!',
+  GENDER_NOT_FOUND: 'Пол не найден!',
+  WRONG_DATE_FORMAT: 'Неверный формат даты!',
+}
