@@ -34,14 +34,14 @@ export class UserService {
       user.email = email
       user.password = await bcrypt.hash(user.password, 10)
 
-      if (user.last_name && user.first_name && user.phone) {
+      if (user.last_name && user.first_name && user.phone && user.id_gender) {
         const createPersonDto = new CreatePersonDto()
         createPersonDto.last_name = user.last_name
         createPersonDto.first_name = user.first_name
         createPersonDto.patronymic = user.patronymic
         createPersonDto.phone = user.phone
-
-        const newPerson = await this.personRepository.create({ ...createPersonDto }, { transaction: transaction })
+        createPersonDto.id_gender = user.id_gender
+        const newPerson = await this.personRepository.create({ ...createPersonDto}, { transaction: transaction })
 
         user.id_person = newPerson.id_person
       }
@@ -251,10 +251,6 @@ export class UserService {
     
     try {
       await this.userRepository.update({ is_deleted: updateUserStatusDto.is_deleted }, { where: { id_user: updateUserStatusDto.id_user } })
-
-     
-
-      
       return { status: true }
     } catch (error) {
       

@@ -14,9 +14,10 @@ export class CreatePersonDto {
 
   @ApiProperty()
   phone: string
-
+  
   @ApiProperty({ required: false })
-  property_values?: number[]
+  id_gender?: number
+  
 }
 
 export class UpdatePersonDto {
@@ -36,7 +37,7 @@ export class UpdatePersonDto {
   phone?: string
 
   @ApiProperty({ required: false })
-  property_values?: number[]
+  id_gender?: number
 }
 
 

@@ -15,7 +15,7 @@ import { AllExceptionsFilter } from "src/common/exception.filter"
 
 
 @ApiBearerAuth()
-@ApiTags('user')
+@ApiTags('User')
 @Controller('user')
 @UseFilters(AllExceptionsFilter)
 export class UserController {
@@ -32,6 +32,7 @@ export class UserController {
   @Post()
   async create(@Body() user: CreateUserDto) {
     const foundUser = await this.usersService.findByEmail(user.email)
+    
     if (foundUser) {
       throw new HttpException(AppError.USER_EMAIL_EXISTS, HttpStatus.CONFLICT)
     }

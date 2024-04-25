@@ -2,11 +2,11 @@ import { format } from 'date-fns'
 
 export const getJWTtokens = () => {
     const accessToken = getCookieValue('accessToken')
-    //const refreshToken = getCookieValue('refreshToken')
+    const refreshToken = getCookieValue('refreshToken')
 
     return {
         accessToken,
-        //refreshToken,
+        refreshToken,
     }
 }
 

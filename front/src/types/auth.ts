@@ -3,24 +3,24 @@ import { UserInterface } from './user'
 
 export interface AuthInterface {
     isLogin: boolean
-    user: number | null
+    user: UserInterface | null
 }
 
 export interface TokenInterface {
-    token: string | null
-    user:UserInterface
-    
+    refreshToken: string | null
+    accessToken: string | null
 }
 
 export interface AuthPayloadInterface {
-    username: string
+    email: string
     password: string
 }
 
 export interface RefreshPayloadInterface {
-    token: string
+    refresh_token: string
 }
 
 export interface JWT extends JwtPayload {
-    id: number
+    user_id: number
+    email: string
 }

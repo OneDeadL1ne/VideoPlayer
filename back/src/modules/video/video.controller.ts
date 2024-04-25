@@ -8,7 +8,7 @@ import * as fs from "node:fs"
 import { Response } from 'express';
 
 
-@ApiTags("video")
+@ApiTags("Video")
 @Controller('video')
 export class VideoController {
   constructor(private readonly videoService: VideoService) {}

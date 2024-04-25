@@ -1,44 +1,24 @@
-import { createSlice } from '@reduxjs/toolkit'
 import { AuthInterface } from '@/types/auth'
-import { jwtDecode } from 'jwt-decode'
-import { removeCookie, removeCookieValue } from '@/utils/helpers'
+import { createSlice } from '@reduxjs/toolkit'
+
 
 const initialState: AuthInterface = {
     isLogin: false,
     user: null,
 }
 
-
-
 export const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
         setAccessToken: (_, action) => {
-            
-            removeCookieValue("accessToken")
-            document.cookie = `accessToken=${action.payload}; Max-Age=43200`
+            document.cookie = `accessToken=${action.payload}; Max-Age=43200; Path=/`
         },
         setRefreshToken: (_, action) => {
-            document.cookie = `refreshToken=${action.payload}`
+            document.cookie = `refreshToken=${action.payload}; Path=/`
         },
-        setUser:(_,action)=>{
-            
-            _.isLogin=true
-            const user:{id:number} = jwtDecode(action.payload)
-            
-            _.user=user.id
-            
-        },
-        setLogout:(_)=>{
-            _.isLogin=false
-            removeCookie()
-            
-            _.user=null
-        }
-        
     },
 })
 
-export const { setAccessToken, setRefreshToken,setUser,setLogout } = authSlice.actions
+export const { setAccessToken, setRefreshToken } = authSlice.actions
 export default authSlice.reducer

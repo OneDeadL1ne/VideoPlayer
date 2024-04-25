@@ -23,6 +23,11 @@ export class CreateUserDto {
   
     @ApiProperty()
     password: string
+
+    @ApiProperty({ default: '1' })
+    id_gender: number
+
+
   
   }
   
