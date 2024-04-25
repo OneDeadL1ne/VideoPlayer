@@ -1,34 +1,145 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { Controller, UseFilters, Post, Body, HttpException, HttpStatus, UseGuards, Get, Param, Patch, Req, Delete } from "@nestjs/common"
+import { ApiBearerAuth, ApiTags, ApiOperation, ApiCreatedResponse, ApiResponse, ApiOkResponse } from "@nestjs/swagger"
+import { AppError } from "src/constants/error"
+import { AppStrings } from "src/constants/strings"
+import { ActiveGuard } from "../auth/guards/active.guard"
+import { JwtAuthGuard } from "../auth/guards/auth.guard"
+import { CreateUserDto } from "./dto/create-user.dto"
+import { UpdateUserDto, UpdateUserStatusDto, UpdateUserSubscritionDto } from "./dto/update-user.dto"
+import { User } from "./entities/user.entity"
+import { StatusUserResponse } from "./response"
+import { UserService } from "./user.service"
+import { RoleService } from "../role/role.service"
+import { AllExceptionsFilter } from "src/common/exception.filter"
 
+
+
+@ApiBearerAuth()
+@ApiTags('user')
 @Controller('user')
+@UseFilters(AllExceptionsFilter)
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly usersService: UserService,
+    private readonly roleService: RoleService,
+  ) {}
 
+  @ApiOperation({ summary: AppStrings.USER_CREATE_OPERATION })
+  @ApiCreatedResponse({
+    description: AppStrings.USER_CREATED_RESPONSE,
+    type: StatusUserResponse,
+  })
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  async create(@Body() user: CreateUserDto) {
+    const foundUser = await this.usersService.findByEmail(user.email)
+    if (foundUser) {
+      throw new HttpException(AppError.USER_EMAIL_EXISTS, HttpStatus.CONFLICT)
+    }
+
+    const foundRole = await this.roleService.findOne(user.id_role)
+    if (!foundRole) {
+      throw new HttpException(AppError.ROLE_NOT_FOUND, HttpStatus.NOT_FOUND)
+    }
+
+    
+
+    return this.usersService.create(user).catch((error) => {
+      const errorMessage = error.message
+
+      throw new HttpException(errorMessage, HttpStatus.BAD_REQUEST)
+    })
   }
 
-  @Get()
-  findAll() {
-    return this.userService.findAll();
-  }
+ 
 
+  
+
+  @UseGuards(JwtAuthGuard, ActiveGuard)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  @ApiOperation({ summary: AppStrings.USER_GET_OPERATION })
+  @ApiResponse({
+    status: 200,
+    description: AppStrings.USER_GET_RESPONSE,
+    type: User,
+  })
+  findById(@Param('id') id: number) {
+    
+    return this.usersService.findById(+id)
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  @ApiOperation({ summary: AppStrings.USER_UPDATE_OPERATION })
+  @ApiResponse({ status: 200, description: AppStrings.USER_UPDATE_RESPONSE })
+  @UseGuards(JwtAuthGuard, ActiveGuard)
+  @Patch()
+  async update(@Body() user: UpdateUserDto) {
+    const foundUser = await this.usersService.findByEmail(user.email)
+    if (!foundUser) {
+      throw new HttpException(AppError.USER_NOT_FOUND, HttpStatus.NOT_FOUND)
+    }
+
+    if (user.id_role) {
+      const foundRole = await this.roleService.findOne(user.id_role)
+      if (!foundRole) {
+        throw new HttpException(AppError.ROLE_NOT_FOUND, HttpStatus.NOT_FOUND)
+      }
+    }
+
+   
+
+    return this.usersService.update(user)
   }
 
+  
+
+  @UseGuards(JwtAuthGuard, ActiveGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  @ApiOperation({ summary: AppStrings.USER_DELETE_OPERATION })
+  @ApiResponse({
+    status: 200,
+    description: AppStrings.USER_DELETE_RESPONSE,
+    type: User,
+  })
+  async remove(@Param('id') id: number) {
+    const foundUser = await this.usersService.findOne(id)
+    if (foundUser == null) {
+      throw new HttpException(AppError.USER_NOT_FOUND, HttpStatus.NOT_FOUND)
+    }
+
+    return this.usersService.remove(+id)
+  }
+
+  @UseGuards(JwtAuthGuard, ActiveGuard)
+  @Patch('change_status')
+  @ApiOperation({ summary: AppStrings.USER_DELETE_OPERATION })
+  @ApiOkResponse({ type: StatusUserResponse, description: AppStrings.USER_DELETE_RESPONSE })
+  async changeStatus(@Body() updateUserStatusDto: UpdateUserStatusDto, @Req() request) {
+    if (updateUserStatusDto.id_user == request.user.id_user) {
+      throw new HttpException(AppError.USER_SELF_DEACTIVATE, HttpStatus.FORBIDDEN)
+    } else {
+      const foundUser = await this.usersService.findOne(updateUserStatusDto.id_user)
+      if (!foundUser) {
+        throw new HttpException(AppError.USER_NOT_FOUND, HttpStatus.NOT_FOUND)
+      }
+    }
+    
+    return this.usersService.changeStatus(updateUserStatusDto)
+  }
+
+  @UseGuards(JwtAuthGuard, ActiveGuard)
+  @Patch('change_subscrition')
+  @ApiOkResponse({ type: StatusUserResponse, description: AppStrings.USER_DELETE_RESPONSE })
+  async changeSubscrition(@Body() updateUserSubscritionDto: UpdateUserSubscritionDto, @Req() request) {
+    console.log(updateUserSubscritionDto.id_user == request.user.id_user)
+    if (updateUserSubscritionDto.id_user == request.user.id_user) {
+      throw new HttpException(AppError.USER_SELF_DEACTIVATE, HttpStatus.FORBIDDEN)
+    } else {
+      const foundUser = await this.usersService.findOne(updateUserSubscritionDto.id_user)
+
+      if (!foundUser) {
+        throw new HttpException(AppError.USER_NOT_FOUND, HttpStatus.NOT_FOUND)
+      }
+    }
+
+    return this.usersService.changeSubscrition(updateUserSubscritionDto)
   }
 }

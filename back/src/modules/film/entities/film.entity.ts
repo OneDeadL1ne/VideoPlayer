@@ -23,10 +23,10 @@ export class Film extends Model {
 
     @ApiProperty()
     @Column({type: DataType.INTEGER, allowNull: false})
-    film_lenght_seconds:number
+    film_length_seconds:number
 
     @ApiProperty()
-    @Column({type:DataType.STRING(500), allowNull:false})
+    @Column({type:DataType.STRING(2000), allowNull:false})
     description:string
 
     @ApiProperty()
@@ -89,15 +89,15 @@ export class Film extends Model {
 
     
     @ApiProperty()
-    @Column({type:DataType.STRING(250), allowNull:false})
+    @Column({type:DataType.STRING(250), allowNull:true})
     trailer_path:string
 
     @ApiProperty()
-    @Column({type:DataType.STRING(250), allowNull:false})
+    @Column({type:DataType.STRING(250), allowNull:true})
     film_path:string
 
     @ApiProperty()
-    @Column({type:DataType.STRING(250), allowNull:false})
+    @Column({type:DataType.STRING(250), allowNull:true})
     preview_path:string
     
 }
