@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { CreateGenderDto } from './dto/create-gender.dto';
 import { UpdateGenderDto } from './dto/update-gender.dto';
 import { Gender } from './entities/gender.entity';
@@ -16,7 +16,13 @@ export class GenderService {
   }
 
   async findAll() {
-    return await this.genderModel.findAll({include:[Person]});
+    try {
+
+
+      return ""
+    } catch (error) {
+      throw new HttpException(error, 500)   
+    }
   }
 
   findOne(id: number) {

@@ -16,8 +16,9 @@ export default function HomePage() {
 	document.title = "Видео плеер";
 
 	//const player = useRef<BaseReactPlayer<ReactPlayer>>(null);
+	const player = useRef<HTMLVideoElement>(null);
 
-	const [video, setVideo] = useState("http://localhost:3002/trailer/stream/3.m3u8");
+	const [video, setVideo] = useState("http://localhost:3001/video/stream/film/1/1.m3u8");
 	const full = () => {};
 	const [open, setOpen] = useState(true);
 	useEscape(() => {
@@ -57,6 +58,8 @@ export default function HomePage() {
 					controls
 					config={{
 						file: {
+							forceHLS: true,
+							forceDisableHls: false,
 							attributes: {
 								controlsList: "nodownload",
 							},
@@ -68,7 +71,7 @@ export default function HomePage() {
 					playerRef={player}
 					src={video}
 					muted
-					autoPlay={false}
+					autoPlay={true}
 					controls={true}
 					width="100%"
 					height="auto"

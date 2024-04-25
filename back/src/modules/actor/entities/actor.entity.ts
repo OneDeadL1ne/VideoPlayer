@@ -1,11 +1,14 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Column, DataType, ForeignKey, Model, Table } from "sequelize-typescript";
+import { Column, DataType, ForeignKey, Model, PrimaryKey, Table } from "sequelize-typescript";
 import { AppStrings } from "src/constants/strings";
 import { Film } from "src/modules/film/entities/film.entity";
 
 @Table({tableName:"Actor", timestamps:false})
 export class Actor extends Model{
 
+    @PrimaryKey
+    @ApiProperty()
+    @Column({type: DataType.INTEGER, allowNull: false, autoIncrement: true })
     id_actor:number
 
     @ApiProperty({ example: AppStrings.PERSON_LAST_NAME_EXAMPLE, description: AppStrings.PERSON_LAST_NAME_DESCRIPTION })

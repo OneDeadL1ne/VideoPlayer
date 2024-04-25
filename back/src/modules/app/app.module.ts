@@ -29,6 +29,7 @@ import { Post } from '../post/entities/post.entity';
 import { PostModule } from '../post/post.module';
 
 import { ResourceModule } from '../resource/resource.module';
+import { VideoModule } from '../video/video.module';
 
 
 @Module({
@@ -69,7 +70,6 @@ import { ResourceModule } from '../resource/resource.module';
     }),
     inject:[ConfigService]
   }),
-  
   GenderModule,
   PersonModule,
   RoleModule,
@@ -82,7 +82,8 @@ import { ResourceModule } from '../resource/resource.module';
   DirectorModule,
   FilmModule, 
   PostModule,
-  ResourceModule
+  ResourceModule,
+  VideoModule
   ], 
   
 })

@@ -80,7 +80,7 @@ export class Reaction extends Model {
 
     @ApiProperty()
     @Column({type:DataType.STRING(50), allowNull:false})
-    reaction_name:string
+    reaction_name: "Like" | "Dislike"
 
     @ApiProperty()
     @Column({type: DataType.INTEGER, allowNull: false })

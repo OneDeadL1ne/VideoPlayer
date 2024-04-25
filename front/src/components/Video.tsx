@@ -3,7 +3,7 @@ import "lion-player/dist/lion-skin.min.css";
 
 const SOURCES = [
 	{
-		src: "http://localhost:3002/trailer/stream/3.m3u8",
+		src: "http://localhost:3001/video/stream/film/1/1.m3u8",
 		type: "application/x-mpegURL",
 	},
 	// {
@@ -15,14 +15,7 @@ const SOURCES = [
 export const VideoPlayer = () => {
 	return (
 		<div className="relative h-[200px] w-[400px]">
-			<LionPlayer
-				tracks={[{}]}
-				disablePictureInPicture
-				sources={SOURCES}
-				autoplay
-				muted
-				bigPlayButton
-			/>
+			<LionPlayer disablePictureInPicture sources={SOURCES} autoplay muted bigPlayButton />
 		</div>
 	);
 };

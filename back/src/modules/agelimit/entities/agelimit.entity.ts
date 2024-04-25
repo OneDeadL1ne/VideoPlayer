@@ -11,8 +11,8 @@ export class Agelimit extends Model {
     id_age_limit:number
 
     @ApiProperty()
-    @Column({type:DataType.STRING(50), allowNull:false})
-    age_limit_name:string
+    @Column({type:DataType.INTEGER, allowNull:false})
+    age_limit_name:number
 
     @HasMany(()=>Film)
     films:Film[]
