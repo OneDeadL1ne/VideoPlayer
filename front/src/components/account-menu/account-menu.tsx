@@ -1,23 +1,23 @@
-import { useMemo } from "react";
-import { User } from "lucide-react";
+import { useMemo } from 'react';
+import { User } from 'lucide-react';
 
-import { useNavigate } from "react-router-dom";
-import { Button } from "../ui/button";
+import { useNavigate } from 'react-router-dom';
+import { Button } from '../ui/button';
 
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
 	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Skeleton } from "@/components/ui/skeleton.tsx";
+} from '@/components/ui/dropdown-menu';
+import { Skeleton } from '@/components/ui/skeleton.tsx';
 
-import { useAppDispatch } from "@/hooks/reduxHooks";
-import { useErrorToast } from "@/hooks/use-error-toast";
-import { api } from "@/redux/api";
-import { useLogoutMutation } from "@/redux/api/auth";
+import { useAppDispatch } from '@/hooks/reduxHooks';
+import { useErrorToast } from '@/hooks/use-error-toast';
+import { api } from '@/redux/api';
+import { useLogoutMutation } from '@/redux/api/auth';
 
-import { getJWTtokens, removeCookieValue } from "@/utils/helpers";
+import { getJWTtokens, removeCookieValue } from '@/utils/helpers';
 
 export default function AccountMenu() {
 	const navigate = useNavigate();
@@ -38,10 +38,10 @@ export default function AccountMenu() {
 
 		if (refreshToken) {
 			logout({ refresh_token: refreshToken! });
-			removeCookieValue("refreshToken");
+			removeCookieValue('refreshToken');
 		}
 
-		removeCookieValue("accessToken");
+		removeCookieValue('accessToken');
 
 		dispatch(api.util.resetApiState());
 	};
@@ -69,7 +69,7 @@ export default function AccountMenu() {
 				>
 					<DropdownMenuItem asChild>
 						<Button
-							onClick={() => navigate("/profile")}
+							onClick={() => navigate('/profile')}
 							variant="ghost"
 							className="w-full h-5 justify-start p-3 hover:cursor-pointer"
 							size="sm"

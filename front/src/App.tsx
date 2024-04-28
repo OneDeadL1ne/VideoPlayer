@@ -1,8 +1,9 @@
-import { Routes, Route } from "react-router-dom";
-import Layout from "./components/Layout";
-import HomePage from "./pages/home/HomePage";
-import NotFoundPage from "./pages/NotFound";
-import { AdminLayout } from "./components/admin/AdminLayout";
+import { Routes, Route } from 'react-router-dom';
+import Layout from './components/layout/Layout';
+import HomePage from './pages/home/HomePage';
+import NotFoundPage from './pages/NotFound';
+import { AdminLayout } from './components/admin/AdminLayout';
+import TestPage from './pages/home/TestPage.1';
 
 function App() {
 	// const dispatch = useAppDispatch();

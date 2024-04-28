@@ -1,11 +1,7 @@
-import { SelectDemo } from '@/components/Select';
-import { Button } from '@/components/ui/button';
 import useEscape from '@/hooks/use-escape';
 import { useEffect, useRef, useState } from 'react';
-import ReactPlayer from 'react-player';
-import BaseReactPlayer from 'react-player/base';
 import screenfull from 'screenfull';
-import { TVPlayer, TVPlayerButtonProps, TVPlayerUI } from 'react-tv-player';
+import { TVPlayerButtonProps } from 'react-tv-player';
 import { VideoPlayer } from '@/components/Video';
 
 //import VideoPlayer from "@/components/Video";
@@ -42,20 +38,20 @@ export default function TestPage() {
 				<VideoPlayer />
 
 				{/* <ReactPlayer
-					url={video}
-					className=""
-					muted
-					controls
-					config={{
-						file: {
-							forceHLS: true,
-							forceDisableHls: false,
-							attributes: {
-								controlsList: "nodownload",
-							},
-						},
-					}}
-				/> */}
+                url={video}
+                className=""
+                muted
+                controls
+                config={{
+                    file: {
+                        forceHLS: true,
+                        forceDisableHls: false,
+                        attributes: {
+                            controlsList: "nodownload",
+                        },
+                    },
+                }}
+            /> */}
 			</div>
 		</div>
 	);
