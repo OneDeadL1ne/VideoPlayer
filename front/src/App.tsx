@@ -3,7 +3,7 @@ import Layout from './components/layout/Layout';
 import HomePage from './pages/home/HomePage';
 import NotFoundPage from './pages/NotFound';
 import { AdminLayout } from './components/admin/AdminLayout';
-import TestPage from './pages/home/TestPage.1';
+import TestPage from './pages/home/TestPage';
 
 function App() {
 	// const dispatch = useAppDispatch();
@@ -15,8 +15,8 @@ function App() {
 
 	return (
 		<Routes>
-			<Route path="/" element={<Layout />}>
-				<Route index element={<HomePage />} />
+			<Route path="/">
+				<Route index element={<TestPage />} />
 			</Route>
 
 			<Route path="/admin" element={<AdminLayout />}>

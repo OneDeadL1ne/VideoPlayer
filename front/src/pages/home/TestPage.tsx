@@ -16,7 +16,9 @@ export default function TestPage() {
 	//const player = useRef<BaseReactPlayer<ReactPlayer>>(null);
 	const player = useRef<HTMLVideoElement>(null);
 
-	const [video, setVideo] = useState('http://localhost:3002/trailer/stream/1');
+	const [video, setVideo] = useState(
+		'https://766qc35g-3001.euw.devtunnels.ms/video/stream/film/1/1_480p.m3u8'
+	);
 	const full = () => {};
 	const [open, setOpen] = useState(true);
 	useEscape(() => {
@@ -26,20 +28,26 @@ export default function TestPage() {
 	});
 
 	const customButtons: TVPlayerButtonProps[] = [
-		{ action: 'like', align: 'left' },
+		{ action: 'like', align: 'right' },
 		{ action: 'mute', align: 'left' },
 		{ action: 'playpause', align: 'center' },
 
-		{ action: 'fullscreen', align: 'right', onRelease: full },
+		{ action: 'fullscreen', align: 'left', onRelease: full },
 	];
 
 	useEffect(() => {}, []);
 	return (
 		<div className="h-screen flex justify-center items-center  ">
-			<div className={'bg-black h-[200px] w-[200px	]'}>
-				{/* <TVPlayer url={video} className="" muted customButtons={customButtons} /> */}
+			<div className={'bg-black h-screen w-screen'}>
+				<TVPlayer
+					url={video}
+					className=""
+					title="Джинтельмены"
+					subTitle="Дарина снимала этот фильм <3"
+					customButtons={customButtons}
+				/>
 
-				<VideoPlayer />
+				{/* <VideoPlayer /> */}
 
 				{/* <ReactPlayer
 					url={video}
