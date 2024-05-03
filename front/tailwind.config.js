@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable no-undef */
 /** @type {import('tailwindcss').Config} */
+
 module.exports = {
 	darkMode: ['class'],
 	content: [
@@ -17,16 +20,37 @@ module.exports = {
 			},
 		},
 		extend: {
+			backgroundColor: {
+				secondary: 'var(--color-bg-secondary)',
+				accent: 'var(--color-bg-accent)',
+			},
+			textColor: {
+				primary: 'var(--color-text-primary)',
+				muted: {
+					DEFAULT: 'var(--color-text-muted)',
+					foreground: 'var(--color-text-muted-foreground)',
+				},
+				accent: {
+					DEFAULT: 'var(--color-text-accent)',
+					foreground: 'var(--color-text-accent-foreground)',
+				},
+			},
+
+			fontFamily: {
+				sans: ['Inter Tight', 'ui-sans-serif', 'system-ui'],
+			},
 			colors: {
+				base: '#FF6B6B',
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				primary: {
-					DEFAULT: '#FF6B00',
+					DEFAULT: 'var(--primary)',
 					foreground: 'hsl(var(--primary-foreground))',
 				},
+
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary))',
 					foreground: 'hsl(var(--secondary-foreground))',
@@ -36,7 +60,7 @@ module.exports = {
 					foreground: 'hsl(var(--destructive-foreground))',
 				},
 				muted: {
-					DEFAULT: 'hsl(var(--muted))',
+					DEFAULT: '#F8F8F8',
 					foreground: 'hsl(var(--muted-foreground))',
 				},
 				accent: {
@@ -51,6 +75,20 @@ module.exports = {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))',
 				},
+				body: {
+					light: '#8A9099',
+				},
+				status: {
+					'in-progress': '#F6F3FC',
+					closed: '#F1FBF3',
+					canceled: '#FFF2F3',
+					verification: '#FFFBF0',
+				},
+
+				ringColor: {
+					primary: 'var(--primary)',
+				},
+				pagination: 'var(--pagination)',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -73,5 +111,13 @@ module.exports = {
 			},
 		},
 	},
-	plugins: [require('@tailwindcss/container-queries'), require('tailwindcss-animate')],
+	plugins: [
+		require('vidstack/tailwind.cjs')({
+			selector: '.media-player',
+
+			prefix: 'media',
+		}),
+		require('@tailwindcss/container-queries'),
+		require('tailwindcss-animate'),
+	],
 };

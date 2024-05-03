@@ -10,9 +10,6 @@ import { Sequelize } from 'sequelize-typescript'
 
 import { Op } from 'sequelize'
 
-
-
-
 import { CreateUserDto } from './dto/create-user.dto'
 import { AppError } from 'src/constants/error'
 import { UpdateUserDto, UpdateUserStatusDto, UpdateUserSubscritionDto } from './dto/update-user.dto'
@@ -41,7 +38,7 @@ export class UserService {
         createPersonDto.patronymic = user.patronymic
         createPersonDto.phone = user.phone
         createPersonDto.id_gender = user.id_gender
-        const newPerson = await this.personRepository.create({ ...createPersonDto}, { transaction: transaction })
+        const newPerson = await this.personRepository.create({ ...createPersonDto }, { transaction: transaction })
 
         user.id_person = newPerson.id_person
       }
@@ -57,13 +54,12 @@ export class UserService {
         throw new HttpException(errorMessage, errorCode)
       })
 
-    
       return {
         status: true,
         data: {
           id_user: newUser.id_user,
           ...user,
-          is_deleted:false
+          is_deleted: false,
         },
       }
     } catch (error) {
@@ -76,7 +72,6 @@ export class UserService {
     }
   }
 
-  
   async update(updatedUser: UpdateUserDto): Promise<UserResponse> {
     try {
       const transaction = await this.sequelize.transaction()
@@ -115,15 +110,11 @@ export class UserService {
         where: { id_user: updatedUser.id_user },
       })
 
-      
-
       return foundUser
     } catch (error) {
       throw new Error(error)
     }
   }
-
-  
 
   async findOne(id_user: number): Promise<boolean> {
     try {
@@ -140,15 +131,15 @@ export class UserService {
   }
 
   async findById(id: number) {
-    
+    console.log(id)
     const result = await this.userRepository.findOne({
-      include: [Role,  Person],
+      include: [Role, Person],
       where: { id_user: id },
       attributes: {
         exclude: ['password', 'id_role', 'id_person'],
       },
     })
-    
+
     if (result != null) {
       return result
     } else {
@@ -160,7 +151,6 @@ export class UserService {
   }
 
   async findUser({ id_user = -1, email = '' }: { id_user?: number; email?: string }): Promise<UserResponse> {
-    
     try {
       const foundUser = await this.userRepository.findOne({
         where: { [Op.or]: [{ id_user }, { email }] },
@@ -230,10 +220,9 @@ export class UserService {
           where: { person_id: user.id_person },
           transaction: transaction,
         })
-      } 
+      }
 
       if (deleteUser && deleteData) {
-    
         await transaction.commit()
 
         return { status: true }
@@ -248,31 +237,26 @@ export class UserService {
   }
 
   async changeStatus(updateUserStatusDto: UpdateUserStatusDto): Promise<StatusUserResponse> {
-    
     try {
       await this.userRepository.update({ is_deleted: updateUserStatusDto.is_deleted }, { where: { id_user: updateUserStatusDto.id_user } })
       return { status: true }
     } catch (error) {
-      
       throw new Error(error)
     }
   }
 
   async changeSubscrition(updateUserSubscritionDto: UpdateUserSubscritionDto): Promise<StatusUserResponse> {
-    
     try {
-      
       await this.userRepository.update({ is_subscrition: updateUserSubscritionDto.is_subscrition }, { where: { id_user: updateUserSubscritionDto.id_user } })
       return { status: true }
     } catch (error) {
-      
       throw new Error(error)
     }
   }
   async canUserActivate(id_user: number): Promise<boolean> {
     try {
       const user = await this.findById(id_user)
-      
+
       if (!user.is_deleted) {
         return true
       } else {
@@ -283,4 +267,3 @@ export class UserService {
     }
   }
 }
-

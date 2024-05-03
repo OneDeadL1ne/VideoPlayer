@@ -1,41 +1,57 @@
-import * as React from 'react';
+import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 
-import { Card, CardContent } from '@/components/ui/card';
-import {
-	Carousel,
-	CarouselContent,
-	CarouselItem,
-	CarouselNext,
-	CarouselPrevious,
-} from '@/components/ui/carousel';
-//import Preview from '@/assets/Preview.svg?react';
+import { Card, CardContent } from '../ui/card';
+import { useState } from 'react';
+import { NavLink } from 'react-router-dom';
 
-export function FilmsCarousel() {
+export interface CarouselProps<T> {
+	title?: string;
+	type?: 'films' | 'genres' | 'default';
+	data: Array<T>;
+	disabledButtons?: boolean;
+	loop?: boolean;
+}
+
+export function CustomCarousel<T>({
+	title,
+	type = 'default',
+	data = [],
+	disabledButtons = false,
+	loop = true,
+}: CarouselProps<T>) {
+	const [activeIndex, setActiveIndex] = useState(0);
 	return (
-		<Carousel
-			opts={{ align: 'center', containScroll: 'trimSnaps', loop: true }}
-			className="relative w-full max-w-96  @[500px]:max-w-xl    @[1000px]:max-w-6xl "
-		>
-			<CarouselContent className="-ml-1">
-				{Array.from({ length: 7 }).map((_, index) => (
-					<CarouselItem key={index} className="w-[300px] md:basis-1/2 lg:basis-1/2">
-						<div className="p-1 ">
-							<Card className=" ">
-								<CardContent className="flex aspect-square items-center justify-center"></CardContent>
-							</Card>
-						</div>
-					</CarouselItem>
-				))}
-			</CarouselContent>
-			<div className="hidden @[1000px]:inline-flex">
-				<div className="flex justify-center items-center ">
-					<div className="absolute @ top-[50%]">
-						<CarouselPrevious className="h-10 w-10 bg-[#A8ABAF]  outline-[#A8ABAF] hover:bg-[#BCBCBC]" />
-
-						<CarouselNext className="h-10 w-10 bg-[#A8ABAF]  outline-[#A8ABAF] hover:bg-[#BCBCBC]" />
-					</div>
+		<div className="w-screen">
+			{title && (
+				<div className="flex @[450px]:inline-block   justify-center items-center">
+					<p className="text-primary text-2xl @[450px]:text-5xl @[450px]:ml-7  font-semibold ">
+						{title}
+					</p>
 				</div>
+			)}
+			<div className="w-full lg:max-w-screen-2xl mx-auto">
+				<Carousel className="relative" opts={{ align: 'start' }}>
+					<CarouselContent>
+						{Array.from({ length: 7 }).map((_, index) => (
+							<CarouselItem key={index} className=" md:basis-1/2 lg:basis-1/2">
+								<div className="p-1">
+									<NavLink to={`/film/${index}`}>
+										<Card className=" md:h-full bg-transparent outline-transparent	border-0 shadow-none">
+											<CardContent className="aspect-banner ">
+												<img
+													src="http://localhost:3000/Preview.svg"
+													className={`select-none h-full w-full  pointer-events-none   rounded-xl   object-cover`}
+													alt="test"
+												/>
+											</CardContent>
+										</Card>
+									</NavLink>
+								</div>
+							</CarouselItem>
+						))}
+					</CarouselContent>
+				</Carousel>
 			</div>
-		</Carousel>
+		</div>
 	);
 }

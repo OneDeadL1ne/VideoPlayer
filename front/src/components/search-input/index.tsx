@@ -4,6 +4,7 @@ import { FilterIcon, Search } from 'lucide-react';
 import { Button } from '../ui/button';
 
 import { cn } from '@/lib/utils.ts';
+import { Input } from '../ui/input';
 
 type Props = {
 	value: string | number;
@@ -41,13 +42,13 @@ export const DebouncedInput: React.FC<Props> = ({
 	}, [value]);
 
 	return (
-		<div className="w-full h-[35px] border-solid border-[2px] rounded-xl flex items-center justify-start  overflow-hidden">
-			<div className="ml-3 mr-3">
+		<div className="w-full  text-accent-foreground  h-[35px] border-solid border-[2px] rounded-xl flex items-center justify-start  overflow-hidden">
+			<div className=" ml-3 mr-3">
 				<Search color="#8A9099" size={20} />
 			</div>
-			<div className="flex-auto ">
-				<input
-					className="w-full focus:outline-none bg-transparent "
+			<div className="flex-auto">
+				<Input
+					className="w-full focus:outline-none  bg-transparent   outline-none  "
 					{...props}
 					value={value}
 					onChange={handleInputChange}

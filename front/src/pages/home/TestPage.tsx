@@ -38,32 +38,8 @@ export default function TestPage() {
 	useEffect(() => {}, []);
 	return (
 		<div className="h-screen flex justify-center items-center  ">
-			<div className={'bg-black h-screen w-screen'}>
-				<TVPlayer
-					url={video}
-					className=""
-					title="Джинтельмены"
-					subTitle="Дарина снимала этот фильм <3"
-					customButtons={customButtons}
-				/>
-
-				{/* <VideoPlayer /> */}
-
-				{/* <ReactPlayer
-					url={video}
-					className=""
-					muted
-					controls
-					config={{
-						file: {
-							forceHLS: true,
-							forceDisableHls: false,
-							attributes: {
-								controlsList: "nodownload",
-							},
-						},
-					}}
-				/> */}
+			<div className={' h-screen w-screen'}>
+				<VideoPlayer />
 			</div>
 		</div>
 	);

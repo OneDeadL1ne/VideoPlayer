@@ -1,21 +1,56 @@
-import { LionPlayer } from 'lion-player';
-import 'lion-player/dist/lion-skin.min.css';
-
+//import 'lion-player/dist/lion-skin.min.css';
+import '@vidstack/react/player/styles/default/theme.css';
+import '@vidstack/react/player/styles/default/layouts/video.css';
+//import '@vidstack/react/player/styles/base.css';
 const SOURCES = [
-	// {
-	// 	src: 'https://streams.bitmovin.com/conpaklsrjnnig8jbd4g/manifest.m3u8',
-	// 	type: 'application/x-mpegURL',
-	// },
 	{
-		src: 'https://766qc35g-3001.euw.devtunnels.ms/video/stream/film/1/1_480p.m3u8',
+		src: 'http://localhost:3001/video/stream/film/1/1_1080p.m3u8',
 		type: 'application/x-mpegURL',
+		width: 1920,
+		height: 1080,
+	},
+	{
+		src: 'http://localhost:3001/video/stream/film/1/1_720p.m3u8',
+		type: 'application/x-mpegURL',
+		width: 1280,
+		height: 720,
+	},
+	{
+		src: 'http://localhost:3001/video/stream/film/1/1_480p.m3u8',
+		type: 'application/x-mpegURL',
+		width: 853,
+		height: 480,
 	},
 ];
 
+import { MediaPlayer, MediaProvider } from '@vidstack/react';
+import {
+	DefaultAudioLayout,
+	DefaultVideoLayout,
+	defaultLayoutIcons,
+} from '@vidstack/react/player/layouts/default';
+
 export const VideoPlayer = () => {
 	return (
-		<div className="relative h-[200px] w-[400px]">
-			<LionPlayer sources={SOURCES} muted />
+		<div className="h-[300px] 	">
+			{/* <LionPlayer sources={SOURCES} muted /> */}
+
+			<MediaPlayer
+				className=""
+				keyTarget="document"
+				load="visible"
+				title=""
+				viewType="video"
+				src={'http://localhost:3001/video/stream/film/1/1_360p.m3u8'}
+				crossOrigin
+			>
+				<MediaProvider></MediaProvider>
+
+				{/* Layouts */}
+
+				<DefaultAudioLayout icons={defaultLayoutIcons} colorScheme="system" />
+				<DefaultVideoLayout icons={defaultLayoutIcons} colorScheme="system" />
+			</MediaPlayer>
 		</div>
 	);
 };
