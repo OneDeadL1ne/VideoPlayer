@@ -1,34 +1,41 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { DirectorService } from './director.service';
-import { CreateDirectorDto } from './dto/create-director.dto';
-import { UpdateDirectorDto } from './dto/update-director.dto';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseFilters, UseGuards } from '@nestjs/common'
+import { DirectorService } from './director.service'
 
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
+import { AllExceptionsFilter } from 'src/common/exception.filter'
+import { ActiveGuard } from '../auth/guards/active.guard'
+import { JwtAuthGuard } from '../auth/guards/auth.guard'
+import { CreateDirectorDto, UpdateDirectorDto } from './dto'
+
+@ApiBearerAuth()
+@ApiTags('Director')
+@UseFilters(AllExceptionsFilter)
 @Controller('director')
 export class DirectorController {
   constructor(private readonly directorService: DirectorService) {}
-
+  @UseGuards(JwtAuthGuard, ActiveGuard)
   @Post()
-  create(@Body() createDirectorDto: CreateDirectorDto) {
-    return this.directorService.create(createDirectorDto);
+  async create(@Body() createDirectorDto: CreateDirectorDto) {
+    return await this.directorService.create(createDirectorDto)
   }
 
   @Get()
-  findAll() {
-    return this.directorService.findAll();
+  async findAll() {
+    return await this.directorService.findAll()
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.directorService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.directorService.findOne(+id)
   }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDirectorDto: UpdateDirectorDto) {
-    return this.directorService.update(+id, updateDirectorDto);
+  @UseGuards(JwtAuthGuard, ActiveGuard)
+  @Patch()
+  async update(@Body() updateDirectorDto: UpdateDirectorDto) {
+    return await this.directorService.update(updateDirectorDto)
   }
-
+  @UseGuards(JwtAuthGuard, ActiveGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.directorService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return await this.directorService.remove(+id)
   }
 }

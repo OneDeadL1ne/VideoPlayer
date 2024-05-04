@@ -1,39 +1,66 @@
-import { HttpException, Injectable } from '@nestjs/common';
-import { CreateGenderDto } from './dto/create-gender.dto';
-import { UpdateGenderDto } from './dto/update-gender.dto';
-import { Gender } from './entities/gender.entity';
-import { InjectModel } from '@nestjs/sequelize';
-import { Person } from '../person/entities/person.entity';
+import { Injectable } from '@nestjs/common'
+
+import { Gender } from './entities/gender.entity'
+import { InjectModel } from '@nestjs/sequelize'
+import { CreateGenderDto, UpdateGenderDto } from './dto'
 
 @Injectable()
 export class GenderService {
-  constructor( 
-  @InjectModel(Gender)
-  private genderModel: typeof Gender
-){}
-  create(createGenderDto: CreateGenderDto) {
-    return 'This action adds a new gender';
+  constructor(
+    @InjectModel(Gender)
+    private genderRepository: typeof Gender,
+  ) {}
+  async create(createGenderDto: CreateGenderDto) {
+    try {
+      const newGenre = await this.genderRepository.create({ ...createGenderDto })
+
+      return { status: true, data: newGenre }
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 
   async findAll() {
     try {
-
-
-      return ""
+      return await this.genderRepository.findAll({ order: [['id_gender', 'ASC']] })
     } catch (error) {
-      throw new HttpException(error, 500)   
+      throw new Error(error)
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} gender`;
+  async findOne(id_gender: number) {
+    try {
+      return await this.genderRepository.findOne({ where: { id_gender } })
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 
-  update(id: number, updateGenderDto: UpdateGenderDto) {
-    return `This action updates a #${id} gender`;
+  async update(updateGenderDto: UpdateGenderDto) {
+    try {
+      await this.genderRepository.update({ ...updateGenderDto }, { where: { id_gender: updateGenderDto.id_gender } })
+
+      const foundGender = await this.genderRepository.findOne({
+        where: { id_gender: updateGenderDto.id_gender },
+      })
+
+      return foundGender
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} gender`;
+  async remove(id_gender: number) {
+    try {
+      const deleteGender = await this.genderRepository.destroy({ where: { id_gender: id_gender } })
+
+      if (deleteGender) {
+        return { status: true }
+      }
+
+      return { status: false }
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 }

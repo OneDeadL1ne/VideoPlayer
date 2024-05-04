@@ -1,26 +1,62 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAgelimitDto } from './dto/create-agelimit.dto';
-import { UpdateAgelimitDto } from './dto/update-agelimit.dto';
+import { Injectable } from '@nestjs/common'
+import { CreateAgelimitDto, UpdateAgelimitDto } from './dto'
+import { Agelimit } from './entities/agelimit.entity'
+import { InjectModel } from '@nestjs/sequelize'
 
 @Injectable()
 export class AgelimitService {
-  create(createAgelimitDto: CreateAgelimitDto) {
-    return 'This action adds a new agelimit';
+  constructor(
+    @InjectModel(Agelimit)
+    private agelimitRepository: typeof Agelimit,
+  ) {}
+  async create(createAgelimitDto: CreateAgelimitDto) {
+    try {
+      const newGenre = await this.agelimitRepository.create({ ...createAgelimitDto })
+      return { status: true, data: newGenre }
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 
-  findAll() {
-    return `This action returns all agelimit`;
+  async findAll() {
+    try {
+      return await this.agelimitRepository.findAll({ order: [['id_age_limit', 'ASC']] })
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} agelimit`;
+  async findOne(id_age_limit: number) {
+    try {
+      return await this.agelimitRepository.findOne({ where: { id_age_limit } })
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 
-  update(id: number, updateAgelimitDto: UpdateAgelimitDto) {
-    return `This action updates a #${id} agelimit`;
+  async update(updateAgelimitDto: UpdateAgelimitDto) {
+    try {
+      await this.agelimitRepository.update({ ...updateAgelimitDto }, { where: { id_age_limit: updateAgelimitDto.id_age_limit } })
+
+      const foundAgeLimit = await this.agelimitRepository.findOne({ where: { id_age_limit: updateAgelimitDto.id_age_limit } })
+
+      return foundAgeLimit
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} agelimit`;
+  async remove(id_age_limit: number) {
+    try {
+      const deleteAgeLimit = await this.agelimitRepository.destroy({ where: { id_age_limit: id_age_limit } })
+
+      if (deleteAgeLimit) {
+        return { status: true }
+      }
+
+      return { status: false }
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 }

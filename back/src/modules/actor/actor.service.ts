@@ -1,26 +1,56 @@
-import { Injectable } from '@nestjs/common';
-import { CreateActorDto } from './dto/create-actor.dto';
-import { UpdateActorDto } from './dto/update-actor.dto';
+import { Injectable } from '@nestjs/common'
+import { Actor } from './entities/actor.entity'
+import { InjectModel } from '@nestjs/sequelize'
+import { CreateActorDto, UpdateActorDto } from './dto'
 
 @Injectable()
 export class ActorService {
-  create(createActorDto: CreateActorDto) {
-    return 'This action adds a new actor';
+  constructor(
+    @InjectModel(Actor)
+    private actorRepository: typeof Actor,
+  ) {}
+  async create(createActorDto: CreateActorDto) {
+    try {
+      const newGenre = await this.actorRepository.create({ ...createActorDto })
+      return { status: true, data: newGenre }
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 
-  findAll() {
-    return `This action returns all actor`;
+  async findAll() {
+    try {
+      return await this.actorRepository.findAll({ order: [['id_actor', 'ASC']] })
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} actor`;
+  async findOne(id_actor: number) {
+    try {
+      return await this.actorRepository.findOne({ where: { id_actor } })
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 
-  update(id: number, updateActorDto: UpdateActorDto) {
-    return `This action updates a #${id} actor`;
+  async update(updateActorDto: UpdateActorDto) {
+    try {
+      await this.actorRepository.update({ ...updateActorDto }, { where: { id_actor: updateActorDto.id_actor } })
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} actor`;
+  async remove(id_actor: number) {
+    try {
+      const deleteActor = await this.actorRepository.destroy({ where: { id_actor: id_actor } })
+      if (deleteActor) {
+        return { status: true }
+      }
+      return { status: false }
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 }

@@ -1,34 +1,44 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { GenreService } from './genre.service';
-import { CreateGenreDto } from './dto/create-genre.dto';
-import { UpdateGenreDto } from './dto/update-genre.dto';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseFilters, UseGuards } from '@nestjs/common'
+import { GenreService } from './genre.service'
 
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
+import { AllExceptionsFilter } from 'src/common/exception.filter'
+import { JwtAuthGuard } from '../auth/guards/auth.guard'
+import { ActiveGuard } from '../auth/guards/active.guard'
+import { CreateGenreDto, UpdateGenreDto } from './dto'
+
+@ApiBearerAuth()
+@ApiTags('Genre')
 @Controller('genre')
+@UseFilters(AllExceptionsFilter)
 export class GenreController {
   constructor(private readonly genreService: GenreService) {}
 
+  @UseGuards(JwtAuthGuard, ActiveGuard)
   @Post()
-  create(@Body() createGenreDto: CreateGenreDto) {
-    return this.genreService.create(createGenreDto);
+  async create(@Body() createGenreDto: CreateGenreDto) {
+    return await this.genreService.create(createGenreDto)
   }
 
   @Get()
-  findAll() {
-    return this.genreService.findAll();
+  async findAll() {
+    return await this.genreService.findAll()
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.genreService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.genreService.findOne(+id)
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateGenreDto: UpdateGenreDto) {
-    return this.genreService.update(+id, updateGenreDto);
+  @UseGuards(JwtAuthGuard, ActiveGuard)
+  @Patch()
+  async update(@Body() updateGenreDto: UpdateGenreDto) {
+    return await this.genreService.update(updateGenreDto)
   }
 
+  @UseGuards(JwtAuthGuard, ActiveGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.genreService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return await this.genreService.remove(+id)
   }
 }
