@@ -14,7 +14,7 @@ import { useLogoutMutation } from '@/redux/api/auth';
 import { getJWTtokens, removeCookieValue } from '@/utils/helpers';
 import { Avatar, AvatarFallback } from '@radix-ui/react-avatar';
 import { setLogout, setUser } from '@/redux/reducers/authSlice';
-import { useGetMyUserQuery, useGetUserMutation } from '@/redux/api/user';
+import { useGetUserMutation } from '@/redux/api/user';
 import { useMemo } from 'react';
 import { Skeleton } from '../ui/skeleton';
 

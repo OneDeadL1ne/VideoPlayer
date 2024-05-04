@@ -65,7 +65,7 @@ export default function AuthDialog() {
 			<DialogTrigger asChild>
 				<Button variant="outline">Войти</Button>
 			</DialogTrigger>
-			<DialogContent className="sm:max-w-[425px]   ">
+			<DialogContent className="sm:max-w-[425px] bg-secondary	border-accent-foreground text-accent-foreground	   ">
 				<DialogHeader>
 					<DialogTitle>Авторизация</DialogTitle>
 				</DialogHeader>
@@ -75,7 +75,7 @@ export default function AuthDialog() {
 							control={form.control}
 							name="email"
 							render={({ field }) => (
-								<InputField label="Логин" className="" {...field} />
+								<InputField label="Логин" isRequired className="" {...field} />
 							)}
 						/>
 						<FormField
