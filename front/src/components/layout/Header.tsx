@@ -12,7 +12,7 @@ import AccountMenu from '../account-menu/AccountMenu';
 
 export default function Header() {
 	const [search, setSearch] = useState<string | number>('');
-	const { isLogin, user } = useAppSelector((s) => s.auth);
+	const { isLogin } = useAppSelector((s) => s.auth);
 	useEffect(() => {
 		if (search.toString().length != 0) {
 			console.log(search);
@@ -49,8 +49,7 @@ export default function Header() {
 				<SwithTheme />
 			</div>
 			<div className="w-1/4 flex justify-end items-center">
-				{!isLogin && <AuthDialog />}
-				{isLogin && user && <AccountMenu />}
+				{isLogin ? <AccountMenu /> : <AuthDialog />}
 			</div>
 		</div>
 	);

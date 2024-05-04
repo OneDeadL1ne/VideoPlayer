@@ -9,6 +9,10 @@ const usersApi = api.injectEndpoints({
 			query: () => ({ url: `user/my/:id`, method: 'GET' }),
 			providesTags: ['User'],
 		}),
+		getUser: builder.mutation<UserInterface, void>({
+			query: () => ({ url: `user/my/:id`, method: 'GET' }),
+			invalidatesTags: ['User'],
+		}),
 		createUser: builder.mutation<FetchResultInterface<UserInterface>, UserInterface>({
 			query: (body) => ({
 				url: 'user',
@@ -50,6 +54,7 @@ const usersApi = api.injectEndpoints({
 
 export const {
 	useGetMyUserQuery,
+	useGetUserMutation,
 	useCreateUserMutation,
 	useUpdateUserMutation,
 	useChangeUserStatusMutation,

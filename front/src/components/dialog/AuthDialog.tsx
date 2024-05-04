@@ -47,6 +47,7 @@ export default function AuthDialog() {
 	useEffect(() => {
 		if (isAuthSuccess) {
 			dispatch(setAccessToken(authData?.accessToken));
+
 			if (form.getValues().remember_me) {
 				dispatch(setRefreshToken(authData?.refreshToken));
 			}

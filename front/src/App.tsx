@@ -23,11 +23,13 @@ function App() {
 
 	useEffect(() => {
 		const { accessToken, refreshToken } = getJWTtokens();
-
+		if (!accessToken && !refreshToken) {
+			return;
+		}
 		if (refreshToken) {
 			fetchRefreshToken({ refresh_token: `${refreshToken}` });
 		} else if (!accessToken) {
-			console.log(2);
+			console.log('2');
 		}
 	}, []);
 
@@ -45,7 +47,7 @@ function App() {
 
 	useEffect(() => {
 		if (refreshTokenError) {
-			console.log(1);
+			//console.log(1);
 		}
 	}, [refreshTokenError]);
 

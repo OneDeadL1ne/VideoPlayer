@@ -14,25 +14,33 @@ import { useLogoutMutation } from '@/redux/api/auth';
 import { getJWTtokens, removeCookieValue } from '@/utils/helpers';
 import { Avatar, AvatarFallback } from '@radix-ui/react-avatar';
 import { setLogout, setUser } from '@/redux/reducers/authSlice';
-import { useGetMyUserQuery } from '@/redux/api/user';
+import { useGetMyUserQuery, useGetUserMutation } from '@/redux/api/user';
 import { useMemo } from 'react';
 import { Skeleton } from '../ui/skeleton';
-import AuthDialog from '../dialog/AuthDialog';
 
 export default function AccountMenu() {
 	const navigate = useNavigate();
 
 	const dispatch = useAppDispatch();
-	const { isLogin, user } = useAppSelector((s) => s.auth);
+	const { user } = useAppSelector((s) => s.auth);
 
-	const { data: userFetch, isLoading: isUserLoading } = useGetMyUserQuery();
+	const [fetchUser, { data: userFetch, isLoading: isUserLoading, isSuccess: isUserSuccess }] =
+		useGetUserMutation();
 	const [logout, { error }] = useLogoutMutation();
 	const userName = useMemo(() => {
+		if (!user) {
+			fetchUser();
+			if (isUserSuccess) {
+				dispatch(setUser(userFetch));
+			}
+		}
 		if (userFetch?.nickname) {
-			dispatch(setUser(user));
 			return `${userFetch.nickname}`;
 		}
-	}, [user]);
+		if (user?.nickname) {
+			return `${user.nickname}`;
+		}
+	}, [user, userFetch]);
 
 	const handleLogout = () => {
 		const refreshToken = getJWTtokens().refreshToken;
@@ -49,10 +57,6 @@ export default function AccountMenu() {
 	};
 
 	useErrorToast(handleLogout, error);
-
-	if (!isLogin && !user) {
-		return <AuthDialog />;
-	}
 
 	return (
 		<div className="flex items-center justify-center mr-5 gap-3">
