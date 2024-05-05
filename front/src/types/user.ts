@@ -11,4 +11,5 @@ export interface UserInterface {
 	is_deleted: boolean;
 	role: RoleInterface;
 	person: PersonInterface;
+	avatar_url: string;
 }

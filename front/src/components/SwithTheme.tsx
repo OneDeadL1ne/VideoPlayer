@@ -1,28 +1,16 @@
 import { getCurrentColorScheme } from '@/utils/helpers';
 import { Switch } from './ui/switch';
-import { useEffect, useState } from 'react';
+
+import { useTheme } from '@/hooks/useTheme';
 
 export default function SwithTheme() {
-	const [colorScheme, setColorScheme] = useState(() => getCurrentColorScheme());
-
-	const handleColorSchemeChange = (variant: string) => {
-		document.querySelector('html')?.setAttribute('data-color-scheme', variant);
-		setColorScheme(variant);
-		localStorage.setItem('color-scheme', variant);
-	};
+	const [theme, handleChange] = useTheme(getCurrentColorScheme());
 
 	return (
 		<Switch
-			checked={colorScheme == 'dark' ? true : false}
-			value={colorScheme}
-			onCheckedChange={(value) => {
-				if (value) {
-					handleColorSchemeChange('dark');
-				}
-				if (!value) {
-					handleColorSchemeChange('light');
-				}
-			}}
+			checked={theme == 'dark' ? true : false}
+			value={theme}
+			onCheckedChange={handleChange}
 		/>
 	);
 }

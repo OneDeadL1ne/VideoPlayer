@@ -30,6 +30,7 @@ import { PostModule } from '../post/post.module'
 
 import { ResourceModule } from '../resource/resource.module'
 import { VideoModule } from '../video/video.module'
+import { ImageModule } from '../image/image.module'
 
 @Module({
   imports: [
@@ -69,6 +70,7 @@ import { VideoModule } from '../video/video.module'
       }),
       inject: [ConfigService],
     }),
+    ImageModule,
     GenderModule,
     PersonModule,
     RoleModule,

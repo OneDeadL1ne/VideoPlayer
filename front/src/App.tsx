@@ -7,19 +7,21 @@ import { useEffect } from 'react';
 import { getCurrentColorScheme, getJWTtokens } from './utils/helpers';
 import { FilmPage } from './pages/film/FilmPage';
 import { setAccessToken, setUser } from './redux/reducers/authSlice';
-import { useAppDispatch } from './hooks/reduxHooks';
+import { useAppDispatch, useAppSelector } from './hooks/reduxHooks';
 import { useGetMyUserQuery } from './redux/api/user';
 import { useRefreshTokenMutation } from './redux/api/auth';
+import GenrePage from './pages/admin/genre/index';
 
 function App() {
 	const dispatch = useAppDispatch();
 
+	const { user } = useAppSelector((s) => s.auth);
 	const [
 		fetchRefreshToken,
 		{ data: newAccessToken, isError: refreshTokenError, isSuccess: refreshTokenSuccess },
 	] = useRefreshTokenMutation();
 
-	const { data: user, isSuccess: isUserSuccess } = useGetMyUserQuery();
+	const { data: userData, isSuccess: isUserSuccess } = useGetMyUserQuery();
 
 	useEffect(() => {
 		const { accessToken, refreshToken } = getJWTtokens();
@@ -40,7 +42,7 @@ function App() {
 			}
 
 			if (isUserSuccess) {
-				dispatch(setUser(user));
+				dispatch(setUser(userData));
 			}
 		}
 	}, [refreshTokenSuccess, isUserSuccess]);
@@ -67,10 +69,12 @@ function App() {
 
 				<Route path="*" element={<NotFoundPage />} />
 			</Route>
-
-			<Route path="/admin" element={<AdminLayout />}>
-				<Route index element={<HomePage />} />
-			</Route>
+			{user?.role.role_name != 'Пользователь' && (
+				<Route path="/admin" element={<AdminLayout />}>
+					<Route path="genre" element={<GenrePage />} />
+				</Route>
+			)}
+			<Route path="*" element={<NotFoundPage />} />
 		</Routes>
 	);
 }

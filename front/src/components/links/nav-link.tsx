@@ -1,7 +1,7 @@
-import React from "react";
-import { NavLink, useLocation } from "react-router-dom";
-import { Button } from "../ui/button";
-import { cn } from "@/lib/utils";
+import React from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
+import { Button } from '../ui/button';
+import { cn } from '@/lib/utils';
 
 function SidebarLink({
 	open,
@@ -25,13 +25,13 @@ function SidebarLink({
 		<NavLink
 			to={path}
 			className={({ isActive }) =>
-				cn("flex bg-transparent", isActive && "border-solid border-l-4 border-primary")
+				cn('flex bg-transparent', isActive && 'border-solid border-l-4 border-primary')
 			}
 		>
 			<Button
 				className={cn(
-					"w-[100%] h-[56px] relative justify-start bg-transparent rounded-none",
-					isOnCurrentPath && "bg-muted"
+					'w-[100%] h-[56px] relative justify-start bg-transparent rounded-none',
+					isOnCurrentPath && 'bg-muted'
 				)}
 				variant="ghost"
 			>
@@ -41,8 +41,8 @@ function SidebarLink({
 						{open && (
 							<div
 								className={cn(
-									isOnCurrentPath ? "font-[600]" : "font-[400]",
-									"ml-3 font-pop text-[16px] text-[#3F434A] whitespace-pre-line text-start"
+									isOnCurrentPath ? 'font-[600]' : 'font-[400]',
+									'ml-3 font-pop text-[16px] text-accent-foreground whitespace-pre-line text-start'
 								)}
 							>
 								{title}

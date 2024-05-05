@@ -9,11 +9,11 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
 	({ className, type, prefixIcon, suffixIcon, ...props }, ref) => (
-		<div className={cn('flex border-0 border-input rounded-xl input-outline', className)}>
+		<div className={cn('flex border border-input rounded-xl input-outline', className)}>
 			{prefixIcon}
 			<input
 				type={type}
-				className="w-full h-10 rounded-xl bg-transparent px-0 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 focus-within:ring-0 focus-within:ring-black ring-offset-background"
+				className="w-full h-10 rounded-xl bg-transparent px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 focus-within:ring-0 focus-within:ring-black ring-offset-background"
 				ref={ref}
 				{...props}
 			/>

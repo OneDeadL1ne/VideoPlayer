@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState } from 'react';
 import {
 	Cell,
 	ColumnDef,
@@ -11,12 +11,12 @@ import {
 	SortingState,
 	useReactTable,
 	VisibilityState,
-} from "@tanstack/react-table";
+} from '@tanstack/react-table';
 
-import { Button } from "../ui/button";
-import { ScrollArea, ScrollBar } from "../ui/scroll-area";
+import { Button } from '../ui/button';
+import { ScrollArea, ScrollBar } from '../ui/scroll-area';
 
-import { Skeleton } from "@/components/ui/skeleton.tsx";
+import { Skeleton } from '@/components/ui/skeleton.tsx';
 import {
 	Table,
 	TableBody,
@@ -24,9 +24,9 @@ import {
 	TableHead,
 	TableHeader,
 	TableRow,
-} from "@/components/ui/table";
-import { ArrowDown } from "lucide-react";
-import { TablePagination } from "./table-pagination";
+} from '@/components/ui/table';
+import { ArrowDown } from 'lucide-react';
+import { TablePagination } from './table-pagination';
 
 const SKELETON_ITEMS_COUNT = 5;
 
@@ -72,14 +72,14 @@ function DataTable<TData, TValue>({
 				? columns.map((column) => ({
 						...column,
 						cell: ({ cell }: { cell: Cell<unknown, unknown> }) => {
-							const isActions = cell.column.id === "actions";
-							const isId = cell.column.id === "id";
-							const isSelect = cell.column.id === "select";
+							const isActions = cell.column.id === 'actions';
+							const isId = cell.column.id === 'id';
+							const isSelect = cell.column.id === 'select';
 							if (isActions || isId) {
 								return <Skeleton className="h-6 w-6" />;
 							}
 
-							return <Skeleton className={isSelect ? "h-4 w-4" : "h-6 w-[100px]"} />;
+							return <Skeleton className={isSelect ? 'h-4 w-4' : 'h-6 w-[100px]'} />;
 						},
 				  }))
 				: columns,
@@ -109,17 +109,20 @@ function DataTable<TData, TValue>({
 		<div
 			className={`${
 				hasBackground
-					? "bg-white rounded-2xl mt-4 p-6 flex flex-wrap gap-4 items-center justify-start w-full"
-					: ""
+					? 'bg-secondary rounded-2xl mt-4 p-6 flex flex-wrap gap-4 items-center justify-start w-full'
+					: ''
 			}`}
 		>
 			<ScrollArea className="w-full">
 				<Table>
 					<TableHeader>
 						{table.getHeaderGroups().map((headerGroup) => (
-							<TableRow key={headerGroup.id}>
+							<TableRow key={headerGroup.id} className="hover:bg-accent ">
 								{headerGroup.headers.map((header) => (
-									<TableHead key={header.id} className="text-primary uppercase">
+									<TableHead
+										key={header.id}
+										className="text-accent-foreground uppercase "
+									>
 										<div className="flex items-center">
 											{header.isPlaceholder
 												? null
@@ -127,14 +130,14 @@ function DataTable<TData, TValue>({
 														header.column.columnDef.header,
 														header.getContext()
 												  )}
-											{header.id !== "select" && header.id !== "actions" && (
+											{header.id !== 'select' && header.id !== 'actions' && (
 												<Button
 													variant="ghost"
 													className={`py-0 px-1 ${
-														header.column.getIsSorted() === "asc" ||
+														header.column.getIsSorted() === 'asc' ||
 														!header.column.getIsSorted()
-															? "rotate-0"
-															: "rotate-180"
+															? 'rotate-0'
+															: 'rotate-180'
 													}`}
 													onClick={() => {
 														if (!header.column.getIsSorted()) {
@@ -145,7 +148,7 @@ function DataTable<TData, TValue>({
 															header.column.toggleSorting(false);
 														}
 														header.column.toggleSorting(
-															header.column.getIsSorted() === "asc"
+															header.column.getIsSorted() === 'asc'
 														);
 													}}
 												>
@@ -162,15 +165,15 @@ function DataTable<TData, TValue>({
 						{table.getRowModel().rows?.length ? (
 							table.getRowModel().rows.map((row) => (
 								<TableRow
-									className="hover:bg-neutral-200 data-[state=selected]:bg-neutral-300"
+									className="hover:bg-accent data-[state=selected]:bg-neutral-300"
 									key={row.id}
-									data-state={row.getIsSelected() && "selected"}
+									data-state={row.getIsSelected() && 'selected'}
 									onClick={(e) => {
 										const clickedColumnId = (
 											e.target as HTMLTableRowElement
-										).getAttribute("data-column-id");
+										).getAttribute('data-column-id');
 										if (
-											typeof onRowClick !== "undefined" &&
+											typeof onRowClick !== 'undefined' &&
 											clickedColumnId !== null
 										) {
 											onRowClick(row.original);
@@ -180,7 +183,7 @@ function DataTable<TData, TValue>({
 									{row.getVisibleCells().map((cell) => (
 										<TableCell
 											key={cell.id}
-											className={`text-[15px] `}
+											className={`text-[15px] text-accent-foreground `}
 											data-column-id={cell.column.id}
 										>
 											{flexRender(
@@ -200,7 +203,7 @@ function DataTable<TData, TValue>({
 						)}
 					</TableBody>
 				</Table>
-				<ScrollBar orientation="horizontal" className="bg-primary" />
+				<ScrollBar orientation="horizontal" />
 			</ScrollArea>
 			<div className=" w-full flex items-center justify-end space-x-2 py-4">
 				{table.getRowModel().rows?.length > 0 && <TablePagination table={table} />}

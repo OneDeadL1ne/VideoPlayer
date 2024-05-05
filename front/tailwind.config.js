@@ -35,6 +35,17 @@ module.exports = {
 					foreground: 'var(--color-text-accent-foreground)',
 				},
 			},
+			borderColor: {
+				primary: 'var(--color-text-primary)',
+				muted: {
+					DEFAULT: 'var(--color-text-muted)',
+					foreground: 'var(--color-text-muted-foreground)',
+				},
+				accent: {
+					DEFAULT: 'var(--color-text-accent)',
+					foreground: 'var(--color-text-accent-foreground)',
+				},
+			},
 
 			fontFamily: {
 				sans: ['Inter Tight', 'ui-sans-serif', 'system-ui'],

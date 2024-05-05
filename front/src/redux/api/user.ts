@@ -39,15 +39,6 @@ const usersApi = api.injectEndpoints({
 			}),
 			invalidatesTags: ['User'],
 		}),
-		updateUserPassword: builder.mutation<FetchResultInterface, string>({
-			query: (password) => ({
-				url: 'users/update-password',
-				method: 'PATCH',
-				body: {
-					password,
-				},
-			}),
-		}),
 	}),
 	overrideExisting: true,
 });
@@ -58,5 +49,4 @@ export const {
 	useCreateUserMutation,
 	useUpdateUserMutation,
 	useChangeUserStatusMutation,
-	useUpdateUserPasswordMutation,
 } = usersApi;

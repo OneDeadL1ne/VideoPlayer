@@ -11,18 +11,21 @@ import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks';
 import { useErrorToast } from '@/hooks/use-error-toast';
 import { api } from '@/redux/api';
 import { useLogoutMutation } from '@/redux/api/auth';
-import { getJWTtokens, removeCookieValue } from '@/utils/helpers';
+import { getCurrentColor, getJWTtokens, removeCookieValue } from '@/utils/helpers';
 import { Avatar, AvatarFallback } from '@radix-ui/react-avatar';
 import { setLogout, setUser } from '@/redux/reducers/authSlice';
 import { useGetUserMutation } from '@/redux/api/user';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Skeleton } from '../ui/skeleton';
+import { AvatarImage } from '../ui/avatar';
 
 export default function AccountMenu() {
 	const navigate = useNavigate();
 
 	const dispatch = useAppDispatch();
 	const { user } = useAppSelector((s) => s.auth);
+	const { theme } = useAppSelector((s) => s.theme);
+	const [color, setColor] = useState(theme);
 
 	const [fetchUser, { data: userFetch, isLoading: isUserLoading, isSuccess: isUserSuccess }] =
 		useGetUserMutation();
@@ -54,7 +57,12 @@ export default function AccountMenu() {
 
 		dispatch(api.util.resetApiState());
 		dispatch(setLogout());
+		navigate('/');
 	};
+
+	useEffect(() => {
+		setColor(getCurrentColor());
+	}, [theme]);
 
 	useErrorToast(handleLogout, error);
 
@@ -71,10 +79,17 @@ export default function AccountMenu() {
 							)}
 						</div>
 						<Avatar>
-							{/* <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" /> */}
-							<AvatarFallback>
-								<User color="#fff" />
-							</AvatarFallback>
+							{user?.avatar_url && user?.avatar_url.length != 0 ? (
+								<AvatarImage
+									className="h-10 rounded-full self-center"
+									src={user.avatar_url}
+									alt={`@${user.nickname}`}
+								/>
+							) : (
+								<AvatarFallback>
+									<User color={color} />
+								</AvatarFallback>
+							)}
 						</Avatar>
 					</div>
 				</DropdownMenuTrigger>
@@ -82,6 +97,18 @@ export default function AccountMenu() {
 					className="flex flex-col rounded-xl mt-1 gap-1 py-2 bg-secondary outline-black/50 border-neutral-600 text-accent-foreground"
 					align="end"
 				>
+					{user?.role.role_name != 'Пользователь' && (
+						<DropdownMenuItem asChild>
+							<Button
+								onClick={() => navigate('/admin/genre')}
+								variant="ghost"
+								className="w-full h-5 justify-start p-3 hover:cursor-pointer"
+								size="sm"
+							>
+								Админ панель
+							</Button>
+						</DropdownMenuItem>
+					)}
 					<DropdownMenuItem asChild>
 						<Button
 							onClick={() => navigate('/profile')}

@@ -1,7 +1,7 @@
-import { NavLink } from "react-router-dom";
+import { NavLink } from 'react-router-dom';
 
 export default function NotFoundPage() {
-	document.title = "Ошибка 404";
+	//document.title = "Ошибка 404";
 	return (
 		<div className="flex flex-col h-screen">
 			<header className="flex justify-center items-center mt-5">

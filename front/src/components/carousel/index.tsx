@@ -1,13 +1,17 @@
-import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import {
+	Carousel,
+	CarouselContent,
+	CarouselItem,
+	CarouselNext,
+	CarouselPrevious,
+} from '@/components/ui/carousel';
 
-import { Card, CardContent } from '../ui/card';
-import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { CustomCard } from '../custom-card/CustomCard';
 
 export interface CarouselProps<T> {
 	title?: string;
 	type?: 'films' | 'genres' | 'default';
-	data: Array<T>;
+	data: Array<T | undefined>;
 	disabledButtons?: boolean;
 	loop?: boolean;
 }
@@ -19,7 +23,7 @@ export function CustomCarousel<T>({
 	disabledButtons = false,
 	loop = true,
 }: CarouselProps<T>) {
-	const [activeIndex, setActiveIndex] = useState(0);
+	//const [activeIndex, setActiveIndex] = useState(0);
 	return (
 		<div className="w-screen">
 			{title && (
@@ -29,27 +33,17 @@ export function CustomCarousel<T>({
 					</p>
 				</div>
 			)}
-			<div className="w-full lg:max-w-screen-2xl mx-auto">
-				<Carousel className="relative" opts={{ align: 'start' }}>
+			<div className="w-full lg:max-w-screen-xl mx-auto">
+				<Carousel className="relative" opts={{ align: 'start', loop: loop }}>
 					<CarouselContent>
-						{Array.from({ length: 7 }).map((_, index) => (
+						{data.map((item, index) => (
 							<CarouselItem key={index} className=" md:basis-1/2 lg:basis-1/2">
-								<div className="p-1">
-									<NavLink to={`/film/${index}`}>
-										<Card className=" md:h-full bg-transparent outline-transparent	border-0 shadow-none">
-											<CardContent className="aspect-banner ">
-												<img
-													src="http://localhost:3000/Preview.svg"
-													className={`select-none h-full w-full  pointer-events-none   rounded-xl   object-cover`}
-													alt="test"
-												/>
-											</CardContent>
-										</Card>
-									</NavLink>
-								</div>
+								<CustomCard index={index} item={item} type="genres" />
 							</CarouselItem>
 						))}
 					</CarouselContent>
+					<CarouselNext />
+					<CarouselPrevious />
 				</Carousel>
 			</div>
 		</div>

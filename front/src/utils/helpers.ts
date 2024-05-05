@@ -50,3 +50,13 @@ export const removeCookie = () => {
 };
 
 export const getCurrentColorScheme = () => localStorage.getItem('color-scheme') || 'light';
+
+export const getCurrentColor = () => {
+	const theme = localStorage.getItem('color-scheme') || 'light';
+
+	if (theme == 'dark') {
+		return 'white';
+	}
+
+	return 'black';
+};
