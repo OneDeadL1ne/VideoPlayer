@@ -5,8 +5,7 @@
 
 html,
 body {
-	font-family: 'Inter Tight', sans-serif; 
-	
+	font-family: 'Inter Tight', sans-serif;
 }
 @layer base {
 	input[type='number']::-webkit-outer-spin-button,
@@ -51,24 +50,27 @@ body {
 
 	:root[data-color-scheme='light'] {
 		--color-text-primary: #ff6b00;
-		--color-text-accent-foreground:"#000000"
-		--color-text-accent:"fff";
-		--color-text-muted-foreground:;
+		--color-text-accent-foreground: #000000;
+		--color-text-accent: #fff;
+		--color-text-muted-foreground: #cbcbcc;
+
+		--color-ring-ring: #000000;
 
 		--primary: #ff6b00;
 		--color-bg-accent: #edeef0;
 		--color-bg-secondary: #fff;
 
-		--pagination: rgba(231, 243, 250, 1);
+		--pagination: #edeef0;
 	}
 
 	:root[data-color-scheme='dark'] {
 		--color-text-primary: #ff6b00;
-		
-		--color-text-accent-foreground:#fff;
-		--color-text-accent:#000000;
-		
-		
+
+		--color-text-accent-foreground: #fff;
+		--color-text-accent: #000000;
+		--color-text-muted-foreground: #bebebe;
+
+		--color-ring-ring: #fff;
 
 		--primary: #ff6b00;
 		--color-bg-accent: #1a1a1a;

@@ -12,7 +12,7 @@ export default function HomePage() {
 		{ name: 'Боевик' },
 	];
 
-	const { data: genres, isLoading: Loading } = useGetGenresQuery();
+	const { data: genres, isLoading: Loading, error: isError } = useGetGenresQuery();
 
 	return (
 		<div className="grid grid-flow-row  ">
@@ -23,10 +23,19 @@ export default function HomePage() {
 				<CustomCarousel data={items} type="default" title="Новинки" />
 			</div>
 			<div className="flex justify-start  items-center @container ">
-				{Loading ? (
-					<Skeleton />
-				) : (
-					<CustomCarousel data={genres!} type="genres" title="Жанры" loop={false} />
+				{!isError && (
+					<>
+						{Loading ? (
+							<Skeleton />
+						) : (
+							<CustomCarousel
+								data={genres!}
+								type="genres"
+								title="Жанры"
+								loop={false}
+							/>
+						)}
+					</>
 				)}
 			</div>
 		</div>

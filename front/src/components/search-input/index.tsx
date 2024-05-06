@@ -48,7 +48,7 @@ export const DebouncedInput: React.FC<Props> = ({
 			</div>
 			<div className="flex-auto">
 				<Input
-					className="w-full focus:outline-none  bg-transparent   outline-none  "
+					className="w-full bg-transparent  focus:outline-none outline-none  "
 					{...props}
 					value={value}
 					onChange={handleInputChange}

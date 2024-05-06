@@ -20,7 +20,14 @@ module.exports = {
 			},
 		},
 		extend: {
+			ringColor: {
+				ring: 'var(--color-ring-ring)',
+			},
 			backgroundColor: {
+				primary: {
+					DEFAULT: 'var(--primary)',
+					foreground: 'var(--color-bg-primary-foreground)',
+				},
 				secondary: 'var(--color-bg-secondary)',
 				accent: 'var(--color-bg-accent)',
 			},

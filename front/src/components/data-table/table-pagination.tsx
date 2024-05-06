@@ -3,17 +3,17 @@ import {
 	ChevronRightIcon,
 	DoubleArrowLeftIcon,
 	DoubleArrowRightIcon,
-} from "@radix-ui/react-icons";
-import { Table } from "@tanstack/react-table";
+} from '@radix-ui/react-icons';
+import { Table } from '@tanstack/react-table';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 
 const ITEMS_PER_PAGE_LIST = [10, 20, 30, 40, 50];
 
@@ -23,7 +23,7 @@ interface TablePaginationProps<TData> {
 
 export function TablePagination<TData>({ table }: TablePaginationProps<TData>) {
 	const totalPagesCount =
-		typeof table?.getPageCount() !== "undefined" &&
+		typeof table?.getPageCount() !== 'undefined' &&
 		Array.from({ length: table?.getPageCount() }, (_, i) => i);
 
 	return (
@@ -36,12 +36,16 @@ export function TablePagination<TData>({ table }: TablePaginationProps<TData>) {
 							table?.setPageSize(Number(value));
 						}}
 					>
-						<SelectTrigger className="h-8 w-[70px]">
+						<SelectTrigger className="h-8 w-[70px] bg-accent border-0 text-accent-foreground  focus:ring-0 focus:ring-offset-0 ">
 							<SelectValue placeholder={table?.getState().pagination.pageSize} />
 						</SelectTrigger>
-						<SelectContent side="top">
+						<SelectContent side="top" className="bg-accent border-0">
 							{ITEMS_PER_PAGE_LIST.map((pageSize) => (
-								<SelectItem key={pageSize} value={`${pageSize}`}>
+								<SelectItem
+									key={pageSize}
+									value={`${pageSize}`}
+									className="text-muted-foreground hover:text-accent-foreground"
+								>
 									{pageSize}
 								</SelectItem>
 							))}
@@ -100,8 +104,8 @@ export function TablePagination<TData>({ table }: TablePaginationProps<TData>) {
 								<Button
 									key={page}
 									variant="ghost"
-									className={`h-8 w-8 p-0 font-normal ${
-										isCurrentPage ? "bg-primary text-white" : ""
+									className={`h-8 w-8 p-0 font-normal text-accent-foreground ${
+										isCurrentPage ? 'bg-primary text-accent-foreground' : ''
 									}`}
 									onClick={() => table?.setPageIndex(page)}
 								>

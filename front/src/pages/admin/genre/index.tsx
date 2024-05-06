@@ -8,7 +8,7 @@ import DialogWindow from '@/components/dialog-window/dialog-window';
 import { useState } from 'react';
 import { genreFormTab } from './genre-form-tab';
 
-export default function GenrePage() {
+export default function TableGenrePage() {
 	const [formOpen, setFormOpen] = useState(false);
 	//const { data: genres } = useGetGenresQuery();
 	const { data: genres, error, isFetching, refetch } = useGetGenresQuery();

@@ -57,7 +57,6 @@ export default function AccountMenu() {
 
 		dispatch(api.util.resetApiState());
 		dispatch(setLogout());
-		navigate('/');
 	};
 
 	useEffect(() => {
@@ -71,7 +70,7 @@ export default function AccountMenu() {
 			<DropdownMenu>
 				<DropdownMenuTrigger asChild>
 					<div className="cursor-pointer flex items-center justify-center gap-1">
-						<div className="font-pop text-[14px] text-accent-foreground">
+						<div className="font-pop text-[14px] text-accent-foreground hidden @[500px]:inline-flex">
 							{isUserLoading ? (
 								<Skeleton className="w-[120px] h-5 rounded-xl" />
 							) : (
@@ -94,15 +93,15 @@ export default function AccountMenu() {
 					</div>
 				</DropdownMenuTrigger>
 				<DropdownMenuContent
-					className="flex flex-col rounded-xl mt-1 gap-1 py-2 bg-secondary outline-black/50 border-neutral-600 text-accent-foreground"
+					className="flex flex-col rounded-xl mt-1 gap-1 py-2 bg-accent   border-0 text-muted-foreground"
 					align="end"
 				>
 					{user?.role.role_name != 'Пользователь' && (
 						<DropdownMenuItem asChild>
 							<Button
-								onClick={() => navigate('/admin/genre')}
+								onClick={() => navigate('/admin/genres')}
 								variant="ghost"
-								className="w-full h-5 justify-start p-3 hover:cursor-pointer"
+								className="w-full h-5 justify-start p-3  hover:cursor-pointer  "
 								size="sm"
 							>
 								Админ панель

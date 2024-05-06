@@ -1,23 +1,23 @@
-import React from 'react'
-import { Plus } from 'lucide-react'
-import { Button } from '../ui/button'
+import React from 'react';
+import { Plus } from 'lucide-react';
+import { Button } from '../ui/button';
 
 const PlusButton = React.forwardRef<
-    HTMLButtonElement,
-    React.ButtonHTMLAttributes<HTMLButtonElement>
+	HTMLButtonElement,
+	React.ButtonHTMLAttributes<HTMLButtonElement>
 >(({ onClick, ...props }, ref) => (
-    <Button
-        variant="outline"
-        size="icon"
-        className="bg-primary rounded-3xl flex items-center justify-center p-[7px] size-8"
-        onClick={onClick}
-        ref={ref}
-        {...props}
-    >
-        <Plus color="white" size={17} />
-    </Button>
-))
+	<Button
+		variant="outline"
+		size="icon"
+		className="bg-primary rounded-3xl flex items-center outline-none border-0 justify-center p-[7px] size-8"
+		onClick={onClick}
+		ref={ref}
+		{...props}
+	>
+		<Plus color="white" size={17} />
+	</Button>
+));
 
-PlusButton.displayName = 'PlusButton'
+PlusButton.displayName = 'PlusButton';
 
-export default PlusButton
+export default PlusButton;

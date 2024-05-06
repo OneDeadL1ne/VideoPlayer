@@ -75,7 +75,12 @@ export default function AuthDialog() {
 							control={form.control}
 							name="email"
 							render={({ field }) => (
-								<InputField label="Логин" isRequired className="" {...field} />
+								<InputField
+									label="Логин"
+									isRequired
+									classNameInput="border border-input"
+									{...field}
+								/>
 							)}
 						/>
 						<FormField

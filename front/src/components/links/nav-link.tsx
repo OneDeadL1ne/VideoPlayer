@@ -25,13 +25,16 @@ function SidebarLink({
 		<NavLink
 			to={path}
 			className={({ isActive }) =>
-				cn('flex bg-transparent', isActive && 'border-solid border-l-4 border-primary')
+				cn(
+					'flex bg-transparent focus:outline-none outline-none ',
+					isActive && 'border-solid border-l-4 border-primary'
+				)
 			}
 		>
 			<Button
 				className={cn(
-					'w-[100%] h-[56px] relative justify-start bg-transparent rounded-none',
-					isOnCurrentPath && 'bg-muted'
+					'w-[100%] h-[56px] relative justify-start bg-transparent rounded-none ',
+					isOnCurrentPath && 'bg-orange-600 bg-opacity-30'
 				)}
 				variant="ghost"
 			>
@@ -42,7 +45,7 @@ function SidebarLink({
 							<div
 								className={cn(
 									isOnCurrentPath ? 'font-[600]' : 'font-[400]',
-									'ml-3 font-pop text-[16px] text-accent-foreground whitespace-pre-line text-start'
+									'ml-3 font-pop text-[16px] text-accent-foreground whitespace-pre-line text-start '
 								)}
 							>
 								{title}

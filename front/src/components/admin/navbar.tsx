@@ -9,10 +9,30 @@ import LogoMini from '@/assets/LogoMini.svg?react';
 import { useAppSelector } from '@/hooks/reduxHooks.ts';
 import { getCurrentColor } from '@/utils/helpers.ts';
 import { NavLink } from 'react-router-dom';
+import Post from '@/assets/post.svg?react';
+import PostDark from '@/assets/postDark.svg?react';
+import Film from '@/assets/film.svg?react';
+import FilmDark from '@/assets/filmDark.svg?react';
+import Director from '@/assets/director.svg?react';
+import DirectorDark from '@/assets/directorDark.svg?react';
+import Actor from '@/assets/actor.svg?react';
+import ActorDark from '@/assets/actorDark.svg?react';
+import Genre from '@/assets/genre.svg?react';
+import GenreDark from '@/assets/genreDark.svg?react';
+import Voice from '@/assets/voice.svg?react';
+import VoiceDark from '@/assets/voiceDark.svg?react';
+import User from '@/assets/user.svg?react';
+import UserDark from '@/assets/userDark.svg?react';
+import Employee from '@/assets/employee.svg?react';
+import EmployeeDark from '@/assets/employeeDark.svg?react';
+import Role from '@/assets/role.svg?react';
+import RoleDark from '@/assets/roleDark.svg?react';
+
 export interface SingleLink {
 	path: string;
 	title: string;
-	children: React.ReactNode;
+	childrenLight: React.ReactNode;
+	childrenDark: React.ReactNode;
 }
 
 export interface NavbarProps {
@@ -20,29 +40,77 @@ export interface NavbarProps {
 }
 
 export function Navbar({ open }: NavbarProps) {
-	const links: (SingleLink | false)[] = [
-		{ title: 'Рецензии', path: '/admin/posts', children: null },
-		{ title: 'Список фильмов', path: '/admin/films', children: null },
-		{ title: 'Режиссёры', path: '/admin/directors', children: null },
-		{ title: 'Актеры', path: '/admin/actors', children: null },
-		{ title: 'Жанры', path: '/admin/genres', children: null },
-		{ title: 'Озвучка', path: '/admin/voiceovers', children: null },
-		{ title: 'Пользователи', path: '/admin/users', children: null },
-		{ title: 'Сотрудники', path: '/admin/employees', children: null },
-		{ title: 'Роли', path: '/admin/roles', children: null },
-	];
-
 	const { theme } = useAppSelector((s) => s.theme);
 	const [color, setColor] = useState(theme);
+
+	const links: (SingleLink | false)[] = [
+		{
+			title: 'Рецензии',
+			path: '/admin/posts',
+			childrenLight: <Post />,
+			childrenDark: <PostDark />,
+		},
+		{
+			title: 'Список фильмов',
+			path: '/admin/films',
+			childrenLight: <Film />,
+			childrenDark: <FilmDark />,
+		},
+		{
+			title: 'Режиссёры',
+			path: '/admin/directors',
+			childrenLight: <Director />,
+			childrenDark: <DirectorDark />,
+		},
+		{
+			title: 'Актеры',
+			path: '/admin/actors',
+			childrenLight: <Actor />,
+			childrenDark: <ActorDark />,
+		},
+		{
+			title: 'Жанры',
+			path: '/admin/genres',
+			childrenLight: <Genre />,
+			childrenDark: <GenreDark />,
+		},
+		{
+			title: 'Озвучка',
+			path: '/admin/voiceovers',
+			childrenLight: <Voice />,
+			childrenDark: <VoiceDark />,
+		},
+		{
+			title: 'Пользователи',
+			path: '/admin/users',
+			childrenLight: <User />,
+			childrenDark: <UserDark />,
+		},
+		{
+			title: 'Сотрудники',
+			path: '/admin/employees',
+			childrenLight: <Employee />,
+			childrenDark: <EmployeeDark />,
+		},
+		{
+			title: 'Роли',
+			path: '/admin/roles',
+			childrenLight: <Role />,
+			childrenDark: <RoleDark />,
+		},
+	];
+
 	useEffect(() => {
 		setColor(getCurrentColor());
 	}, [theme]);
 
 	return (
-		<nav className="bg-secondary flex flex-col border-solid h-screen">
+		<nav className="bg-secondary flex flex-col border-solid border-r-[2px] border-muted-foreground h-screen">
 			{open ? (
 				<NavLink to="/">
-					<div className={cn('h-[64px] w-[270px] items-center flex justify-center')}>
+					<div
+						className={cn('h-[64px] w-[270px] items-center -ml-3 flex justify-center')}
+					>
 						{color == 'white' ? <LogoDark height={35} /> : <Logo height={35} />}
 					</div>
 				</NavLink>
@@ -64,7 +132,7 @@ export function Navbar({ open }: NavbarProps) {
 					return (
 						<li key={key}>
 							<SidebarLink open={open} path={link.path} title={link.title}>
-								{link.children}
+								{theme == 'dark' ? link.childrenDark : link.childrenLight}
 							</SidebarLink>
 						</li>
 					);
