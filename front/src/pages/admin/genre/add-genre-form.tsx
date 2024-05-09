@@ -59,14 +59,14 @@ const AddGenreForm = ({ genre, setDialogOpen }: AddGenreFormProps) => {
 	useErrorToast(void 0, addError);
 
 	return (
-		<CustomForm className="mt-3 px-8 pb-8" form={form} onSubmit={handleSubmit}>
-			<ScrollArea className="w-full h-[150px] px-8">
+		<CustomForm className="mt-3 px-8 pb-8 border-0" form={form} onSubmit={handleSubmit}>
+			<ScrollArea className="w-full h-[150px]   border-0 ">
 				<FormField
 					control={form.control}
 					name="genre_name"
 					render={({ field }) => (
 						<InputField
-							className="text-accent-foreground "
+							className="text-accent-foreground ml-1 "
 							classNameInput="border border-input"
 							label={'Название'}
 							isRequired
@@ -78,8 +78,18 @@ const AddGenreForm = ({ genre, setDialogOpen }: AddGenreFormProps) => {
 
 				{addError && <ErrorCustomAlert error={addError} className="mt-3" />}
 				{updateError && <ErrorCustomAlert error={updateError} className="mt-3" />}
-				<Button className="mt-5 mr-4" type="submit" disabled={isAdding || isUpdating}>
-					{isAdding || isUpdating ? <LoadingSpinner /> : !genre ? 'Добавить' : 'Изменить'}
+				<Button
+					className="mt-5 ml-1 text-white "
+					type="submit"
+					disabled={isAdding || isUpdating}
+				>
+					{isAdding || isUpdating ? (
+						<LoadingSpinner className="text-white" />
+					) : !genre ? (
+						'Добавить'
+					) : (
+						'Изменить'
+					)}
 				</Button>
 			</ScrollArea>
 		</CustomForm>

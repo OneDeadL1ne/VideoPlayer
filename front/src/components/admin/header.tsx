@@ -31,9 +31,11 @@ export function Header({ open, setOpen }: HeaderProps) {
 				)}
 			</div>
 
-			<div className="flex items-center place-items-end justify-end gap-3 p-[10px]">
+			<div className="flex items-center place-items-end justify-end  gap-3 p-[10px]">
 				<SwithTheme />
-				<AccountMenu />
+				<div>
+					<AccountMenu />
+				</div>
 			</div>
 		</div>
 	);

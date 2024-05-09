@@ -53,7 +53,7 @@ export const ActionsDropdown = ({ voice }: { voice: VoiceInterface }) => {
 							setFormOpen(true);
 						}}
 					>
-						<p className="hover:text-muted-foreground text-accent-foreground">
+						<p className="hover:text-accent-foreground text-muted-foreground">
 							Изменить
 						</p>
 					</DropdownMenuItem>

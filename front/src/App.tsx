@@ -1,4 +1,4 @@
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import HomePage from './pages/home/HomePage';
 import NotFoundPage from './pages/NotFound';
@@ -8,7 +8,7 @@ import { getCurrentColorScheme, getJWTtokens } from './utils/helpers';
 import { FilmPage } from './pages/film/FilmPage';
 import { setAccessToken, setUser } from './redux/reducers/authSlice';
 import { useAppDispatch, useAppSelector } from './hooks/reduxHooks';
-import { useGetMyUserQuery } from './redux/api/user';
+import { useGetUserMutation } from './redux/api/user';
 import { useRefreshTokenMutation } from './redux/api/auth';
 import TableGenrePage from './pages/admin/genre/index';
 import TablePostPage from './pages/admin/post';
@@ -19,17 +19,19 @@ import TableVoiceOverPage from './pages/admin/voiceover';
 import TableRolePage from './pages/admin/role';
 import TableEmployeePage from './pages/admin/employee';
 import TableUserPage from './pages/admin/user';
+import ProfilePage from './pages/profile/ProfilePage';
+import AuthDialog from './components/dialog/AuthDialog';
 
 function App() {
 	const dispatch = useAppDispatch();
-	const navigate = useNavigate();
+
 	const { user } = useAppSelector((s) => s.auth);
 	const [
 		fetchRefreshToken,
 		{ data: newAccessToken, isError: refreshTokenError, isSuccess: refreshTokenSuccess },
 	] = useRefreshTokenMutation();
 
-	const { data: userData, isSuccess: isUserSuccess } = useGetMyUserQuery();
+	const [fetchUser, { data: userData, isSuccess: isUserSuccess }] = useGetUserMutation();
 
 	useEffect(() => {
 		const { accessToken, refreshToken } = getJWTtokens();
@@ -40,6 +42,10 @@ function App() {
 			fetchRefreshToken({ refresh_token: `${refreshToken}` });
 		} else if (!accessToken) {
 			console.log('2');
+		}
+
+		if (accessToken) {
+			fetchUser();
 		}
 	}, []);
 
@@ -65,7 +71,10 @@ function App() {
 		const { accessToken, refreshToken } = getJWTtokens();
 
 		if (!accessToken && !refreshToken) {
-			navigate('/');
+			return;
+		}
+		if (accessToken) {
+			fetchUser();
 		}
 	}, [document.cookie]);
 
@@ -82,7 +91,18 @@ function App() {
 					<Route path="/film/:id" element={<FilmPage />} />
 					<Route path="/film/:id" element={<FilmPage />} />
 				</Route>
-
+				<Route
+					path="/profile"
+					element={
+						user ? (
+							<ProfilePage />
+						) : (
+							<div className="opacity-0">
+								<AuthDialog active />
+							</div>
+						)
+					}
+				/>
 				<Route path="*" element={<NotFoundPage />} />
 			</Route>
 			{user?.role.role_name != 'Пользователь' && (

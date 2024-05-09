@@ -35,7 +35,7 @@ export default function CustomTabs({
 			onValueChange={getCurrentPage}
 		>
 			<ScrollArea className="w-full">
-				<TabsList className="gap-2">
+				<TabsList className="gap-2 ml-7 mb-3">
 					{tabs.map((tab, key) => (
 						<TabsTrigger
 							key={key}
@@ -71,7 +71,11 @@ export default function CustomTabs({
 			{tabs.map((tab, key) => {
 				if (tab.isDialog) {
 					return (
-						<TabsContent key={key} value={tab.value} className="w-full">
+						<TabsContent
+							key={key}
+							value={tab.value}
+							className="w-full border-0  focus-visible:ring-offset-0 focus-visible:ring-0 ring-0 "
+						>
 							<ScrollArea className="w-full max-h-[691px]">
 								{React.cloneElement(tab.content, {
 									setDialogOpen,
@@ -82,8 +86,8 @@ export default function CustomTabs({
 					);
 				} else {
 					return (
-						<TabsContent key={key} value={tab.value} className="w-full mt-8">
-							<Card className="p-5 content-center rounded-2xl">
+						<TabsContent key={key} value={tab.value} className="w-full mt-8 ">
+							<Card className="p-5 content-center rounded-2xl ">
 								<CardContent className="p-0">{tab.content}</CardContent>
 							</Card>
 						</TabsContent>

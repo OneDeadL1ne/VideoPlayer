@@ -23,7 +23,7 @@ export default function AccountMenu() {
 	const navigate = useNavigate();
 
 	const dispatch = useAppDispatch();
-	const { user } = useAppSelector((s) => s.auth);
+	const { user, isLogin } = useAppSelector((s) => s.auth);
 	const { theme } = useAppSelector((s) => s.theme);
 	const [color, setColor] = useState(theme);
 
@@ -47,16 +47,15 @@ export default function AccountMenu() {
 
 	const handleLogout = () => {
 		const refreshToken = getJWTtokens().refreshToken;
+		removeCookieValue('accessToken');
+		dispatch(setLogout());
+		dispatch(api.util.resetApiState());
 
 		if (refreshToken) {
 			logout({ refresh_token: refreshToken! });
 			removeCookieValue('refreshToken');
 		}
-
-		removeCookieValue('accessToken');
-
-		dispatch(api.util.resetApiState());
-		dispatch(setLogout());
+		navigate('/');
 	};
 
 	useEffect(() => {
@@ -70,22 +69,22 @@ export default function AccountMenu() {
 			<DropdownMenu>
 				<DropdownMenuTrigger asChild>
 					<div className="cursor-pointer flex items-center justify-center gap-1">
-						<div className="font-pop text-[14px] text-accent-foreground hidden @[500px]:inline-flex">
+						<div className="font-pop text-[14px] text-accent-foreground ">
 							{isUserLoading ? (
 								<Skeleton className="w-[120px] h-5 rounded-xl" />
 							) : (
-								<p>{userName}</p>
+								<p className="hidden sm:inline-block">{userName}</p>
 							)}
 						</div>
 						<Avatar>
 							{user?.avatar_url && user?.avatar_url.length != 0 ? (
 								<AvatarImage
-									className="h-10 rounded-full self-center"
+									className="h-10 w-10 rounded-full self-center"
 									src={user.avatar_url}
 									alt={`@${user.nickname}`}
 								/>
 							) : (
-								<AvatarFallback>
+								<AvatarFallback className="bg-secondary">
 									<User color={color} />
 								</AvatarFallback>
 							)}
@@ -99,7 +98,7 @@ export default function AccountMenu() {
 					{user?.role.role_name != 'Пользователь' && (
 						<DropdownMenuItem asChild>
 							<Button
-								onClick={() => navigate('/admin/genres')}
+								onClick={() => navigate('/admin/posts')}
 								variant="ghost"
 								className="w-full h-5 justify-start p-3  hover:cursor-pointer  "
 								size="sm"

@@ -40,6 +40,6 @@ export const api = createApi({
 			return headers;
 		},
 	}),
-	tagTypes: ['User', 'Genre', 'Role', 'Voice'],
+	tagTypes: ['User', 'Genre', 'Role', 'Voice', 'Actor'],
 	endpoints: () => ({}),
 });

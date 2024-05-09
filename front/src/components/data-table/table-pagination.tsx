@@ -55,21 +55,21 @@ export function TablePagination<TData>({ table }: TablePaginationProps<TData>) {
 				<div className="flex items-center space-x-2">
 					<Button
 						variant="ghost"
-						className="hidden h-8 w-8 p-0 lg:flex bg-pagination text-primary"
+						className="hidden h-8 w-8 p-0 lg:flex bg-pagination "
 						onClick={() => table?.setPageIndex(0)}
 						disabled={!table?.getCanPreviousPage()}
 					>
 						<span className="sr-only">{1}</span>
-						<DoubleArrowLeftIcon className="h-4 w-4" />
+						<DoubleArrowLeftIcon className="h-5 w-5" color="#ff6b00" />
 					</Button>
 					<Button
 						variant="ghost"
-						className="h-8 w-8 p-0 bg-pagination text-primary"
+						className="h-8 w-8 p-0 bg-pagination  "
 						onClick={() => table?.previousPage()}
 						disabled={!table?.getCanPreviousPage()}
 					>
 						<span className="sr-only">{2}</span>
-						<ChevronLeftIcon className="h-4 w-4" />
+						<ChevronLeftIcon className="h-5 w-5" color="#ff6b00" />
 					</Button>
 					{totalPagesCount &&
 						totalPagesCount.map((page) => {
@@ -130,7 +130,7 @@ export function TablePagination<TData>({ table }: TablePaginationProps<TData>) {
 						disabled={!table?.getCanNextPage()}
 					>
 						<span className="sr-only">След</span>
-						<ChevronRightIcon className="h-4 w-4" />
+						<ChevronRightIcon className="h-5 w-5" color="#ff6b00" />
 					</Button>
 					<Button
 						variant="ghost"
@@ -139,7 +139,7 @@ export function TablePagination<TData>({ table }: TablePaginationProps<TData>) {
 						disabled={!table?.getCanNextPage()}
 					>
 						<span className="sr-only">Назад</span>
-						<DoubleArrowRightIcon className="h-4 w-4" />
+						<DoubleArrowRightIcon className="h-5 w-5" color="#ff6b00" />
 					</Button>
 				</div>
 			</div>

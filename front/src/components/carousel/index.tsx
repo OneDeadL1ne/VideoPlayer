@@ -18,9 +18,9 @@ export interface CarouselProps<T> {
 
 export function CustomCarousel<T>({
 	title,
-	type = 'default',
+	//type = 'default',
 	data = [],
-	disabledButtons = false,
+	//disabledButtons = false,
 	loop = true,
 }: CarouselProps<T>) {
 	//const [activeIndex, setActiveIndex] = useState(0);

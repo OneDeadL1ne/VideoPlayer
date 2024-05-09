@@ -12,13 +12,15 @@ import { Eye, EyeOff } from 'lucide-react';
 import { InputField } from '../input/input-field';
 
 import { useAuthMutation } from '@/redux/api/auth';
-import { useAppDispatch } from '@/hooks/reduxHooks';
+import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks';
 
 import { setAccessToken, setRefreshToken } from '@/redux/reducers/authSlice';
 import { LoadingSpinner } from '../spinner/spinner';
 import { useErrorToast } from '@/hooks/use-error-toast';
 import { useSuccessToast } from '@/hooks/use-success-toast';
 import { Checkbox } from '../ui/checkbox';
+import { getCurrentColor } from '@/utils/helpers';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const FormSchema = z.object({
 	email: z.string(),
@@ -26,9 +28,13 @@ const FormSchema = z.object({
 	remember_me: z.boolean(),
 });
 
-export default function AuthDialog() {
-	const [open, setOpen] = useState(false);
-
+export default function AuthDialog({ active = false }: { active?: boolean }) {
+	const [open, setOpen] = useState(active);
+	const navigate = useNavigate();
+	const { theme } = useAppSelector((s) => s.theme);
+	const { isLogin } = useAppSelector((s) => s.auth);
+	const [color, setColor] = useState(theme);
+	const { pathname } = useLocation();
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
@@ -57,6 +63,17 @@ export default function AuthDialog() {
 	function onSubmit(data: z.infer<typeof FormSchema>) {
 		signIn(data);
 	}
+
+	useEffect(() => {
+		setColor(getCurrentColor());
+	}, [theme]);
+
+	useEffect(() => {
+		if (!isLogin && !open && active && pathname == '/profile') {
+			navigate('/');
+		}
+	}, [open]);
+
 	useSuccessToast('Успешная Авторизация', isAuthSuccess, setOpen);
 	useErrorToast(() => onSubmit(form.getValues()), error);
 
@@ -65,7 +82,7 @@ export default function AuthDialog() {
 			<DialogTrigger asChild>
 				<Button variant="outline">Войти</Button>
 			</DialogTrigger>
-			<DialogContent className="sm:max-w-[425px] bg-secondary	border-accent-foreground text-accent-foreground	   ">
+			<DialogContent className="sm:max-w-[425px]  bg-secondary	border-0 text-accent-foreground	   ">
 				<DialogHeader>
 					<DialogTitle>Авторизация</DialogTitle>
 				</DialogHeader>
@@ -78,6 +95,7 @@ export default function AuthDialog() {
 								<InputField
 									label="Логин"
 									isRequired
+									type="email"
 									classNameInput="border border-input"
 									{...field}
 								/>
@@ -91,6 +109,7 @@ export default function AuthDialog() {
 									label="Пароль"
 									type={passwordShown ? 'text' : 'password'}
 									className="mt-3  relative  "
+									classNameInput="border border-input"
 									suffixIcon={
 										<Button
 											type="button"
@@ -99,13 +118,9 @@ export default function AuthDialog() {
 											onClick={() => setPasswordShown(!passwordShown)}
 										>
 											{passwordShown ? (
-												<Eye size={20} strokeWidth={2.4} color="#3F434A" />
+												<Eye size={20} strokeWidth={2.4} color={color} />
 											) : (
-												<EyeOff
-													size={20}
-													strokeWidth={2.4}
-													color="#3F434A"
-												/>
+												<EyeOff size={20} strokeWidth={2.4} color={color} />
 											)}
 										</Button>
 									}
@@ -120,6 +135,7 @@ export default function AuthDialog() {
 								<Checkbox
 									label="Запомнить меня"
 									id="remember"
+									color={color}
 									checked={field.value}
 									onCheckedChange={field.onChange}
 								/>

@@ -1,17 +1,19 @@
 import { PageLayout } from '@/components/admin/page-layout';
 import CustomTabs from '@/components/custom-tabs/custom-tabs';
 import DataTable from '@/components/data-table/data-table';
-import { useGetGenresQuery } from '@/redux/api/genre';
-import { genresTableColumns } from './genres-columns';
+
 import { ErrorCustomAlert } from '@/components/custom-alert/custom-alert';
 import DialogWindow from '@/components/dialog-window/dialog-window';
 import { useState } from 'react';
-import { genreFormTab } from './genre-form-tab';
+
+import { useGetActorsQuery } from '@/redux/api/actor';
+import { actorsTableColumns } from './actor-columns';
+import { actorFormTab } from './actor-form-tab';
 
 export default function TableActorPage() {
 	const [formOpen, setFormOpen] = useState(false);
-	//const { data: genres } = useGetGenresQuery();
-	const { data: genres, error, isFetching, refetch } = useGetGenresQuery();
+
+	const { data: actors, error, isFetching, refetch } = useGetActorsQuery();
 
 	return (
 		<PageLayout
@@ -22,7 +24,7 @@ export default function TableActorPage() {
 				<DialogWindow
 					open={formOpen}
 					setOpen={setFormOpen}
-					content={<CustomTabs tabs={genreFormTab()} setDialogOpen={setFormOpen} />}
+					content={<CustomTabs tabs={actorFormTab()} setDialogOpen={setFormOpen} />}
 				/>
 			}
 		>
@@ -30,8 +32,8 @@ export default function TableActorPage() {
 				<ErrorCustomAlert error={error} />
 			) : (
 				<DataTable
-					data={genres!}
-					columns={genresTableColumns}
+					data={actors!}
+					columns={actorsTableColumns}
 					isLoading={isFetching}
 					hasBackground
 				/>

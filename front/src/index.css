@@ -15,6 +15,9 @@ body {
 		margin: 0;
 		-moz-appearance: textfield !important;
 	}
+	input[type='file']::-webkit-file-upload-button {
+		display: none;
+	}
 
 	:root {
 		--background: 0 0% 100%;
@@ -52,7 +55,9 @@ body {
 		--color-text-primary: #ff6b00;
 		--color-text-accent-foreground: #000000;
 		--color-text-accent: #fff;
-		--color-text-muted-foreground: #cbcbcc;
+		--color-text-muted-foreground: #696969;
+
+		--color-border-muted-foreground: #cbcbcc;
 
 		--color-ring-ring: #000000;
 
@@ -60,7 +65,7 @@ body {
 		--color-bg-accent: #edeef0;
 		--color-bg-secondary: #fff;
 
-		--pagination: #edeef0;
+		--pagination: #ffb680;
 	}
 
 	:root[data-color-scheme='dark'] {
@@ -76,7 +81,7 @@ body {
 		--color-bg-accent: #1a1a1a;
 		--color-bg-secondary: #36393f;
 
-		--pagination: rgba(253, 121, 114, 0.1);
+		--pagination: #ffb680;
 	}
 
 	.dark {

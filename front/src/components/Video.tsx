@@ -2,26 +2,26 @@
 import '@vidstack/react/player/styles/default/theme.css';
 import '@vidstack/react/player/styles/default/layouts/video.css';
 //import '@vidstack/react/player/styles/base.css';
-const SOURCES = [
-	{
-		src: 'http://localhost:3001/video/stream/film/1/1_1080p.m3u8',
-		type: 'application/x-mpegURL',
-		width: 1920,
-		height: 1080,
-	},
-	{
-		src: 'http://localhost:3001/video/stream/film/1/1_720p.m3u8',
-		type: 'application/x-mpegURL',
-		width: 1280,
-		height: 720,
-	},
-	{
-		src: 'http://localhost:3001/video/stream/film/1/1_480p.m3u8',
-		type: 'application/x-mpegURL',
-		width: 853,
-		height: 480,
-	},
-];
+// const SOURCES = [
+// 	{
+// 		src: 'http://localhost:3001/video/stream/film/1/1_1080p.m3u8',
+// 		type: 'application/x-mpegURL',
+// 		width: 1920,
+// 		height: 1080,
+// 	},
+// 	{
+// 		src: 'http://localhost:3001/video/stream/film/1/1_720p.m3u8',
+// 		type: 'application/x-mpegURL',
+// 		width: 1280,
+// 		height: 720,
+// 	},
+// 	{
+// 		src: 'http://localhost:3001/video/stream/film/1/1_480p.m3u8',
+// 		type: 'application/x-mpegURL',
+// 		width: 853,
+// 		height: 480,
+// 	},
+// ];
 
 import { MediaPlayer, MediaProvider } from '@vidstack/react';
 import {

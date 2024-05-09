@@ -59,8 +59,8 @@ const AddGenreForm = ({ voice, setDialogOpen }: AddGenreFormProps) => {
 	useErrorToast(void 0, addError);
 
 	return (
-		<CustomForm className="mt-3 px-8 pb-8" form={form} onSubmit={handleSubmit}>
-			<ScrollArea className="w-full h-[150px] px-8">
+		<CustomForm className="mt-3 px-8 pb-8 border-0" form={form} onSubmit={handleSubmit}>
+			<ScrollArea className="w-full h-[150px] ">
 				<FormField
 					control={form.control}
 					name="voiceover_name"
@@ -78,8 +78,18 @@ const AddGenreForm = ({ voice, setDialogOpen }: AddGenreFormProps) => {
 
 				{addError && <ErrorCustomAlert error={addError} className="mt-3" />}
 				{updateError && <ErrorCustomAlert error={updateError} className="mt-3" />}
-				<Button className="mt-5 mr-4" type="submit" disabled={isAdding || isUpdating}>
-					{isAdding || isUpdating ? <LoadingSpinner /> : !voice ? 'Добавить' : 'Изменить'}
+				<Button
+					className="mt-5 ml-1 text-white"
+					type="submit"
+					disabled={isAdding || isUpdating}
+				>
+					{isAdding || isUpdating ? (
+						<LoadingSpinner className="text-white" />
+					) : !voice ? (
+						'Добавить'
+					) : (
+						'Изменить'
+					)}
 				</Button>
 			</ScrollArea>
 		</CustomForm>

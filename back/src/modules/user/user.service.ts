@@ -131,22 +131,25 @@ export class UserService {
   }
 
   async findById(id: number) {
-    console.log(id)
-    const result = await this.userRepository.findOne({
-      include: [Role, Person],
-      where: { id_user: id },
-      attributes: {
-        exclude: ['password', 'id_role', 'id_person'],
-      },
-    })
-
-    if (result != null) {
-      return result
-    } else {
-      return Promise.reject({
-        statusCode: HttpStatus.NOT_FOUND,
-        message: AppError.USER_NOT_FOUND,
+    try {
+      const result = await this.userRepository.findOne({
+        include: [Role, Person],
+        where: { id_user: id },
+        attributes: {
+          exclude: ['password', 'id_role', 'id_person'],
+        },
       })
+
+      if (result != null) {
+        return result
+      } else {
+        return Promise.reject({
+          statusCode: HttpStatus.NOT_FOUND,
+          message: AppError.USER_NOT_FOUND,
+        })
+      }
+    } catch (error) {
+      throw new Error(error)
     }
   }
 

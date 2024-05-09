@@ -45,8 +45,8 @@ module.exports = {
 			borderColor: {
 				primary: 'var(--color-text-primary)',
 				muted: {
-					DEFAULT: 'var(--color-text-muted)',
-					foreground: 'var(--color-text-muted-foreground)',
+					DEFAULT: 'var(--color-border-muted)',
+					foreground: 'var(--color-border-muted-foreground)',
 				},
 				accent: {
 					DEFAULT: 'var(--color-text-accent)',

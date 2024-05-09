@@ -34,7 +34,7 @@ interface DialogWindowProps extends VariantProps<typeof dialogVariants> {
 const DialogWindow = ({
 	header,
 	trigger = <PlusButton />,
-	triggerPermissions = [],
+	//triggerPermissions = [],
 	content,
 	open,
 	setOpen,

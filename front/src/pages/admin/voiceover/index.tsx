@@ -23,6 +23,7 @@ export default function TableVoiceOverPage() {
 				<DialogWindow
 					open={formOpen}
 					setOpen={setFormOpen}
+					className="border-0"
 					content={<CustomTabs tabs={voiceFormTab()} setDialogOpen={setFormOpen} />}
 				/>
 			}

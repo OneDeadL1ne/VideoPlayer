@@ -6,10 +6,11 @@ import { cn } from '@/lib/utils';
 
 interface CheckboxProps extends React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root> {
 	label?: string;
+	color?: string;
 }
 
 const Checkbox = React.forwardRef<React.ElementRef<typeof CheckboxPrimitive.Root>, CheckboxProps>(
-	({ label, className, ...props }, ref) => (
+	({ label, className, color, ...props }, ref) => (
 		<div className="flex items-center select-none">
 			<CheckboxPrimitive.Root
 				ref={ref}
@@ -20,7 +21,7 @@ const Checkbox = React.forwardRef<React.ElementRef<typeof CheckboxPrimitive.Root
 				{...props}
 			>
 				<CheckboxPrimitive.Indicator>
-					<Check className="h-4 w-4" />
+					<Check className="h-4 w-4" color={color} />
 				</CheckboxPrimitive.Indicator>
 			</CheckboxPrimitive.Root>
 			{label && (

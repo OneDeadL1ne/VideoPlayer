@@ -141,10 +141,6 @@ function DataTable<TData, TValue>({
 													}`}
 													onClick={() => {
 														if (!header.column.getIsSorted()) {
-															console.log(
-																header.column.getIsSorted()
-															);
-
 															header.column.toggleSorting(false);
 														}
 														header.column.toggleSorting(
@@ -152,7 +148,7 @@ function DataTable<TData, TValue>({
 														);
 													}}
 												>
-													<ArrowDown />
+													<ArrowDown strokeWidth={1.5} />
 												</Button>
 											)}
 										</div>
@@ -196,7 +192,10 @@ function DataTable<TData, TValue>({
 							))
 						) : (
 							<TableRow>
-								<TableCell colSpan={columns.length} className="h-24 text-center">
+								<TableCell
+									colSpan={columns.length}
+									className="h-24 text-accent-foreground text-center"
+								>
 									Ничего не найдено
 								</TableCell>
 							</TableRow>
