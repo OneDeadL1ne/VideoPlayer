@@ -10,24 +10,24 @@ import { FormField } from '@/components/ui/form.tsx';
 import { ScrollArea } from '@/components/ui/scroll-area.tsx';
 
 import { InputField } from '@/components/input/input-field';
-import { ActorInterface } from '@/types/actor';
-import {
-	useCreateActorMutation,
-	useDeleteAvatarActorMutation,
-	useImageActorMutation,
-	useUpdateActorMutation,
-} from '@/redux/api/actor';
 
-import { CustomAvatar } from '@/components/custom-avatar/CustomAvatar';
 import CropperImage from '@/components/cropper/cropper';
 import DialogWindow from '@/components/dialog-window/dialog-window';
 import { Edit2, Trash2 } from 'lucide-react';
 import { useErrorToast } from '@/hooks/use-error-toast';
 import { useSuccessToast } from '@/hooks/use-success-toast';
 import PlusButton from '@/components/plus-button/plus-button';
+import { CustomAvatar } from '@/components/custom-avatar/CustomAvatar';
+import { DirectorInterface } from '@/types/director';
+import {
+	useCreateDirectorMutation,
+	useDeleteAvatarDirectorMutation,
+	useImageDirectorMutation,
+	useUpdateDirectorMutation,
+} from '@/redux/api/director';
 
-interface AddActorFormProps {
-	actor?: ActorInterface;
+interface AddDirectorFormProps {
+	director?: DirectorInterface;
 	setDialogOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -37,38 +37,40 @@ const formSchema = z.object({
 	patronymic: z.string(),
 });
 
-const AddActorForm = ({ actor, setDialogOpen }: AddActorFormProps) => {
+const AddDirectorForm = ({ director, setDialogOpen }: AddDirectorFormProps) => {
 	const [photo, setPhoto] = useState<File | Blob | null>(null);
 	const [avatar, setAvatar] = useState<File | Blob | null>(null);
 
-	const [crop, setCrop] = useState(actor?.avatar_url ? actor.avatar_url : '');
+	const [crop, setCrop] = useState(director?.avatar_url ? director.avatar_url : '');
 	const [open, setOpen] = useState(false);
 	const form = useForm({
 		schema: formSchema,
-		defaultValues: !actor
+		defaultValues: !director
 			? { first_name: '', last_name: '', patronymic: '' }
 			: {
-					first_name: actor?.first_name,
-					last_name: actor?.last_name,
-					patronymic: actor?.patronymic,
+					first_name: director?.first_name,
+					last_name: director?.last_name,
+					patronymic: director?.patronymic,
 			  },
 	});
 
 	const [
-		addActor,
-		{ data: newActor, isLoading: isAdding, error: addError, isSuccess: addSuccess },
-	] = useCreateActorMutation();
-	const [addPhoto, { isSuccess: photoSuccess }] = useImageActorMutation();
-	const [resetPhoto, { isSuccess: resetSuccess }] = useDeleteAvatarActorMutation();
+		addDirector,
+		{ data: newDirector, isLoading: isAdding, error: addError, isSuccess: addSuccess },
+	] = useCreateDirectorMutation();
+	const [addPhoto, { isSuccess: photoSuccess }] = useImageDirectorMutation();
+	const [resetPhoto, { isSuccess: resetSuccess }] = useDeleteAvatarDirectorMutation();
 
-	const [updateActor, { isLoading: isUpdating, error: updateError, isSuccess: updateSuccess }] =
-		useUpdateActorMutation();
+	const [
+		updateDirector,
+		{ isLoading: isUpdating, error: updateError, isSuccess: updateSuccess },
+	] = useUpdateDirectorMutation();
 
 	const handleSubmit = (data: { first_name: string; last_name: string; patronymic: string }) => {
-		if (actor?.id_actor) {
-			updateActor({ id_actor: actor.id_actor, ...data });
+		if (director?.id_director) {
+			updateDirector({ id_director: director.id_director, ...data });
 		} else {
-			addActor(data);
+			addDirector(data);
 		}
 	};
 
@@ -81,11 +83,11 @@ const AddActorForm = ({ actor, setDialogOpen }: AddActorFormProps) => {
 	}, []);
 
 	useEffect(() => {
-		if (addSuccess && newActor.data?.id_actor && avatar && photo) {
+		if (addSuccess && newDirector.data?.id_director && avatar && photo) {
 			const formData = new FormData();
 			formData.append('files', photo);
 			formData.append('files', avatar);
-			addPhoto({ id_actor: newActor.data?.id_actor, formData: formData });
+			addPhoto({ id_director: newDirector.data?.id_director, formData: formData });
 		}
 	}, [addSuccess]);
 
@@ -157,7 +159,7 @@ const AddActorForm = ({ actor, setDialogOpen }: AddActorFormProps) => {
 							<CropperImage
 								open={open}
 								photo={photo!}
-								image={actor?.photo_url ? actor.photo_url : ''}
+								image={director?.photo_url ? director.photo_url : ''}
 								cropped={crop}
 								setOpen={setOpen}
 								updateCrop={setCrop}
@@ -190,15 +192,17 @@ const AddActorForm = ({ actor, setDialogOpen }: AddActorFormProps) => {
 									className="bg-accent"
 									type="button"
 									onClick={() => {
-										if (actor?.id_actor && crop && actor.photo_url) {
-											resetPhoto(actor?.id_actor);
+										if (director?.id_director && crop && director.photo_url) {
+											resetPhoto(director?.id_director);
 											setCrop('');
 
 											setAvatar(null);
 											setPhoto(null);
 										}
-										if (!actor?.id_actor && crop && avatar && photo) {
+
+										if (!director?.id_director && crop && avatar && photo) {
 											setCrop('');
+
 											setAvatar(null);
 											setPhoto(null);
 										}
@@ -215,18 +219,18 @@ const AddActorForm = ({ actor, setDialogOpen }: AddActorFormProps) => {
 					className="mt-3 ml-1 text-white"
 					type="submit"
 					onClick={() => {
-						if (actor?.id_actor && avatar && photo) {
+						if (director?.id_director && avatar && photo) {
 							const formData = new FormData();
 							formData.append('files', photo);
 							formData.append('files', avatar);
-							addPhoto({ id_actor: actor?.id_actor, formData: formData });
+							addPhoto({ id_director: director?.id_director, formData: formData });
 						}
 					}}
 					disabled={isAdding || isUpdating}
 				>
 					{isAdding || isUpdating ? (
 						<LoadingSpinner className="text-white" />
-					) : !actor ? (
+					) : !director ? (
 						'Добавить'
 					) : (
 						'Изменить'
@@ -237,4 +241,4 @@ const AddActorForm = ({ actor, setDialogOpen }: AddActorFormProps) => {
 	);
 };
 
-export default AddActorForm;
+export default AddDirectorForm;

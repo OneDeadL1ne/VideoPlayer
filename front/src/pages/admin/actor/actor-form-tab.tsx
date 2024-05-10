@@ -4,7 +4,7 @@ import AddActorForm from './add-actor-form.tsx';
 
 export const actorFormTab = (actor?: ActorInterface) => [
 	{
-		value: 'genre-creation',
+		value: 'actor-creation',
 		head: `${actor ? 'Изменение актера' : 'Добавление'}`,
 		isDialog: true,
 		content: <AddActorForm actor={actor} />,

@@ -1,12 +1,13 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { ActionsDropdown } from './action-buttons.tsx';
-import { ActorInterface } from '@/types/actor.ts';
+
+import { DirectorInterface } from '@/types/director.ts';
 import { CustomAvatar } from '@/components/custom-avatar/CustomAvatar.tsx';
 
-export const actorsTableColumns: ColumnDef<ActorInterface>[] = [
+export const directorsTableColumns: ColumnDef<DirectorInterface>[] = [
 	{
 		header: 'Номер',
-		accessorKey: 'id_actor',
+		accessorKey: 'id_director',
 	},
 	{
 		accessorKey: 'avatar_url',
@@ -27,6 +28,6 @@ export const actorsTableColumns: ColumnDef<ActorInterface>[] = [
 	},
 	{
 		id: 'actions',
-		cell: ({ row }) => <ActionsDropdown actor={row.original} />,
+		cell: ({ row }) => <ActionsDropdown director={row.original} />,
 	},
 ];

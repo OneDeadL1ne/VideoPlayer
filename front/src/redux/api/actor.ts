@@ -31,7 +31,7 @@ const actorApi = api.injectEndpoints({
 			invalidatesTags: ['Actor'],
 		}),
 		imageActor: builder.mutation<
-			FetchResultInterface<string>,
+			FetchResultInterface<ActorInterface>,
 			{ id_actor: number; formData: FormData }
 		>({
 			query: ({ id_actor, formData }) => ({
@@ -41,10 +41,17 @@ const actorApi = api.injectEndpoints({
 			}),
 			invalidatesTags: ['Actor'],
 		}),
-		delereActor: builder.mutation<FetchResultInterface, number>({
+		deleteActor: builder.mutation<FetchResultInterface, number>({
 			query: (id) => ({
 				url: `actor/${id}`,
 				method: 'DELETE',
+			}),
+			invalidatesTags: ['Actor'],
+		}),
+		deleteAvatarActor: builder.mutation<FetchResultInterface, number>({
+			query: (id) => ({
+				url: `actor/image?id_actor=${id}`,
+				method: 'PATCH',
 			}),
 			invalidatesTags: ['Actor'],
 		}),
@@ -58,5 +65,6 @@ export const {
 	useGetActorsQuery,
 	useImageActorMutation,
 	useUpdateActorMutation,
-	useDelereActorMutation,
+	useDeleteActorMutation,
+	useDeleteAvatarActorMutation,
 } = actorApi;

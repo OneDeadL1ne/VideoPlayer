@@ -16,11 +16,11 @@ import { useSuccessToast } from '@/hooks/use-success-toast';
 
 import { useErrorToast } from '@/hooks/use-error-toast';
 import { ActorInterface } from '@/types/actor';
-import { useDelereActorMutation } from '@/redux/api/actor';
+import { useDeleteActorMutation } from '@/redux/api/actor';
 
 export const ActionsDropdown = ({ actor }: { actor: ActorInterface }) => {
 	const [formOpen, setFormOpen] = useState(false);
-	const [deleteActor, { error, isSuccess, isLoading }] = useDelereActorMutation();
+	const [deleteActor, { error, isSuccess, isLoading }] = useDeleteActorMutation();
 
 	const deleteSuccessMsg = useMemo(
 		() => `Актер "${actor.last_name} ${actor.first_name}" удален`,

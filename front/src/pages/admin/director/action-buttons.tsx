@@ -10,23 +10,28 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu.tsx';
-import { GenreInterface } from '@/types/genre';
-import { genreFormTab } from './genre-form-tab';
+
 import { useSuccessToast } from '@/hooks/use-success-toast';
-import { useDelereGenreMutation } from '@/redux/api/genre';
+
 import { useErrorToast } from '@/hooks/use-error-toast';
+import { DirectorInterface } from '@/types/director';
+import { useDeleteDirectorMutation } from '@/redux/api/director';
+import { directorFormTab } from './director-form-tab';
 
-export const ActionsDropdown = ({ genre }: { genre: GenreInterface }) => {
+export const ActionsDropdown = ({ director }: { director: DirectorInterface }) => {
 	const [formOpen, setFormOpen] = useState(false);
-	const [deleteGenre, { error, isSuccess, isLoading }] = useDelereGenreMutation();
+	const [deleteDirector, { error, isSuccess, isLoading }] = useDeleteDirectorMutation();
 
-	const deleteSuccessMsg = useMemo(() => `Жанр "${genre.genre_name}" удален`, []);
+	const deleteSuccessMsg = useMemo(
+		() => `Режиссер "${director.last_name} ${director.first_name}" удален`,
+		[]
+	);
 
 	const handleGenreDelete = useCallback(() => {
-		if (genre.id_genre) {
-			deleteGenre(genre.id_genre);
+		if (director.id_director) {
+			deleteDirector(director.id_director);
 		}
-	}, [genre.id_genre, deleteGenre]);
+	}, [director.id_director, deleteDirector]);
 
 	useErrorToast(handleGenreDelete, error);
 	useSuccessToast(deleteSuccessMsg, isSuccess);
@@ -34,13 +39,16 @@ export const ActionsDropdown = ({ genre }: { genre: GenreInterface }) => {
 		<Fragment>
 			<DialogWindow
 				open={formOpen}
+				className="focus:outline-none outline-none "
 				setOpen={setFormOpen}
 				trigger={null}
-				content={<CustomTabs tabs={genreFormTab(genre)} setDialogOpen={setFormOpen} />}
+				content={
+					<CustomTabs tabs={directorFormTab(director)} setDialogOpen={setFormOpen} />
+				}
 			/>
 			<DropdownMenu>
 				<DropdownMenuTrigger asChild>
-					<Button variant="ghost" className="h-8 w-8 p-0 text-[#8A9099]">
+					<Button variant="ghost" className="h-8 w-8 p-0 text-[#8A9099]  ">
 						<span className="sr-only">Закрыть</span>
 						<MoreVertical className="h-4 w-4" />
 					</Button>

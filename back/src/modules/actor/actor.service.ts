@@ -130,4 +130,33 @@ export class ActorService {
       throw new Error(error)
     }
   }
+
+  async deleteAvatarActor(id_actor: number) {
+    try {
+      const dir = `./upload/images/actors/${id_actor}`
+
+      await this.actorRepository.update({ photo_url: null, avatar_url: null }, { where: { id_actor: id_actor } })
+
+      if (fs.existsSync(dir)) {
+        const images = fs.readdirSync(dir)
+        for (const f of images) {
+          if (f) {
+            fs.rmSync(`${dir}/${f}`)
+          }
+        }
+      }
+
+      const foundActor = await this.actorRepository.findOne({
+        where: { id_actor: id_actor },
+      })
+
+      if (foundActor) {
+        return { status: true, data: foundActor }
+      }
+
+      return { status: false }
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
 }

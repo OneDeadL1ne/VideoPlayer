@@ -46,7 +46,7 @@ export class ActorController {
   async getImage(@Param('id_actor') id_actor: number, @Param('image') image: string, @Res() res) {
     return await res.sendFile(image, { root: `./upload/images/actors/${id_actor}` })
   }
-
+  @UseGuards(JwtAuthGuard, ActiveGuard)
   @Post('upload')
   @UseInterceptors(
     FilesInterceptor('files', 3, {
@@ -79,7 +79,12 @@ export class ActorController {
       }),
     }),
   )
-  uploadActorImage(@Query('id_actor') id_actor: number, @UploadedFiles() files: Array<Express.Multer.File>) {
-    return this.actorService.updateAvatarActor(id_actor, files)
+  async uploadActorImage(@Query('id_actor') id_actor: number, @UploadedFiles() files: Array<Express.Multer.File>) {
+    return await this.actorService.updateAvatarActor(id_actor, files)
+  }
+  @UseGuards(JwtAuthGuard, ActiveGuard)
+  @Patch('image')
+  async deleteActorImage(@Query('id_actor') id_actor: number) {
+    return await this.actorService.deleteAvatarActor(id_actor)
   }
 }
