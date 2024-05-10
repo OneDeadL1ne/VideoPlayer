@@ -23,7 +23,7 @@ export default function AccountMenu() {
 	const navigate = useNavigate();
 
 	const dispatch = useAppDispatch();
-	const { user, isLogin } = useAppSelector((s) => s.auth);
+	const { user } = useAppSelector((s) => s.auth);
 	const { theme } = useAppSelector((s) => s.theme);
 	const [color, setColor] = useState(theme);
 
