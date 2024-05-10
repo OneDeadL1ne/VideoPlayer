@@ -12,7 +12,7 @@ async function bootstrap() {
       'https://766qc35g-3000.euw.devtunnels.ms/',
       'https://766qc35g-3000.euw.devtunnels.ms',
       'http://89.169.53.46',
-      'https://89.169.53.46/',
+      'http://89.169.53.46/',
     ],
     methods: ['POST', 'GET', 'PUT', 'PATCH', 'DELETE'],
     credentials: true,
