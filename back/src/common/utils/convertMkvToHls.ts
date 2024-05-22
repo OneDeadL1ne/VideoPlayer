@@ -4,7 +4,6 @@ export async function convertToHls(path: string, id_film: number, type: 'film' |
   const hlsOutputPath = `assets/${id_film}/${type}/${id_film}_${name}.m3u8`
 
   return new Promise((resolve, reject) => {
-    // Конвертация MP4 в M3U8
     const ffmpegMp4ToHlsProcess = spawn('ffmpeg', [
       '-i',
       path,
@@ -39,7 +38,6 @@ export async function convertToHls(path: string, id_film: number, type: 'film' |
       `assets/${id_film}/${type}/${id_film}_${name}_%03d.ts`,
       hlsOutputPath,
     ])
-
     ffmpegMp4ToHlsProcess.stdout.on('data', (data) => {
       console.log(`MP4 to HLS stdout: ${data}`)
     })
@@ -48,12 +46,15 @@ export async function convertToHls(path: string, id_film: number, type: 'film' |
       console.error(`MP4 to HLS stderr: ${data}`)
     })
 
+    // ffmpegMp4ToHlsProcess.stderr.on('error', (data) => {
+    //   console.error(`MP4 to HLS error: ${data}`)
+    // })
+
     ffmpegMp4ToHlsProcess.on('close', (code) => {
-      console.log(`MP4 to HLS child process exited with code ${code}`)
       if (code === 0) {
-        resolve(hlsOutputPath)
+        resolve(code)
       } else {
-        reject(new Error(`MP4 to HLS FFmpeg process exited with code ${code}`))
+        reject(new Error(code.toString()))
       }
     })
   })

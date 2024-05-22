@@ -4,7 +4,7 @@ import { User } from './entities/user.entity'
 import * as bcrypt from 'bcrypt'
 import { InjectModel } from '@nestjs/sequelize'
 import { Person } from 'src/modules/person/entities/person.entity'
-import { CreatePersonDto, UpdatePersonDto } from 'src/modules/person/dto'
+import { CreatePersonDto } from 'src/modules/person/dto'
 
 import { Sequelize } from 'sequelize-typescript'
 
@@ -72,10 +72,9 @@ export class UserService {
     }
   }
 
-  async update(updatedUser: UpdateUserDto): Promise<UserResponse> {
+  async update(updatedUser: UpdateUserDto) {
+    const transaction = await this.sequelize.transaction()
     try {
-      const transaction = await this.sequelize.transaction()
-
       if (updatedUser.email != undefined) {
         const email = updatedUser.email.toLowerCase()
         updatedUser.email = email
@@ -86,32 +85,39 @@ export class UserService {
       }
 
       const user = await this.findById(updatedUser.id_user)
-      const person_id = user.person.id_person
-      const foundPerson = await this.personRepository.findOne({
-        where: { person_id },
-      })
-      if (foundPerson == null) {
+
+      const personalData = await this.personRepository.findByPk(user.person.id_person)
+
+      if (!personalData) {
         await transaction.rollback()
         throw new HttpException(AppError.PERSON_NOT_FOUND, HttpStatus.BAD_REQUEST)
       }
 
-      const updatePersonDto = new UpdatePersonDto()
-      updatePersonDto.last_name = updatedUser.last_name
-      updatePersonDto.first_name = updatedUser.first_name
-      updatePersonDto.patronymic = updatedUser.patronymic
-      updatePersonDto.phone = updatedUser.phone
+      if (updatedUser.first_name) {
+        personalData.first_name = updatedUser.first_name
+      }
+      if (updatedUser.last_name) {
+        personalData.last_name = updatedUser.last_name
+      }
+      if (updatedUser.patronymic) {
+        personalData.patronymic = updatedUser.patronymic
+      }
 
-      await foundPerson.update(updatePersonDto, { transaction: transaction })
+      await personalData.save({ transaction: transaction })
 
       let foundUser = null
-      await this.userRepository.update({ ...updatedUser }, { where: { id_user: updatedUser.id_user }, transaction: transaction })
 
+      if (updatedUser.nickname) {
+        user.nickname = updatedUser.nickname
+        await user.save({ transaction: transaction })
+      }
       foundUser = await this.userRepository.findOne({
         where: { id_user: updatedUser.id_user },
       })
 
       return foundUser
     } catch (error) {
+      await transaction.rollback()
       throw new Error(error)
     }
   }

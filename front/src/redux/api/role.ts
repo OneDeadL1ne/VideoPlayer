@@ -12,7 +12,7 @@ const roleApi = api.injectEndpoints({
 			query: (id: number) => ({ url: `role/${id}`, method: 'GET' }),
 			invalidatesTags: ['Role'],
 		}),
-		createRole: builder.mutation<FetchResultInterface<RoleInterface>, RoleInterface>({
+		createRole: builder.mutation<FetchResultInterface<RoleInterface>, Partial<RoleInterface>>({
 			query: (body) => ({
 				url: 'role',
 				method: 'POST',

@@ -60,3 +60,22 @@ export const getCurrentColor = () => {
 
 	return 'black';
 };
+
+export const ConvertDescription = (description: string) => {
+	const length = 10;
+	const trimmedString =
+		description.length > length ? description.substring(0, length - 3) + '...' : description;
+
+	return trimmedString;
+};
+
+export const ConvertSeconds = (seconds: number) => {
+	const hours = Math.floor(seconds / 3600);
+	const minutes = Math.floor((seconds % 3600) / 60);
+
+	// Форматирование часов и минут для добавления в строку
+	const formattedHours = String(hours).padStart(2); // Добавляем ведущий ноль, если часов меньше 10
+	const formattedMinutes = String(minutes).padStart(2, '0'); // Добавляем ведущий ноль, если минут меньше 10
+
+	return `${formattedHours} ч ${formattedMinutes} мин`;
+};

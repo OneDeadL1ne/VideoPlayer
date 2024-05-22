@@ -19,6 +19,7 @@ export default function CropperImage({
 	image,
 	cropped,
 	open,
+	setUrl,
 
 	photo,
 	setOpen,
@@ -33,6 +34,7 @@ export default function CropperImage({
 	open: boolean;
 	setOpen: Dispatch<SetStateAction<boolean>>;
 	updateCrop: Dispatch<SetStateAction<string>>;
+	setUrl: Dispatch<SetStateAction<string>>;
 	setPhoto: Dispatch<SetStateAction<Blob | File | null>>;
 	setAvatar: Dispatch<SetStateAction<Blob | File | null>>;
 }) {
@@ -171,9 +173,8 @@ export default function CropperImage({
 								// }
 							});
 
-							setImageUrl(imgeURL);
-
 							setPhotoFile(file);
+							setImageUrl(imgeURL);
 						});
 						reader.readAsDataURL(file);
 					}}
@@ -207,6 +208,7 @@ export default function CropperImage({
 								if (photo) {
 									setPhotoFile(photo);
 								}
+								setUrl(imageUrl);
 								setPhoto(photoFile);
 								updateCrop(dataUrl);
 								setAvatar(file);

@@ -1,12 +1,13 @@
 import {
 	Carousel,
 	CarouselContent,
-	CarouselItem,
 	CarouselNext,
 	CarouselPrevious,
 } from '@/components/ui/carousel';
 
-import { CustomCard } from '../custom-card/CustomCard';
+import { FilmInterface } from '@/types/film';
+
+import CustomCard from '../custom-card/CustomCard';
 
 export interface CarouselProps<T> {
 	title?: string;
@@ -23,7 +24,6 @@ export function CustomCarousel<T>({
 	//disabledButtons = false,
 	loop = true,
 }: CarouselProps<T>) {
-	//const [activeIndex, setActiveIndex] = useState(0);
 	return (
 		<div className="w-screen">
 			{title && (
@@ -33,14 +33,13 @@ export function CustomCarousel<T>({
 					</p>
 				</div>
 			)}
-			<div className="w-full lg:max-w-screen-xl mx-auto">
-				<Carousel className="relative" opts={{ align: 'start', loop: loop }}>
-					<CarouselContent>
-						{data.map((item, index) => (
-							<CarouselItem key={index} className=" md:basis-1/2 lg:basis-1/2">
-								<CustomCard index={index} item={item} type="genres" />
-							</CarouselItem>
-						))}
+			<div className="w-full mx-auto flex justify-center lg:max-w-screen-md mt-5 ">
+				<Carousel className="" opts={{ align: 'center', loop: loop }}>
+					<CarouselContent className="-ml-1 ">
+						{data.map((item, index) => {
+							const film = item as FilmInterface;
+							return <CustomCard index={index} film={film} key={index} />;
+						})}
 					</CarouselContent>
 					<CarouselNext />
 					<CarouselPrevious />

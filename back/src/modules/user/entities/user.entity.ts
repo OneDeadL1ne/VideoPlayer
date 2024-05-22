@@ -31,6 +31,10 @@ export class User extends Model {
 
   @ApiProperty()
   @Column({ type: DataType.STRING(250), allowNull: true })
+  photo_url?: string
+
+  @ApiProperty()
+  @Column({ type: DataType.STRING(250), allowNull: true })
   avatar_url?: string
 
   @Column({ type: DataType.STRING, allowNull: false })

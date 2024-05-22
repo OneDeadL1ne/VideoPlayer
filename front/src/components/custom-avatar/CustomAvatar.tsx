@@ -10,7 +10,7 @@ export function CustomAvatar({
 	avatar_url,
 	className,
 }: {
-	avatar_url: string;
+	avatar_url?: string | null;
 	className?: string;
 }) {
 	const { theme } = useAppSelector((s) => s.theme);

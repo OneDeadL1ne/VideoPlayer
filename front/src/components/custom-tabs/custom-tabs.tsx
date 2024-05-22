@@ -11,6 +11,7 @@ export interface TabPage {
 	count?: number;
 	isDialog?: boolean;
 	content: ReactElement;
+	disabled?: boolean;
 }
 
 export interface TabsProps {
@@ -38,6 +39,7 @@ export default function CustomTabs({
 				<TabsList className="gap-2 ml-7 mb-3">
 					{tabs.map((tab, key) => (
 						<TabsTrigger
+							disabled={tab.disabled}
 							key={key}
 							value={tab.value}
 							className={

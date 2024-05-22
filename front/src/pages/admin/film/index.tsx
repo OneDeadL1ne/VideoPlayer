@@ -1,17 +1,23 @@
 import { PageLayout } from '@/components/admin/page-layout';
 import CustomTabs from '@/components/custom-tabs/custom-tabs';
 import DataTable from '@/components/data-table/data-table';
-import { useGetGenresQuery } from '@/redux/api/genre';
-import { genresTableColumns } from './genres-columns';
+import { genresTableColumns } from './films-columns';
 import { ErrorCustomAlert } from '@/components/custom-alert/custom-alert';
 import DialogWindow from '@/components/dialog-window/dialog-window';
 import { useState } from 'react';
-import { genreFormTab } from './genre-form-tab';
+import { filmFormTab } from './film-form-tab';
+import { useGetFilmsQuery } from '@/redux/api/film';
+import { useAppSelector } from '@/hooks/reduxHooks';
 
 export default function TableFilmPage() {
 	const [formOpen, setFormOpen] = useState(false);
-	//const { data: genres } = useGetGenresQuery();
-	const { data: genres, error, isFetching, refetch } = useGetGenresQuery();
+	const { user } = useAppSelector((s) => s.auth);
+	const {
+		data: films,
+		error,
+		isFetching,
+		refetch,
+	} = useGetFilmsQuery({ id_user: user?.id_user });
 
 	return (
 		<PageLayout
@@ -20,9 +26,10 @@ export default function TableFilmPage() {
 			isLoading={isFetching}
 			actionButton={
 				<DialogWindow
+					size="lg"
 					open={formOpen}
 					setOpen={setFormOpen}
-					content={<CustomTabs tabs={genreFormTab()} setDialogOpen={setFormOpen} />}
+					content={<CustomTabs tabs={filmFormTab()} setDialogOpen={setFormOpen} />}
 				/>
 			}
 		>
@@ -30,7 +37,7 @@ export default function TableFilmPage() {
 				<ErrorCustomAlert error={error} />
 			) : (
 				<DataTable
-					data={genres!}
+					data={films!}
 					columns={genresTableColumns}
 					isLoading={isFetching}
 					hasBackground

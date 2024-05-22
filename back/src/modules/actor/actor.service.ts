@@ -75,7 +75,7 @@ export class ActorService {
       const dir = `./upload/images/actors/${id_actor}`
       let photo
       let avatar
-      console.log(files)
+
       if (files.length == 2) {
         for (const file of files) {
           if (file.filename.split('.')[1] && file.filename.split('-')[1] == 'photo') {

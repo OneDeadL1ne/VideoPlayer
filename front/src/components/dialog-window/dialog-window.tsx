@@ -27,6 +27,8 @@ interface DialogWindowProps extends VariantProps<typeof dialogVariants> {
 	triggerPermissions?: [];
 	content: ReactNode;
 	open?: boolean;
+	disabled?: boolean;
+
 	setOpen?: Dispatch<SetStateAction<boolean>>;
 	className?: string;
 }
@@ -36,6 +38,7 @@ const DialogWindow = ({
 	trigger = <PlusButton />,
 	//triggerPermissions = [],
 	content,
+	disabled,
 	open,
 	setOpen,
 	size,
@@ -49,7 +52,11 @@ const DialogWindow = ({
 	}, [theme]);
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogTrigger asChild>{trigger}</DialogTrigger>
+			{!disabled && (
+				<DialogTrigger disabled={disabled} asChild>
+					{trigger}
+				</DialogTrigger>
+			)}
 			<DialogContent
 				className={cn(dialogVariants({ size }), className)}
 				onOpenAutoFocus={(e) => e.preventDefault}

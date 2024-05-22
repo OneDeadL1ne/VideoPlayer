@@ -13,7 +13,10 @@ const actorApi = api.injectEndpoints({
 			query: (id: number) => ({ url: `actor/${id}`, method: 'GET' }),
 			invalidatesTags: ['Actor'],
 		}),
-		createActor: builder.mutation<FetchResultInterface<ActorInterface>, ActorInterface>({
+		createActor: builder.mutation<
+			FetchResultInterface<ActorInterface>,
+			Partial<ActorInterface>
+		>({
 			query: (body) => ({
 				url: 'actor',
 				method: 'POST',

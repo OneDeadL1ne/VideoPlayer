@@ -13,7 +13,10 @@ const voiceApi = api.injectEndpoints({
 			query: (id: number) => ({ url: `voiceover/${id}`, method: 'GET' }),
 			invalidatesTags: ['Voice'],
 		}),
-		createVoice: builder.mutation<FetchResultInterface<VoiceInterface>, VoiceInterface>({
+		createVoice: builder.mutation<
+			FetchResultInterface<VoiceInterface>,
+			Partial<VoiceInterface>
+		>({
 			query: (body) => ({
 				url: 'voiceover',
 				method: 'POST',

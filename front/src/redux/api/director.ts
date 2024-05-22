@@ -14,7 +14,7 @@ const directorApi = api.injectEndpoints({
 		}),
 		createDirector: builder.mutation<
 			FetchResultInterface<DirectorInterface>,
-			DirectorInterface
+			Partial<DirectorInterface>
 		>({
 			query: (body) => ({
 				url: 'director',

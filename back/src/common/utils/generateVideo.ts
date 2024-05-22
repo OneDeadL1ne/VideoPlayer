@@ -15,18 +15,7 @@ export async function generateVideo({ path, id_film, type }: { path: string; id_
     fs.mkdirSync(`${outputDirectory}`, { recursive: true })
   }
 
-  // outputDirectory += ``
-
-  //   if (!fs.existsSync(`${outputDirectory}`)) {
-  //     fs.mkdir(`${outputDirectory}`, (err) => {
-  //       if (err) throw err // не удалось создать папки
-  //     })
-  //   }
-  console.log(path)
   for (const { resolution, name } of resolutions) {
-    //const outputHLS = `${outputDirectory}/${id_film}_${name}.m3u8`
-    //const ffmpegCommand = `ffmpeg -i ${path} -c:v libx264 -c:a aac -vf scale=${resolution} -hls_time 10 -hls_list_size 0 -hls_segment_filename ${outputDirectory}/${id_film}_${name}_%03d.ts ${outputHLS}`
-    //execSync(ffmpegCommand)
     await convertToHls(path, id_film, type, resolution, name)
   }
   fs.writeFileSync(

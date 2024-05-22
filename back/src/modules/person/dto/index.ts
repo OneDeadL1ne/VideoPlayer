@@ -1,7 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
 
-
-
 export class CreatePersonDto {
   @ApiProperty()
   last_name: string
@@ -14,15 +12,14 @@ export class CreatePersonDto {
 
   @ApiProperty()
   phone: string
-  
+
   @ApiProperty({ required: false })
   id_gender?: number
-  
 }
 
 export class UpdatePersonDto {
   @ApiProperty()
-  person_id: number
+  id_person: number
 
   @ApiProperty({ required: false })
   last_name?: string
@@ -39,5 +36,3 @@ export class UpdatePersonDto {
   @ApiProperty({ required: false })
   id_gender?: number
 }
-
-

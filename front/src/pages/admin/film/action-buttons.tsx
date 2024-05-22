@@ -10,23 +10,23 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu.tsx';
-import { GenreInterface } from '@/types/genre';
-import { genreFormTab } from './genre-form-tab';
+import { filmFormTab } from './film-form-tab';
 import { useSuccessToast } from '@/hooks/use-success-toast';
-import { useDelereGenreMutation } from '@/redux/api/genre';
 import { useErrorToast } from '@/hooks/use-error-toast';
+import { FilmInterface } from '@/types/film';
+import { useDeleteFilmMutation } from '@/redux/api/film';
 
-export const ActionsDropdown = ({ genre }: { genre: GenreInterface }) => {
+export const ActionsDropdown = ({ film }: { film: FilmInterface }) => {
 	const [formOpen, setFormOpen] = useState(false);
-	const [deleteGenre, { error, isSuccess, isLoading }] = useDelereGenreMutation();
+	const [deleteFilm, { error, isSuccess, isLoading }] = useDeleteFilmMutation();
 
-	const deleteSuccessMsg = useMemo(() => `Жанр "${genre.genre_name}" удален`, []);
+	const deleteSuccessMsg = useMemo(() => `Фильм "${film.film_title}" удален`, []);
 
 	const handleGenreDelete = useCallback(() => {
-		if (genre.id_genre) {
-			deleteGenre(genre.id_genre);
+		if (film.id_film) {
+			deleteFilm(film.id_film);
 		}
-	}, [genre.id_genre, deleteGenre]);
+	}, [film.id_film, deleteFilm]);
 
 	useErrorToast(handleGenreDelete, error);
 	useSuccessToast(deleteSuccessMsg, isSuccess);
@@ -35,8 +35,9 @@ export const ActionsDropdown = ({ genre }: { genre: GenreInterface }) => {
 			<DialogWindow
 				open={formOpen}
 				setOpen={setFormOpen}
+				size="lg"
 				trigger={null}
-				content={<CustomTabs tabs={genreFormTab(genre)} setDialogOpen={setFormOpen} />}
+				content={<CustomTabs tabs={filmFormTab(film)} setDialogOpen={setFormOpen} />}
 			/>
 			<DropdownMenu>
 				<DropdownMenuTrigger asChild>

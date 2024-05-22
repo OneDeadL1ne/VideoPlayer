@@ -2,7 +2,6 @@ import { Dispatch, SetStateAction, useMemo } from 'react';
 
 import { z } from 'zod';
 
-import { ErrorCustomAlert } from '@/components/custom-alert/custom-alert.tsx';
 import CustomForm, { useForm } from '@/components/form/form.tsx';
 
 import { LoadingSpinner } from '@/components/loaders/spinner.tsx';
@@ -57,6 +56,7 @@ const AddGenreForm = ({ genre, setDialogOpen }: AddGenreFormProps) => {
 	useSuccessToast(addSuccessMsg, addSuccess, setDialogOpen);
 	useSuccessToast(updateSuccessMsg, updateSuccess, setDialogOpen);
 	useErrorToast(void 0, addError);
+	useErrorToast(void 0, updateError);
 
 	return (
 		<CustomForm className="mt-3 px-8 pb-8 border-0" form={form} onSubmit={handleSubmit}>
@@ -76,8 +76,6 @@ const AddGenreForm = ({ genre, setDialogOpen }: AddGenreFormProps) => {
 					)}
 				/>
 
-				{addError && <ErrorCustomAlert error={addError} className="mt-3" />}
-				{updateError && <ErrorCustomAlert error={updateError} className="mt-3" />}
 				<Button
 					className="mt-5 ml-1 text-white "
 					type="submit"

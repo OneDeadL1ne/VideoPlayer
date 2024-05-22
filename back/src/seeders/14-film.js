@@ -16,6 +16,7 @@ module.exports = {
         release_year_russia: 2020,
         is_subscribe: false,
         is_deleted: false,
+        is_processed: 1,
         id_age_limit: 5,
       },
     ])
