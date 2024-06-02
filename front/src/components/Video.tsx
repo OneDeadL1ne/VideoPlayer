@@ -1,8 +1,9 @@
 import '@vidstack/react/player/styles/default/theme.css';
+import '@vidstack/react/player/styles/default/layouts/audio.css';
 import '@vidstack/react/player/styles/default/layouts/video.css';
 
-import { MediaPlayer, MediaPlayerInstance, MediaProvider, Poster } from '@vidstack/react';
-import { useEffect, useRef, useState } from 'react';
+import { MediaPlayer, MediaPlayerInstance, MediaProvider } from '@vidstack/react';
+import { useEffect, useRef } from 'react';
 
 export const VideoPlayer = ({
 	src,
@@ -14,28 +15,18 @@ export const VideoPlayer = ({
 	play?: boolean;
 }) => {
 	const player = useRef<MediaPlayerInstance>(null);
-	const [currentTime, setCurrentTime] = useState(0);
+
 	useEffect(() => {
-		console.log(play, player.current?.paused);
-
-		if (play && player.current?.paused) {
-			//setTimeout(() => player.current?.play(), 1000);
-			player.current?.play();
+		let time;
+		if (play) {
+			time = setTimeout(() => player.current?.provider?.play(), 1000);
 		}
-		if (!play && !player.current?.paused) {
-			player.current?.pause();
-
-			rewindToStart();
+		if (!play) {
+			player.current?.provider?.pause();
+			player.current?.provider?.setCurrentTime(0);
+			return clearTimeout(time);
 		}
 	}, [play]);
-
-	const rewindToStart = () => {
-		setCurrentTime(0);
-	};
-
-	const handleTimeUpdate = (time) => {
-		setCurrentTime(time);
-	};
 
 	// const smallAudioLayoutQuery = useCallback<MediaPlayerQuery>(({ width }) => {
 	// 	return width < 576;
@@ -51,22 +42,21 @@ export const VideoPlayer = ({
 				<img
 					src={preview}
 					alt={'1'}
-					className={`h-full object-cover rounded-lg duration-200 
+					className={`w-full opacity-80  @[500px]:h-full object-cover rounded-lg duration-200 
 					`}
 				/>
 			)}
 			<MediaPlayer
-				className={`h-full rounded-lg ${!play && ' hidden'}`}
+				className={`h-1/6  rounded-lg ${!play && ' hidden'}`}
 				viewType="video"
+				preferNativeHLS={true}
 				streamType="on-demand"
 				logLevel="warn"
-				onTimeUpdate={handleTimeUpdate}
-				currentTime={currentTime}
 				crossOrigin
 				playsInline
 				ref={player}
 				src={src}
-				volume={0.3}
+				volume={play ? 0.3 : 0.0}
 			>
 				<MediaProvider>
 					{/* {preview && (

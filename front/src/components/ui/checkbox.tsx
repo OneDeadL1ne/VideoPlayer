@@ -21,7 +21,7 @@ const Checkbox = React.forwardRef<React.ElementRef<typeof CheckboxPrimitive.Root
 				{...props}
 			>
 				<CheckboxPrimitive.Indicator>
-					<Check className="h-4 w-4" color={color} />
+					<Check className="h-4 w-4" color="white" />
 				</CheckboxPrimitive.Indicator>
 			</CheckboxPrimitive.Root>
 			{label && (

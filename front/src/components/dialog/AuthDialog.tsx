@@ -80,7 +80,12 @@ export default function AuthDialog({ active = false }: { active?: boolean }) {
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
-				<Button variant="outline">Войти</Button>
+				<Button
+					variant="ghost"
+					className="text-white bg-primary hover:bg-accent  border-primary border-[1px]"
+				>
+					Войти
+				</Button>
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-[425px]  bg-secondary	border-0 text-accent-foreground	   ">
 				<DialogHeader>
@@ -145,10 +150,10 @@ export default function AuthDialog({ active = false }: { active?: boolean }) {
 						<div className="relative h-8">
 							<Button
 								type="submit"
-								className="rounded-xl h-[40px]  bg-primary "
+								className="rounded-xl h-[40px] text-white bg-primary "
 								variant="default"
 							>
-								{isLoading ? <LoadingSpinner /> : 'Войти'}
+								{isLoading ? <LoadingSpinner className="text-white" /> : 'Войти'}
 							</Button>
 						</div>
 					</form>

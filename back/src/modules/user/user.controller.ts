@@ -1,4 +1,21 @@
-import { Controller, UseFilters, Post, Body, HttpException, HttpStatus, UseGuards, Get, Param, Patch, Req, Delete } from '@nestjs/common'
+import {
+  Controller,
+  UseFilters,
+  Post,
+  Body,
+  HttpException,
+  HttpStatus,
+  UseGuards,
+  Get,
+  Param,
+  Patch,
+  Req,
+  Delete,
+  Query,
+  Res,
+  UploadedFiles,
+  UseInterceptors,
+} from '@nestjs/common'
 import { ApiBearerAuth, ApiTags, ApiOperation, ApiCreatedResponse, ApiResponse, ApiOkResponse } from '@nestjs/swagger'
 import { AppError } from 'src/constants/error'
 import { AppStrings } from 'src/constants/strings'
@@ -11,6 +28,10 @@ import { StatusUserResponse } from './response'
 import { UserService } from './user.service'
 import { RoleService } from '../role/role.service'
 import { AllExceptionsFilter } from 'src/common/exception.filter'
+import { FilesInterceptor } from '@nestjs/platform-express'
+import { diskStorage } from 'multer'
+import { extname } from 'node:path'
+import * as fs from 'node:fs'
 
 @ApiBearerAuth()
 @ApiTags('User')
@@ -134,5 +155,51 @@ export class UserController {
   @Get('my/:id')
   async findMyUser(@Param() id, @Req() request) {
     return this.usersService.findById(request.user.id_user)
+  }
+
+  @Get('image/:id_user/:image')
+  async getImage(@Param('id_user') id_user: number, @Param('image') image: string, @Res() res) {
+    return await res.sendFile(image, { root: `./upload/images/users/${id_user}` })
+  }
+  @UseGuards(JwtAuthGuard, ActiveGuard)
+  @Post('upload')
+  @UseInterceptors(
+    FilesInterceptor('files', 3, {
+      fileFilter: (req, file, callback) => {
+        if (!Boolean(file.mimetype.match(/(jpg|jpeg|png|gif|webp|svg)/))) callback(null, false)
+        callback(null, true)
+      },
+      storage: diskStorage({
+        destination: (req, file, callback) => {
+          let directory = `./upload/images/users`
+          if (!fs.existsSync(`${directory}/${req.query.id_user}`)) {
+            fs.mkdirSync(`${directory}/${req.query.id_user}`, { recursive: true })
+          }
+
+          directory += `/${req.query.id_user}`
+
+          callback(null, `${directory}`)
+        },
+        filename: (req, file, callback) => {
+          let type = 'photo'
+          const randomName = Array(32)
+            .fill(null)
+            .map(() => Math.round(Math.random() * 16).toString(16))
+            .join('')
+          if (file.originalname == 'blob') {
+            type = 'avatar'
+          }
+          return callback(null, `${req.query.id_user}-${type}-${randomName}${extname(file.originalname)}`)
+        },
+      }),
+    }),
+  )
+  async uploadActorImage(@Query('id_user') id_user: number, @UploadedFiles() files: Array<Express.Multer.File>) {
+    return await this.usersService.updateAvatarUser(id_user, files)
+  }
+  @UseGuards(JwtAuthGuard, ActiveGuard)
+  @Patch('image')
+  async deleteActorImage(@Query('id_user') id_user: number) {
+    return await this.usersService.deleteAvatarUser(id_user)
   }
 }

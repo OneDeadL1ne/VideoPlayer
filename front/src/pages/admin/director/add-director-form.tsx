@@ -40,7 +40,8 @@ const formSchema = z.object({
 const AddDirectorForm = ({ director, setDialogOpen }: AddDirectorFormProps) => {
 	const [photo, setPhoto] = useState<File | Blob | null>(null);
 	const [avatar, setAvatar] = useState<File | Blob | null>(null);
-
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const [imageUrl, setImageUrl] = useState('');
 	const [crop, setCrop] = useState(director?.avatar_url ? director.avatar_url : '');
 	const [open, setOpen] = useState(false);
 	const form = useForm({
@@ -157,6 +158,7 @@ const AddDirectorForm = ({ director, setDialogOpen }: AddDirectorFormProps) => {
 						className={`ml-1   sm:max-w-[400px]`}
 						content={
 							<CropperImage
+								setUrl={setImageUrl}
 								open={open}
 								photo={photo!}
 								image={director?.photo_url ? director.photo_url : ''}

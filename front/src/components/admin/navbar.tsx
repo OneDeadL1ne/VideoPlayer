@@ -9,8 +9,6 @@ import LogoMini from '@/assets/LogoMini.svg?react';
 import { useAppSelector } from '@/hooks/reduxHooks.ts';
 import { getCurrentColor } from '@/utils/helpers.ts';
 import { NavLink } from 'react-router-dom';
-import Post from '@/assets/post.svg?react';
-import PostDark from '@/assets/postDark.svg?react';
 import Film from '@/assets/film.svg?react';
 import FilmDark from '@/assets/filmDark.svg?react';
 import Director from '@/assets/director.svg?react';
@@ -23,10 +21,6 @@ import Voice from '@/assets/voice.svg?react';
 import VoiceDark from '@/assets/voiceDark.svg?react';
 import User from '@/assets/user.svg?react';
 import UserDark from '@/assets/userDark.svg?react';
-import Employee from '@/assets/employee.svg?react';
-import EmployeeDark from '@/assets/employeeDark.svg?react';
-import Role from '@/assets/role.svg?react';
-import RoleDark from '@/assets/roleDark.svg?react';
 
 export interface SingleLink {
 	path: string;
@@ -44,12 +38,6 @@ export function Navbar({ open }: NavbarProps) {
 	const [color, setColor] = useState(theme);
 
 	const links: (SingleLink | false)[] = [
-		{
-			title: 'Рецензии',
-			path: '/admin/posts',
-			childrenLight: <Post />,
-			childrenDark: <PostDark />,
-		},
 		{
 			title: 'Список фильмов',
 			path: '/admin/films',
@@ -85,18 +73,6 @@ export function Navbar({ open }: NavbarProps) {
 			path: '/admin/users',
 			childrenLight: <User />,
 			childrenDark: <UserDark />,
-		},
-		{
-			title: 'Сотрудники',
-			path: '/admin/employees',
-			childrenLight: <Employee />,
-			childrenDark: <EmployeeDark />,
-		},
-		{
-			title: 'Роли',
-			path: '/admin/roles',
-			childrenLight: <Role />,
-			childrenDark: <RoleDark />,
 		},
 	];
 

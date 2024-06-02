@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import AccountMenu from '../account-menu/AccountMenu';
-import SwithTheme from '../SwithTheme';
+
 import { useAppSelector } from '@/hooks/reduxHooks';
 import { getCurrentColor } from '@/utils/helpers';
 
@@ -32,10 +32,7 @@ export function Header({ open, setOpen }: HeaderProps) {
 			</div>
 
 			<div className="flex items-center place-items-end justify-end  gap-3 p-[10px]">
-				<SwithTheme />
-				<div>
-					<AccountMenu />
-				</div>
+				<AccountMenu />
 			</div>
 		</div>
 	);

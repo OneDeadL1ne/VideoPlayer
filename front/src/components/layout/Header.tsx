@@ -1,27 +1,27 @@
 import { useEffect, useState } from 'react';
 
-import DebouncedInput from '../search-input';
 import Logo from '@/assets/Logo.svg?react';
 import LogoDark from '@/assets/LogoDark.svg?react';
 import LogoMini from '@/assets/LogoMini.svg?react';
 import { NavLink } from 'react-router-dom';
-import SwithTheme from '../SwithTheme';
+
 import { useAppSelector } from '@/hooks/reduxHooks';
 
 import AuthDialog from '../dialog/AuthDialog';
 import AccountMenu from '../account-menu/AccountMenu';
 import { getCurrentColor } from '@/utils/helpers';
+import { ModeToggle } from '../ModeToggle';
 
 export default function Header() {
-	const [search, setSearch] = useState<string | number>('');
+	//const [search, setSearch] = useState<string | number>('');
 	const { isLogin } = useAppSelector((s) => s.auth);
 	const { theme } = useAppSelector((s) => s.theme);
 	const [color, setColor] = useState(theme);
-	useEffect(() => {
-		if (search.toString().length != 0) {
-			console.log(search);
-		}
-	}, [search]);
+	// useEffect(() => {
+	// 	if (search.toString().length != 0) {
+	// 		console.log(search);
+	// 	}
+	// }, [search]);
 
 	useEffect(() => {
 		setColor(getCurrentColor());
@@ -45,19 +45,26 @@ export default function Header() {
 				</div>
 			</div>
 			<div className="w-1/2 flex items-center">
-				<DebouncedInput
+				{/* <DebouncedInput
 					className="flex  justify-center items-center"
 					value={search}
 					onChange={(search) => {
 						setSearch(search);
 					}}
-				/>
+				/> */}
 			</div>
-			<div className="w-1/4 flex justify-end items-center">
-				<SwithTheme />
-			</div>
-			<div className="w-1/4 flex justify-end items-center">
-				{isLogin ? <AccountMenu /> : <AuthDialog />}
+
+			<div className="w-1/4 flex  gap-3 p-[5px] justify-end items-center">
+				{isLogin ? (
+					<AccountMenu />
+				) : (
+					<>
+						<ModeToggle />
+						<div>
+							<AuthDialog />
+						</div>
+					</>
+				)}
 			</div>
 		</div>
 	);

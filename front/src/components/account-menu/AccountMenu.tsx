@@ -1,29 +1,43 @@
 import { User } from 'lucide-react';
+import { MoonIcon, SunIcon } from '@radix-ui/react-icons';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../ui/button';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
 	DropdownMenuItem,
+	DropdownMenuPortal,
+	DropdownMenuSub,
+	DropdownMenuSubContent,
+	DropdownMenuSubTrigger,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks';
 import { useErrorToast } from '@/hooks/use-error-toast';
 import { api } from '@/redux/api';
 import { useLogoutMutation } from '@/redux/api/auth';
-import { getCurrentColor, getJWTtokens, removeCookieValue } from '@/utils/helpers';
+import {
+	getCurrentColor,
+	getCurrentColorScheme,
+	getJWTtokens,
+	removeCookieValue,
+} from '@/utils/helpers';
 import { Avatar, AvatarFallback } from '@radix-ui/react-avatar';
 import { setLogout, setUser } from '@/redux/reducers/authSlice';
 import { useGetUserMutation } from '@/redux/api/user';
 import { useEffect, useMemo, useState } from 'react';
 import { Skeleton } from '../ui/skeleton';
 import { AvatarImage } from '../ui/avatar';
+import { useTheme } from '@/hooks/useTheme';
 
 export default function AccountMenu() {
 	const navigate = useNavigate();
 
 	const dispatch = useAppDispatch();
 	const { user } = useAppSelector((s) => s.auth);
+
+	const [mode, handleChange] = useTheme(getCurrentColorScheme());
+
 	const { theme } = useAppSelector((s) => s.theme);
 	const [color, setColor] = useState(theme);
 
@@ -98,7 +112,7 @@ export default function AccountMenu() {
 					{user?.role.role_name != 'Пользователь' && (
 						<DropdownMenuItem asChild>
 							<Button
-								onClick={() => navigate('/admin/posts')}
+								onClick={() => navigate('/admin/films')}
 								variant="ghost"
 								className="w-full h-5 justify-start p-3  hover:cursor-pointer  "
 								size="sm"
@@ -117,6 +131,48 @@ export default function AccountMenu() {
 							Личный кабинет
 						</Button>
 					</DropdownMenuItem>
+					<DropdownMenuSub>
+						<DropdownMenuSubTrigger className="flex items-center">
+							<span className="text-center  w-full">
+								{mode == 'light' ? 'Светлая' : 'Темная'}
+							</span>
+							<div className="">
+								{mode == 'light' ? (
+									<SunIcon
+										color={color}
+										className="rotate-0 h-4 w-4 scale-100 transition-all dark:-rotate-90 dark:scale-0"
+									/>
+								) : (
+									<MoonIcon
+										className="rotate-0 h-4 w-4 scale-100 transition-all dark:-rotate-90 dark:scale-0"
+										color={color}
+									/>
+								)}
+							</div>
+						</DropdownMenuSubTrigger>
+						<DropdownMenuPortal>
+							<DropdownMenuSubContent className="bg-accent border-0 ">
+								<DropdownMenuItem
+									onClick={() => handleChange(false)}
+									className="cursor-pointer"
+								>
+									<SunIcon className="mr-2 size-4" color={color} />
+									<span className="text-muted-foreground hover:text-accent-foreground">
+										Светлая
+									</span>
+								</DropdownMenuItem>
+								<DropdownMenuItem
+									onClick={() => handleChange(true)}
+									className="cursor-pointer"
+								>
+									<MoonIcon className="mr-2 size-4" color={color} />
+									<span className="text-muted-foreground hover:text-accent-foreground">
+										Темная
+									</span>
+								</DropdownMenuItem>
+							</DropdownMenuSubContent>
+						</DropdownMenuPortal>
+					</DropdownMenuSub>
 					<DropdownMenuItem asChild>
 						<Button
 							onClick={handleLogout}

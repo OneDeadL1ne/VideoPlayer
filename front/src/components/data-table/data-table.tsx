@@ -53,7 +53,6 @@ function DataTable<TData, TValue>({
 	data,
 	hasBackground,
 	onRowClick,
-
 	isLoading,
 }: DataTableProps<TData, TValue>) {
 	const [rowSelection, setRowSelection] = useState({});

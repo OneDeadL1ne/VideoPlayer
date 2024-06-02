@@ -38,6 +38,7 @@ export async function convertToHls(path: string, id_film: number, type: 'film' |
       `assets/${id_film}/${type}/${id_film}_${name}_%03d.ts`,
       hlsOutputPath,
     ])
+
     ffmpegMp4ToHlsProcess.stdout.on('data', (data) => {
       console.log(`MP4 to HLS stdout: ${data}`)
     })

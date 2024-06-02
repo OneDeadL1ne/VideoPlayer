@@ -12,7 +12,8 @@ import { createReadStream } from 'fs'
 import { ConfigService } from '@nestjs/config'
 import { Agelimit } from '../agelimit/entities/agelimit.entity'
 import { User } from '../user/entities/user.entity'
-import * as fs from 'node:fs'
+
+import { Op } from 'sequelize'
 
 @Injectable()
 export class FilmService {
@@ -83,14 +84,29 @@ export class FilmService {
             { model: Voiceover, through: { attributes: [] } },
           ],
           attributes: { exclude: ['id_age_limit'] },
-          where: { is_subscribe: false },
+          where: { is_subscribe: false, trailer_path: { [Op.ne]: null }, preview_path: { [Op.ne]: null } },
         })
       }
 
       if (user) {
         const sub = user.is_subscrition
+        const role = user.id_role
 
         if (sub) {
+          return await this.filmRepository.findAll({
+            include: [
+              { model: Agelimit, attributes: ['id_age_limit', 'age_limit_name'] },
+              { model: Actor, through: { attributes: ['position_role'] }, order: ['ActorFilm.position_role', 'DESC'] },
+              { model: Genre, through: { attributes: [] } },
+              { model: Director, through: { attributes: [] } },
+              { model: Voiceover, through: { attributes: [] } },
+            ],
+            attributes: { exclude: ['id_age_limit'] },
+            where: { trailer_path: { [Op.ne]: null }, preview_path: { [Op.ne]: null } },
+          })
+        }
+
+        if (role != 1) {
           return await this.filmRepository.findAll({
             include: [
               { model: Agelimit, attributes: ['id_age_limit', 'age_limit_name'] },
@@ -113,9 +129,7 @@ export class FilmService {
           ],
           attributes: { exclude: ['id_age_limit'] },
 
-          where: {
-            is_subscribe: false,
-          },
+          where: { is_subscribe: false, trailer_path: { [Op.ne]: null }, preview_path: { [Op.ne]: null } },
         })
       }
     } catch (error) {
@@ -273,7 +287,7 @@ export class FilmService {
       }
       if (type == 'trailer') {
         await this.filmRepository.update(
-          { trailer_path: `${this.configService.get('API_URL')}/video/stream/trailer/${id_film}/${id_film}.m3u8`, is_processed: 4 },
+          { trailer_path: `${this.configService.get('API_URL')}/video/stream/trailer/${id_film}/${id_film}_360p.m3u8`, is_processed: 4 },
           { where: { id_film: id_film } },
         )
       }

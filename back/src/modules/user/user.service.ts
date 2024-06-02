@@ -9,18 +9,21 @@ import { CreatePersonDto } from 'src/modules/person/dto'
 import { Sequelize } from 'sequelize-typescript'
 
 import { Op } from 'sequelize'
+import * as fs from 'node:fs'
 
 import { CreateUserDto } from './dto/create-user.dto'
 import { AppError } from 'src/constants/error'
 import { UpdateUserDto, UpdateUserStatusDto, UpdateUserSubscritionDto } from './dto/update-user.dto'
 import { Role } from '../role/entities/role.entity'
 import { StatusUserResponse, UserResponse } from './response'
+import { ConfigService } from '@nestjs/config'
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User) private userRepository: typeof User,
     @InjectModel(Person) private personRepository: typeof Person,
+    private readonly configService: ConfigService,
     private sequelize: Sequelize,
   ) {}
 
@@ -50,17 +53,21 @@ export class UserService {
           errorMessage = AppError.USER_EMAIL_EXISTS
           errorCode = HttpStatus.CONFLICT
         }
-
+        await transaction.rollback()
         throw new HttpException(errorMessage, errorCode)
       })
-
-      return {
-        status: true,
-        data: {
-          id_user: newUser.id_user,
-          ...user,
-          is_deleted: false,
-        },
+      const res = await newUser.save()
+      console.log(res)
+      //      console.log(newUser)
+      if (newUser) {
+        return {
+          status: true,
+          data: {
+            id_user: newUser.id_user,
+            ...user,
+            is_deleted: false,
+          },
+        }
       }
     } catch (error) {
       await transaction.rollback()
@@ -271,6 +278,96 @@ export class UserService {
       } else {
         return false
       }
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+
+  async updateAvatarUser(id_user: number, files: Array<Express.Multer.File>) {
+    try {
+      const dir = `./upload/images/users/${id_user}`
+      let photo
+      let avatar
+      console.log(files)
+      if (files.length == 2) {
+        for (const file of files) {
+          if (file.filename.split('.')[1] && file.filename.split('-')[1] == 'photo') {
+            await this.userRepository.update(
+              { photo_url: `${this.configService.get('API_URL')}/director/image/${id_user}/${file.filename}` },
+              { where: { id_user: id_user } },
+            )
+          }
+
+          if (!file.filename.split('.')[1] && file.originalname == 'blob' && file.filename.split('-')[1] == 'avatar') {
+            await this.userRepository.update(
+              { avatar_url: `${this.configService.get('API_URL')}/director/image/${id_user}/${file.filename}` },
+              { where: { id_user: id_user } },
+            )
+          }
+        }
+        const foundActor = await this.userRepository.findOne({
+          where: { id_user: id_user },
+        })
+        photo = foundActor.photo_url.split('/')[6]
+        avatar = foundActor.avatar_url.split('/')[6]
+      }
+      if (files.length == 1) {
+        if (!files[0].filename.split('.')[1] && files[0].originalname == 'blob' && files[0].filename.split('-')[1] == 'avatar') {
+          await this.userRepository.update(
+            { avatar_url: `${this.configService.get('API_URL')}/director/image/${id_user}/${files[0].filename}` },
+            { where: { id_user: id_user } },
+          )
+        }
+        const foundActor = await this.userRepository.findOne({
+          where: { id_user: id_user },
+        })
+        photo = foundActor.photo_url.split('/')[6]
+        avatar = foundActor.avatar_url.split('/')[6]
+      }
+
+      if (fs.existsSync(dir)) {
+        const images = fs.readdirSync(dir)
+        for (const f of images) {
+          if (f != photo && f != avatar) {
+            fs.rmSync(`${dir}/${f}`)
+          }
+        }
+      }
+
+      const foundDirector = await this.userRepository.findOne({
+        where: { id_user: id_user },
+      })
+
+      return { status: true, data: foundDirector }
+    } catch (error) {
+      throw new Error(error)
+    }
+  }
+
+  async deleteAvatarUser(id_user: number) {
+    try {
+      const dir = `./upload/images/users/${id_user}`
+
+      await this.userRepository.update({ photo_url: null, avatar_url: null }, { where: { id_user: id_user } })
+
+      if (fs.existsSync(dir)) {
+        const images = fs.readdirSync(dir)
+        for (const f of images) {
+          if (f) {
+            fs.rmSync(`${dir}/${f}`)
+          }
+        }
+      }
+
+      const foundDirector = await this.userRepository.findOne({
+        where: { id_user: id_user },
+      })
+
+      if (foundDirector) {
+        return { status: true, data: foundDirector }
+      }
+
+      return { status: false }
     } catch (error) {
       throw new Error(error)
     }

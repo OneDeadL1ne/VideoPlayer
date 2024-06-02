@@ -11,7 +11,7 @@ import { diskStorage } from 'multer'
 import { extname } from 'path'
 import * as fs from 'node:fs'
 @ApiBearerAuth()
-@ApiTags('film')
+@ApiTags('Film')
 @Controller('film')
 @UseFilters(AllExceptionsFilter)
 export class FilmController {

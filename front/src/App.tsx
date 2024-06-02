@@ -11,13 +11,10 @@ import { useAppDispatch, useAppSelector } from './hooks/reduxHooks';
 import { useGetUserMutation } from './redux/api/user';
 import { useRefreshTokenMutation } from './redux/api/auth';
 import TableGenrePage from './pages/admin/genre/index';
-import TablePostPage from './pages/admin/post';
 import TableFilmPage from './pages/admin/film';
 import TableDirectorPage from './pages/admin/director';
 import TableActorPage from './pages/admin/actor';
 import TableVoiceOverPage from './pages/admin/voiceover';
-import TableRolePage from './pages/admin/role';
-import TableEmployeePage from './pages/admin/employee';
 import TableUserPage from './pages/admin/user';
 import ProfilePage from './pages/profile/ProfilePage';
 import AuthDialog from './components/dialog/AuthDialog';
@@ -105,17 +102,14 @@ function App() {
 				/>
 				<Route path="*" element={<NotFoundPage />} />
 			</Route>
-			{user?.role.role_name != 'Пользователь' && (
+			{user?.role.role_name != 'Пользователь' && user && (
 				<Route path="/admin" element={<AdminLayout />}>
-					<Route path="posts" element={<TablePostPage />} />
 					<Route path="films" element={<TableFilmPage />} />
 					<Route path="directors" element={<TableDirectorPage />} />
 					<Route path="actors" element={<TableActorPage />} />
 					<Route path="genres" element={<TableGenrePage />} />
 					<Route path="voiceovers" element={<TableVoiceOverPage />} />
 					<Route path="users" element={<TableUserPage />} />
-					<Route path="employees" element={<TableEmployeePage />} />
-					<Route path="roles" element={<TableRolePage />} />
 				</Route>
 			)}
 			<Route path="*" element={<NotFoundPage />} />

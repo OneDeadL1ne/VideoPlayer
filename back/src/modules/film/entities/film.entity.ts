@@ -28,7 +28,7 @@ export class Film extends Model {
   description: string
 
   @ApiProperty()
-  @Column({ type: DataType.INTEGER, allowNull: true, defaultValue: 0.0 })
+  @Column({ type: DataType.DECIMAL, allowNull: true, defaultValue: 0.0 })
   rating?: number
 
   @ApiProperty()
