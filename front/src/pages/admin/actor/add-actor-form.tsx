@@ -41,7 +41,7 @@ const AddActorForm = ({ actor, setDialogOpen }: AddActorFormProps) => {
 	const [photo, setPhoto] = useState<File | Blob | null>(null);
 	const [avatar, setAvatar] = useState<File | Blob | null>(null);
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const [imageUrl, setImageUrl] = useState('');
+	const [, setImageUrl] = useState('');
 	const [crop, setCrop] = useState(actor?.avatar_url ? actor.avatar_url : '');
 	const [open, setOpen] = useState(false);
 	const form = useForm({

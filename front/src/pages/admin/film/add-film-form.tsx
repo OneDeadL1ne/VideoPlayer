@@ -421,7 +421,7 @@ const AddFilmForm = ({ film, setDialogOpen }: AddFilmFormProps) => {
 										<FormLabel className="text-accent-foreground">
 											Режиссеры
 										</FormLabel>
-										<MultiSelectorTrigger className="mr-2">
+										<MultiSelectorTrigger children className="mr-2">
 											<MultiSelectorInput
 												placeholder="Добавьте режиссеров"
 												className="text-accent-foreground "
