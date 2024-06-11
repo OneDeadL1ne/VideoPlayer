@@ -7,7 +7,7 @@ export interface UserInterface {
 	id_user: number;
 	email: string;
 	nickname: string;
-	is_subscrition: boolean;
+	is_subscription: boolean;
 	is_deleted: boolean;
 	role: RoleInterface;
 	person: PersonInterface;

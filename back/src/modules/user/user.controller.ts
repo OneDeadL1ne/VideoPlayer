@@ -22,7 +22,7 @@ import { AppStrings } from 'src/constants/strings'
 import { ActiveGuard } from '../auth/guards/active.guard'
 import { JwtAuthGuard } from '../auth/guards/auth.guard'
 import { CreateUserDto } from './dto/create-user.dto'
-import { UpdateUserDto, UpdateUserStatusDto, UpdateUserSubscritionDto } from './dto/update-user.dto'
+import { UpdateUserDto, UpdateUserStatusDto, UpdateUserSubscriptionDto } from './dto/update-user.dto'
 import { User } from './entities/user.entity'
 import { StatusUserResponse } from './response'
 import { UserService } from './user.service'
@@ -135,21 +135,10 @@ export class UserController {
   }
 
   @UseGuards(JwtAuthGuard, ActiveGuard)
-  @Patch('change_subscrition')
+  @Patch('change_subscription')
   @ApiOkResponse({ type: StatusUserResponse, description: AppStrings.USER_DELETE_RESPONSE })
-  async changeSubscrition(@Body() updateUserSubscritionDto: UpdateUserSubscritionDto, @Req() request) {
-    console.log(request.user.id_user)
-    if (updateUserSubscritionDto.id_user == request.user.id_user) {
-      throw new HttpException(AppError.USER_SELF_DEACTIVATE, HttpStatus.FORBIDDEN)
-    } else {
-      const foundUser = await this.usersService.findOne(updateUserSubscritionDto.id_user)
-
-      if (!foundUser) {
-        throw new HttpException(AppError.USER_NOT_FOUND, HttpStatus.NOT_FOUND)
-      }
-    }
-
-    return this.usersService.changeSubscrition(updateUserSubscritionDto)
+  async changeSubscription(@Body() updateUserSubscritionDto: UpdateUserSubscriptionDto) {
+    return this.usersService.changeSubscription(updateUserSubscritionDto)
   }
   @UseGuards(JwtAuthGuard, ActiveGuard)
   @Get('my/:id')

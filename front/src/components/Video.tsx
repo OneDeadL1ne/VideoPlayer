@@ -8,7 +8,7 @@ import { useEffect, useRef } from 'react';
 export const VideoPlayer = ({
 	src,
 	preview,
-	play,
+	play = true,
 }: {
 	src: string;
 	preview?: string;
@@ -19,7 +19,9 @@ export const VideoPlayer = ({
 	useEffect(() => {
 		let time;
 		if (play) {
-			time = setTimeout(() => player.current?.provider?.play(), 1000);
+			time = setTimeout(() => {
+				player.current?.provider?.play();
+			}, 2000);
 		}
 		if (!play) {
 			player.current?.provider?.pause();

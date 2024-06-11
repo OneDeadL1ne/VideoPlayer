@@ -39,10 +39,10 @@ export class UpdateUserStatusDto {
   is_deleted: boolean
 }
 
-export class UpdateUserSubscritionDto {
+export class UpdateUserSubscriptionDto {
   @ApiProperty({ default: 1 })
   id_user: number
 
   @ApiProperty({ default: false })
-  is_subscrition: boolean
+  is_subscription: boolean
 }

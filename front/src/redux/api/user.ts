@@ -33,9 +33,28 @@ const usersApi = api.injectEndpoints({
 
 		changeUserStatus: builder.mutation<FetchResultInterface, Partial<UserInterface>>({
 			query: (body) => ({
-				url: 'user/change_status',
+				url: 'user/change_subscription',
 				method: 'PATCH',
 				body,
+			}),
+			invalidatesTags: ['User'],
+		}),
+
+		imageUser: builder.mutation<
+			FetchResultInterface<UserInterface>,
+			{ id_user: number; formData: FormData }
+		>({
+			query: ({ id_user, formData }) => ({
+				url: `user/upload?id_user=${id_user}`,
+				method: 'POST',
+				body: formData,
+			}),
+			invalidatesTags: ['User'],
+		}),
+		deleteAvatarUser: builder.mutation<FetchResultInterface, number>({
+			query: (id) => ({
+				url: `user/image?id_user=${id}`,
+				method: 'PATCH',
 			}),
 			invalidatesTags: ['User'],
 		}),
@@ -49,4 +68,6 @@ export const {
 	useCreateUserMutation,
 	useUpdateUserMutation,
 	useChangeUserStatusMutation,
+	useDeleteAvatarUserMutation,
+	useImageUserMutation,
 } = usersApi;

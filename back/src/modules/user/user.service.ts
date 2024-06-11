@@ -13,7 +13,7 @@ import * as fs from 'node:fs'
 
 import { CreateUserDto } from './dto/create-user.dto'
 import { AppError } from 'src/constants/error'
-import { UpdateUserDto, UpdateUserStatusDto, UpdateUserSubscritionDto } from './dto/update-user.dto'
+import { UpdateUserDto, UpdateUserStatusDto, UpdateUserSubscriptionDto } from './dto/update-user.dto'
 import { Role } from '../role/entities/role.entity'
 import { StatusUserResponse, UserResponse } from './response'
 import { ConfigService } from '@nestjs/config'
@@ -56,10 +56,9 @@ export class UserService {
         await transaction.rollback()
         throw new HttpException(errorMessage, errorCode)
       })
-      const res = await newUser.save()
-      console.log(res)
-      //      console.log(newUser)
+
       if (newUser) {
+        transaction.commit()
         return {
           status: true,
           data: {
@@ -118,6 +117,7 @@ export class UserService {
         user.nickname = updatedUser.nickname
         await user.save({ transaction: transaction })
       }
+      transaction.commit()
       foundUser = await this.userRepository.findOne({
         where: { id_user: updatedUser.id_user },
       })
@@ -261,10 +261,17 @@ export class UserService {
     }
   }
 
-  async changeSubscrition(updateUserSubscritionDto: UpdateUserSubscritionDto): Promise<StatusUserResponse> {
+  async changeSubscription(updateUserSubscritionDto: UpdateUserSubscriptionDto): Promise<StatusUserResponse> {
     try {
-      await this.userRepository.update({ is_subscrition: updateUserSubscritionDto.is_subscrition }, { where: { id_user: updateUserSubscritionDto.id_user } })
-      return { status: true }
+      const res = await this.userRepository.update(
+        { is_subscription: updateUserSubscritionDto.is_subscription },
+        { where: { id_user: updateUserSubscritionDto.id_user } },
+      )
+      console.log(res)
+      if (res) {
+        return { status: true }
+      }
+      return { status: false }
     } catch (error) {
       throw new Error(error)
     }
@@ -285,60 +292,56 @@ export class UserService {
 
   async updateAvatarUser(id_user: number, files: Array<Express.Multer.File>) {
     try {
-      const dir = `./upload/images/users/${id_user}`
-      let photo
-      let avatar
-      console.log(files)
+      // const dir = `./upload/images/users/${id_user}`
+      // let photo
+      // let avatar
+
       if (files.length == 2) {
         for (const file of files) {
           if (file.filename.split('.')[1] && file.filename.split('-')[1] == 'photo') {
             await this.userRepository.update(
-              { photo_url: `${this.configService.get('API_URL')}/director/image/${id_user}/${file.filename}` },
+              { photo_url: `${this.configService.get('API_URL')}/user/image/${id_user}/${file.filename}` },
               { where: { id_user: id_user } },
             )
           }
 
           if (!file.filename.split('.')[1] && file.originalname == 'blob' && file.filename.split('-')[1] == 'avatar') {
             await this.userRepository.update(
-              { avatar_url: `${this.configService.get('API_URL')}/director/image/${id_user}/${file.filename}` },
+              { avatar_url: `${this.configService.get('API_URL')}/user/image/${id_user}/${file.filename}` },
               { where: { id_user: id_user } },
             )
           }
         }
-        const foundActor = await this.userRepository.findOne({
-          where: { id_user: id_user },
-        })
-        photo = foundActor.photo_url.split('/')[6]
-        avatar = foundActor.avatar_url.split('/')[6]
+
+        // photo = foundActor.photo_url.split('/')[6]
+        // avatar = foundActor.avatar_url.split('/')[6]
       }
       if (files.length == 1) {
         if (!files[0].filename.split('.')[1] && files[0].originalname == 'blob' && files[0].filename.split('-')[1] == 'avatar') {
           await this.userRepository.update(
-            { avatar_url: `${this.configService.get('API_URL')}/director/image/${id_user}/${files[0].filename}` },
+            { avatar_url: `${this.configService.get('API_URL')}/user/image/${id_user}/${files[0].filename}` },
             { where: { id_user: id_user } },
           )
         }
-        const foundActor = await this.userRepository.findOne({
-          where: { id_user: id_user },
-        })
-        photo = foundActor.photo_url.split('/')[6]
-        avatar = foundActor.avatar_url.split('/')[6]
+
+        // photo = foundActor.photo_url.split('/')[6]
+        // avatar = foundActor.avatar_url.split('/')[6]
       }
 
-      if (fs.existsSync(dir)) {
-        const images = fs.readdirSync(dir)
-        for (const f of images) {
-          if (f != photo && f != avatar) {
-            fs.rmSync(`${dir}/${f}`)
-          }
-        }
-      }
+      // if (fs.existsSync(dir)) {
+      //   const images = fs.readdirSync(dir)
+      //   for (const f of images) {
+      //     if (f != photo && f != avatar) {
+      //       fs.rmSync(`${dir}/${f}`)
+      //     }
+      //   }
+      // }
 
-      const foundDirector = await this.userRepository.findOne({
+      const foundUser = await this.userRepository.findOne({
         where: { id_user: id_user },
       })
 
-      return { status: true, data: foundDirector }
+      return { status: true, data: foundUser }
     } catch (error) {
       throw new Error(error)
     }

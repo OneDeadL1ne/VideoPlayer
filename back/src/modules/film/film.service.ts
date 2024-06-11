@@ -89,7 +89,7 @@ export class FilmService {
       }
 
       if (user) {
-        const sub = user.is_subscrition
+        const sub = user.is_subscription
         const role = user.id_role
 
         if (sub) {

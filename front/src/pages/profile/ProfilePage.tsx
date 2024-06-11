@@ -12,7 +12,13 @@ import { FormField } from '@/components/ui/form';
 import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks';
 import { useErrorToast } from '@/hooks/use-error-toast';
 import { useSuccessToast } from '@/hooks/use-success-toast';
-import { useGetUserMutation, useUpdateUserMutation } from '@/redux/api/user';
+import {
+	useChangeUserStatusMutation,
+	useDeleteAvatarUserMutation,
+	useGetUserMutation,
+	useImageUserMutation,
+	useUpdateUserMutation,
+} from '@/redux/api/user';
 import { setUser } from '@/redux/reducers/authSlice';
 import { Edit2, Trash2 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
@@ -56,10 +62,6 @@ export default function ProfilePage() {
 			  },
 	});
 
-	const updateSuccessMsg = useMemo(() => {
-		return 'Пользователь изменен';
-	}, []);
-
 	const handleSubmit = (data: {
 		id_user: number;
 		email: string;
@@ -73,18 +75,35 @@ export default function ProfilePage() {
 		}
 	};
 
+	const [addPhoto] = useImageUserMutation();
+	const [resetPhoto] = useDeleteAvatarUserMutation();
+	const [changeSubscription, { isSuccess: isSubscriptionSuccess }] =
+		useChangeUserStatusMutation();
+
+	const updateSuccessMsg = useMemo(() => {
+		return 'Пользователь изменен';
+	}, []);
+
+	const updateSubscriptionMsg = useMemo(() => {
+		return `${user?.nickname} подписка ${!user?.is_subscription ? 'Подключена' : 'Отключена'}`;
+	}, [user]);
+
 	useSuccessToast(updateSuccessMsg, isSuccess);
+	useSuccessToast(updateSubscriptionMsg, isSubscriptionSuccess);
 
 	useErrorToast(() => handleSubmit(form.getValues()), error);
 
 	useEffect(() => {
-		if (isSuccess) {
-			fetchUser();
-		}
 		if (isUserSuccess && userData) {
 			dispatch(setUser(userData));
 		}
-	}, [isSuccess, isUserSuccess]);
+	}, [isUserSuccess]);
+
+	useEffect(() => {
+		if (isSuccess || isSubscriptionSuccess) {
+			fetchUser();
+		}
+	}, [isSuccess, isSubscriptionSuccess]);
 
 	return (
 		<div className="@container h-full flex justify-center  text-accent-foreground">
@@ -153,7 +172,7 @@ export default function ProfilePage() {
 											setImageUrl('');
 											setCrop('');
 											if (user?.id_user && crop && user.photo_url) {
-												//resetPhoto(actor?.id_actor);
+												resetPhoto(user?.id_user);
 												setAvatar(null);
 												setPhoto(null);
 											}
@@ -319,6 +338,15 @@ export default function ProfilePage() {
 								<Button
 									onClick={() => {
 										setEdit(!edit);
+										if (user && avatar && photo) {
+											const formData = new FormData();
+											formData.append('files', photo);
+											formData.append('files', avatar);
+											addPhoto({
+												id_user: user?.id_user,
+												formData: formData,
+											});
+										}
 									}}
 									className="text-white"
 									disabled={isLoading}
@@ -336,6 +364,20 @@ export default function ProfilePage() {
 						</CustomForm>
 					</CardContent>
 				</Card>
+				<div className="m-5">
+					<Button
+						className="w-full  text-white  p-7  text-md"
+						onClick={() =>
+							changeSubscription({
+								id_user: user?.id_user,
+								is_subscription: !user?.is_subscription,
+							})
+						}
+						disabled={edit}
+					>
+						{user?.is_subscription ? 'Отключить подписку' : 'Оформить подписку'}
+					</Button>
+				</div>
 			</div>
 		</div>
 	);

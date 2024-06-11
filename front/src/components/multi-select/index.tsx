@@ -1,295 +1,312 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-'use client';
+import * as React from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { CheckIcon, ChevronDown, XIcon, Sparkles, X } from 'lucide-react';
 
-import { Badge } from '@/components/ui/badge';
-import { Command, CommandItem, CommandEmpty, CommandList } from '@/components/ui/command';
 import { cn } from '@/lib/utils';
-import { Command as CommandPrimitive } from 'cmdk';
-import { X as RemoveIcon, Check } from 'lucide-react';
-import React, {
-	KeyboardEvent,
-	createContext,
-	forwardRef,
-	useCallback,
-	useContext,
-	useState,
-} from 'react';
+import { Separator } from '@/components/ui/separator';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import {
+	Command,
+	CommandEmpty,
+	CommandGroup,
+	CommandInput,
+	CommandItem,
+	CommandList,
+	CommandSeparator,
+} from '@/components/ui/command';
+import { ScrollArea, ScrollBar } from '../ui/scroll-area';
+import { useAppSelector } from '@/hooks/reduxHooks';
+import { getCurrentColor } from '@/utils/helpers';
 
-type MultiSelectorProps = {
-	values: string[];
-	onValuesChange: (value: string[]) => void;
-	loop?: boolean;
-} & React.ComponentPropsWithoutRef<typeof CommandPrimitive>;
+export type Option = {
+	label: string;
+	value: string;
+	icon?: React.ComponentType<{ className?: string }>;
+};
 
-interface MultiSelectContextProps {
-	value: string[];
-	onValueChange: (value: any) => void;
-	open: boolean;
-	setOpen: (value: boolean) => void;
-	inputValue: string;
-	setInputValue: React.Dispatch<React.SetStateAction<string>>;
-	activeIndex: number;
-	setActiveIndex: React.Dispatch<React.SetStateAction<number>>;
+const multiSelectVariants = cva(
+	'm-1 transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300',
+	{
+		variants: {
+			variant: {
+				default:
+					'border-primary  bg-secondary text-muted-foreground hover:text-accent-foreground rounded-[8px]',
+				secondary:
+					'border-foreground/10 bg-secondary text-secondary-foreground hover:bg-secondary/80',
+				destructive:
+					'border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80',
+				inverted: 'inverted',
+			},
+		},
+		defaultVariants: {
+			variant: 'default',
+		},
+	}
+);
+
+interface MultiSelectProps
+	extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+		VariantProps<typeof multiSelectVariants> {
+	options: {
+		label: string;
+		value: string;
+		icon?: React.ComponentType<{ className?: string }>;
+	}[];
+	onValueChange: (value: string[]) => void;
+	defaultValue: string[];
+	placeholder?: string;
+	animation?: number;
+	maxCount?: number;
+	asChild?: boolean;
+	className?: string;
 }
 
-const MultiSelectContext = createContext<MultiSelectContextProps | null>(null);
-
-const useMultiSelect = () => {
-	const context = useContext(MultiSelectContext);
-	if (!context) {
-		throw new Error('useMultiSelect must be used within MultiSelectProvider');
-	}
-	return context;
-};
-
-const MultiSelector = ({
-	values: value,
-	onValuesChange: onValueChange,
-	loop = false,
-	className,
-	children,
-	dir,
-	...props
-}: MultiSelectorProps) => {
-	const [inputValue, setInputValue] = useState('');
-	const [open, setOpen] = useState<boolean>(false);
-	const [activeIndex, setActiveIndex] = useState<number>(-1);
-
-	const onValueChangeHandler = useCallback(
-		(val: string) => {
-			if (value.includes(val)) {
-				onValueChange(value.filter((item) => item !== val));
-			} else {
-				onValueChange([...value, val]);
-			}
+export const MultiSelect = React.forwardRef<HTMLButtonElement, MultiSelectProps>(
+	(
+		{
+			options,
+			onValueChange,
+			variant,
+			defaultValue = [],
+			placeholder = 'Select options',
+			animation = 0,
+			maxCount = 3,
+			className,
+			...props
 		},
-		[value]
-	);
-
-	// TODO : change from else if use to switch case statement
-
-	const handleKeyDown = useCallback(
-		(e: KeyboardEvent<HTMLDivElement>) => {
-			const moveNext = () => {
-				const nextIndex = activeIndex + 1;
-				setActiveIndex(nextIndex > value.length - 1 ? (loop ? 0 : -1) : nextIndex);
-			};
-
-			const movePrev = () => {
-				const prevIndex = activeIndex - 1;
-				setActiveIndex(prevIndex < 0 ? value.length - 1 : prevIndex);
-			};
-
-			if ((e.key === 'Backspace' || e.key === 'Delete') && value.length > 0) {
-				if (inputValue.length === 0) {
-					if (activeIndex !== -1 && activeIndex < value.length) {
-						onValueChange(value.filter((item) => item !== value[activeIndex]));
-						const newIndex = activeIndex - 1 < 0 ? 0 : activeIndex - 1;
-						setActiveIndex(newIndex);
-					} else {
-						onValueChange(value.filter((item) => item !== value[value.length - 1]));
-					}
-				}
-			} else if (e.key === 'Enter') {
-				setOpen(true);
-			} else if (e.key === 'Escape') {
-				if (activeIndex !== -1) {
-					setActiveIndex(-1);
-				} else {
-					setOpen(false);
-				}
-			} else if (dir === 'rtl') {
-				if (e.key === 'ArrowRight') {
-					movePrev();
-				} else if (e.key === 'ArrowLeft' && (activeIndex !== -1 || loop)) {
-					moveNext();
-				}
-			} else {
-				if (e.key === 'ArrowLeft') {
-					movePrev();
-				} else if (e.key === 'ArrowRight' && (activeIndex !== -1 || loop)) {
-					moveNext();
-				}
+		ref
+	) => {
+		const [selectedValues, setSelectedValues] = React.useState<string[]>(defaultValue);
+		const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
+		const [isAnimating, setIsAnimating] = React.useState(false);
+		const { theme } = useAppSelector((s) => s.theme);
+		const [color, setColor] = React.useState(theme);
+		React.useEffect(() => {
+			if (JSON.stringify(selectedValues) !== JSON.stringify(defaultValue)) {
+				setSelectedValues(defaultValue);
 			}
-		},
-		[value, inputValue, activeIndex, loop]
-	);
+		}, [defaultValue, selectedValues]);
 
-	return (
-		<MultiSelectContext.Provider
-			value={{
-				value,
-				onValueChange: onValueChangeHandler,
-				open,
-				setOpen,
-				inputValue,
-				setInputValue,
-				activeIndex,
-				setActiveIndex,
-			}}
-		>
-			<Command
-				onKeyDown={handleKeyDown}
-				className={cn('overflow-visible bg-transparent flex flex-col space-y-2', className)}
-				dir={dir}
-				{...props}
-			>
-				{children}
-			</Command>
-		</MultiSelectContext.Provider>
-	);
-};
+		const handleInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+			if (event.key === 'Enter') {
+				setIsPopoverOpen(true);
+			} else if (event.key === 'Backspace' && !event.currentTarget.value) {
+				const newSelectedValues = [...selectedValues];
+				newSelectedValues.pop();
+				setSelectedValues(newSelectedValues);
+				onValueChange(newSelectedValues);
+			}
+		};
 
-const MultiSelectorTrigger = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-	({ className, children, ...props }, ref) => {
-		const { value, onValueChange, activeIndex } = useMultiSelect();
+		const toggleOption = (value: string) => {
+			const newSelectedValues = selectedValues.includes(value)
+				? selectedValues.filter((v) => v !== value)
+				: [...selectedValues, value];
+			setSelectedValues(newSelectedValues);
+			onValueChange(newSelectedValues);
+		};
 
-		const mousePreventDefault = useCallback((e: React.MouseEvent) => {
-			e.preventDefault();
-			e.stopPropagation();
-		}, []);
+		const handleClear = () => {
+			setSelectedValues([]);
+			onValueChange([]);
+		};
+
+		const handleTogglePopover = () => {
+			setIsPopoverOpen((prev) => !prev);
+		};
+
+		const clearExtraOptions = () => {
+			const newSelectedValues = selectedValues.slice(0, maxCount);
+			setSelectedValues(newSelectedValues);
+			onValueChange(newSelectedValues);
+		};
+
+		React.useEffect(() => {
+			setColor(getCurrentColor());
+		}, [theme]);
 
 		return (
-			<div
-				ref={ref}
-				className={cn(
-					'flex flex-wrap gap-1 p-1 py-2  border border-input rounded-xl bg-secondary',
-					className
-				)}
-				{...props}
-			>
-				{value.map((item, index) => (
-					<Badge
-						key={item}
+			<Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen} modal>
+				<PopoverTrigger asChild>
+					<Button
+						ref={ref}
+						{...props}
+						onClick={handleTogglePopover}
 						className={cn(
-							'px-1 rounded-xl text-accent-foreground flex items-center gap-1',
-							activeIndex === index && 'ring-2 ring-muted-foreground '
+							'flex w-full p-1  rounded-xl border min-h-10 h-auto items-center justify-between bg-inherit hover:bg-inherit',
+							className
 						)}
-						variant={'secondary'}
 					>
-						<span className="text-xs">{item}</span>
-						<button
-							aria-label={`Remove ${item} option`}
-							aria-roledescription="button to remove option"
-							type="button"
-							onMouseDown={mousePreventDefault}
-							onClick={() => onValueChange(item)}
-						>
-							<span className="sr-only">Remove {item} option</span>
-							<RemoveIcon className="h-4 w-4 hover:stroke-destructive" />
-						</button>
-					</Badge>
-				))}
-				{children}
-			</div>
+						{selectedValues.length > 0 ? (
+							<div className="flex justify-between items-center w-full">
+								<div className="flex flex-wrap items-center">
+									{selectedValues.slice(0, maxCount).map((value) => {
+										const option = options.find((o) => o.value === value);
+										const IconComponent = option?.icon;
+										return (
+											<Badge
+												key={value}
+												className={cn(
+													isAnimating ? 'animate-bounce' : '',
+													multiSelectVariants({ variant, className })
+												)}
+												style={{ animationDuration: `${animation}s` }}
+											>
+												{IconComponent && (
+													<IconComponent className="h-4 w-4 mr-2" />
+												)}
+												{option?.label}
+												<X
+													className="ml-2 h-4 w-4 cursor-pointer dark:text-white  hover:text-red-500"
+													onClick={(event) => {
+														event.stopPropagation();
+														toggleOption(value);
+													}}
+												/>
+											</Badge>
+										);
+									})}
+									{selectedValues.length > maxCount && (
+										<Badge
+											className={cn(
+												'bg-transparent text-foreground border-foreground/1 hover:bg-transparent',
+												isAnimating ? 'animate-bounce' : '',
+												multiSelectVariants({ variant, className })
+											)}
+											style={{ animationDuration: `${animation}s` }}
+										>
+											{`+ ${selectedValues.length - maxCount} добавлено`}
+											<X
+												className="ml-2 h-4 w-4 cursor-pointer"
+												onClick={(event) => {
+													event.stopPropagation();
+													clearExtraOptions();
+												}}
+											/>
+										</Badge>
+									)}
+								</div>
+								<div className="flex items-center justify-between">
+									<XIcon
+										className="h-4 mx-2 cursor-pointer text-muted-foreground"
+										onClick={(event) => {
+											event.stopPropagation();
+											handleClear();
+										}}
+									/>
+									<Separator
+										orientation="vertical"
+										className="flex min-h-6 h-full"
+									/>
+									<ChevronDown className="h-4 mx-2 cursor-pointer text-muted-foreground" />
+								</div>
+							</div>
+						) : (
+							<div className="flex items-center justify-between w-full mx-auto">
+								<span className="text-sm text-muted-foreground mx-3">
+									{placeholder}
+								</span>
+								<ChevronDown className="h-4 cursor-pointer text-muted-foreground mx-2" />
+							</div>
+						)}
+					</Button>
+				</PopoverTrigger>
+
+				<PopoverContent
+					align="center"
+					className="w-[470px]  p-0  text-accent-foreground border-0 outline-none border-none	"
+					onEscapeKeyDown={() => setIsPopoverOpen(false)}
+				>
+					<Command className="overflow-visible bg-accent   ">
+						<CommandInput
+							placeholder="Поиск..."
+							onKeyDown={handleInputKeyDown}
+							color={color}
+							className={`${color == 'black' ? 'text-black' : 'text-white'}`}
+						/>
+						<CommandSeparator className="bg-secondary h-[1px]  " />
+						<CommandList className="">
+							<ScrollArea
+								//className={selectedValues.length > 6 ? 'h-[100px]' : ''}
+								className="relative h-[130px]  overflow-auto text-accent-foreground"
+								type="hover"
+							>
+								<CommandEmpty>Ничего не найдено</CommandEmpty>
+
+								<CommandGroup className="h-full ">
+									{options.map((option) => {
+										const isSelected = selectedValues.includes(option.value);
+										return (
+											<CommandItem
+												key={option.value}
+												onSelect={() => toggleOption(option.value)}
+												style={{ pointerEvents: 'auto', opacity: 1 }}
+												className="cursor-pointer"
+											>
+												<div
+													className={cn(
+														'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
+														isSelected
+															? 'bg-primary '
+															: 'opacity-50 [&_svg]:invisible'
+													)}
+												>
+													<CheckIcon className="h-4 w-4 text-white" />
+												</div>
+												{option.icon && (
+													<option.icon className="mr-2 h-4 w-4 text-accent-foreground" />
+												)}
+												<span
+													className={cn(
+														isSelected ? 'text-accent-foreground' : ''
+													)}
+												>
+													{option.label}
+												</span>
+											</CommandItem>
+										);
+									})}
+								</CommandGroup>
+								<ScrollBar orientation="vertical" />
+							</ScrollArea>
+							{selectedValues.length > 0 && (
+								<>
+									<CommandSeparator className="bg-secondary h-[1px] " />
+
+									<CommandGroup>
+										<div className="flex items-center text-accent-foreground justify-between">
+											<CommandItem
+												onSelect={handleClear}
+												style={{
+													pointerEvents: 'auto',
+													opacity: 1,
+												}}
+												className="flex-1 justify-center cursor-pointer"
+											>
+												Очистить
+											</CommandItem>
+										</div>
+									</CommandGroup>
+								</>
+							)}
+						</CommandList>
+					</Command>
+				</PopoverContent>
+
+				{animation > 0 && selectedValues.length > 0 && (
+					<Sparkles
+						className={cn(
+							'cursor-pointer my-2 text-foreground bg-background w-3 h-3',
+							isAnimating ? '' : 'text-muted-foreground'
+						)}
+						onClick={() => setIsAnimating(!isAnimating)}
+					/>
+				)}
+			</Popover>
 		);
 	}
 );
 
-MultiSelectorTrigger.displayName = 'MultiSelectorTrigger';
-
-const MultiSelectorInput = forwardRef<
-	React.ElementRef<typeof CommandPrimitive.Input>,
-	React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
->(({ className, ...props }, ref) => {
-	const { setOpen, inputValue, setInputValue, activeIndex, setActiveIndex } = useMultiSelect();
-	return (
-		<CommandPrimitive.Input
-			{...props}
-			ref={ref}
-			value={inputValue}
-			onValueChange={activeIndex === -1 ? setInputValue : undefined}
-			onBlur={() => setOpen(false)}
-			onFocus={() => setOpen(true)}
-			onClick={() => setActiveIndex(-1)}
-			className={cn(
-				'ml-3 bg-secondary text-accent-foreground outline-none  flex-1',
-				className,
-				activeIndex !== -1 && 'caret-transparent'
-			)}
-		/>
-	);
-});
-
-MultiSelectorInput.displayName = 'MultiSelectorInput';
-
-const MultiSelectorContent = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-	({ children }, ref) => {
-		const { open } = useMultiSelect();
-		return (
-			<div ref={ref} className="relative">
-				{open && children}
-			</div>
-		);
-	}
-);
-
-MultiSelectorContent.displayName = 'MultiSelectorContent';
-
-const MultiSelectorList = forwardRef<
-	React.ElementRef<typeof CommandPrimitive.List>,
-	React.ComponentPropsWithoutRef<typeof CommandPrimitive.List>
->(({ className, children }, ref) => {
-	return (
-		<CommandList
-			ref={ref}
-			className={cn(
-				'p-2 flex flex-col  gap-2 rounded-md scrollbar-thin scrollbar-track-transparent transition-colors scrollbar-thumb-muted-foreground dark:scrollbar-thumb-muted scrollbar-thumb-rounded-lg w-full absolute bg-secondary  shadow-md z-10 border border-input top-0',
-				className
-			)}
-		>
-			{children}
-
-			<CommandEmpty>
-				<span className="text-accent-foreground">No results found</span>
-			</CommandEmpty>
-		</CommandList>
-	);
-});
-
-MultiSelectorList.displayName = 'MultiSelectorList';
-
-const MultiSelectorItem = forwardRef<
-	React.ElementRef<typeof CommandPrimitive.Item>,
-	{ value: string } & React.ComponentPropsWithoutRef<typeof CommandPrimitive.Item>
->(({ className, value, children, ...props }, ref) => {
-	const { value: Options, onValueChange, setInputValue } = useMultiSelect();
-
-	const mousePreventDefault = useCallback((e: React.MouseEvent) => {
-		e.preventDefault();
-		e.stopPropagation();
-	}, []);
-
-	const isIncluded = Options.includes(value);
-	return (
-		<CommandItem
-			ref={ref}
-			{...props}
-			onSelect={() => {
-				onValueChange(value);
-				setInputValue('');
-			}}
-			className={cn(
-				'rounded-md cursor-pointer px-2 py-1  flex justify-between data-[didisabled]:opacity-100',
-				className,
-				isIncluded && 'opacity-50 cursor-default',
-				props.disabled && 'opacity-50 cursor-not-allowed'
-			)}
-			onMouseDown={mousePreventDefault}
-		>
-			{children}
-			{isIncluded && <Check className="h-4 w-4" />}
-		</CommandItem>
-	);
-});
-
-MultiSelectorItem.displayName = 'MultiSelectorItem';
-
-export {
-	MultiSelector,
-	MultiSelectorTrigger,
-	MultiSelectorInput,
-	MultiSelectorContent,
-	MultiSelectorList,
-	MultiSelectorItem,
-};
+MultiSelect.displayName = 'MultiSelect';

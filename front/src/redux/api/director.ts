@@ -43,17 +43,17 @@ const directorApi = api.injectEndpoints({
 			}),
 			invalidatesTags: ['Director'],
 		}),
-		deleteDirector: builder.mutation<FetchResultInterface, number>({
-			query: (id) => ({
-				url: `director/${id}`,
-				method: 'DELETE',
-			}),
-			invalidatesTags: ['Director'],
-		}),
 		deleteAvatarDirector: builder.mutation<FetchResultInterface, number>({
 			query: (id) => ({
 				url: `director/image?id_director=${id}`,
 				method: 'PATCH',
+			}),
+			invalidatesTags: ['Director'],
+		}),
+		deleteDirector: builder.mutation<FetchResultInterface, number>({
+			query: (id) => ({
+				url: `director/${id}`,
+				method: 'DELETE',
 			}),
 			invalidatesTags: ['Director'],
 		}),

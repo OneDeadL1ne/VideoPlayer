@@ -1,4 +1,5 @@
 import { CustomCarousel } from '@/components/carousel';
+
 import { useAppSelector } from '@/hooks/reduxHooks';
 import { useGetFilmsQuery } from '@/redux/api/film';
 import { useGetGenresQuery } from '@/redux/api/genre';
@@ -10,7 +11,7 @@ export default function HomePage() {
 	const { data } = useGetFilmsQuery({ id_user: user?.id_user });
 	const films = data?.filter((x) => x.preview_path != null && x.trailer_path?.length != null);
 	document.title = 'Ностальгия';
-	console.log(films);
+
 	return (
 		<div className="grid grid-flow-row  ">
 			<div className="flex justify-center  items-center @container">

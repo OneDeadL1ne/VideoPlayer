@@ -31,8 +31,9 @@ const FormSchema = z.object({
 export default function AuthDialog({ active = false }: { active?: boolean }) {
 	const [open, setOpen] = useState(active);
 	const navigate = useNavigate();
-	const { theme } = useAppSelector((s) => s.theme);
+
 	const { isLogin } = useAppSelector((s) => s.auth);
+	const { theme } = useAppSelector((s) => s.theme);
 	const [color, setColor] = useState(theme);
 	const { pathname } = useLocation();
 	const form = useForm<z.infer<typeof FormSchema>>({

@@ -42,7 +42,7 @@ export class User extends Model {
 
   @ApiProperty()
   @Column({ type: DataType.BOOLEAN, allowNull: false, defaultValue: false })
-  is_subscrition: boolean
+  is_subscription: boolean
 
   @ApiProperty()
   @Column({ type: DataType.BOOLEAN, allowNull: false, defaultValue: false })
