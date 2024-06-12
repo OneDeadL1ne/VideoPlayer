@@ -91,20 +91,7 @@ export class FilmService {
       if (user) {
         const sub = user.is_subscription
         const role = user.id_role
-
-        if (sub) {
-          return await this.filmRepository.findAll({
-            include: [
-              { model: Agelimit, attributes: ['id_age_limit', 'age_limit_name'] },
-              { model: Actor, through: { attributes: ['position_role'] }, order: ['ActorFilm.position_role', 'DESC'] },
-              { model: Genre, through: { attributes: [] } },
-              { model: Director, through: { attributes: [] } },
-              { model: Voiceover, through: { attributes: [] } },
-            ],
-            attributes: { exclude: ['id_age_limit'] },
-            where: { trailer_path: { [Op.ne]: null }, preview_path: { [Op.ne]: null } },
-          })
-        }
+        console.log(role)
 
         if (role != 1) {
           return await this.filmRepository.findAll({
@@ -116,6 +103,19 @@ export class FilmService {
               { model: Voiceover, through: { attributes: [] } },
             ],
             attributes: { exclude: ['id_age_limit'] },
+          })
+        }
+        if (sub) {
+          return await this.filmRepository.findAll({
+            include: [
+              { model: Agelimit, attributes: ['id_age_limit', 'age_limit_name'] },
+              { model: Actor, through: { attributes: ['position_role'] }, order: ['ActorFilm.position_role', 'DESC'] },
+              { model: Genre, through: { attributes: [] } },
+              { model: Director, through: { attributes: [] } },
+              { model: Voiceover, through: { attributes: [] } },
+            ],
+            attributes: { exclude: ['id_age_limit'] },
+            where: { trailer_path: { [Op.ne]: null }, preview_path: { [Op.ne]: null } },
           })
         }
 

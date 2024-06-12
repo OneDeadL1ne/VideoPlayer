@@ -1,5 +1,6 @@
 import {
 	Carousel,
+	CarouselApi,
 	CarouselContent,
 	CarouselNext,
 	CarouselPrevious,
@@ -9,6 +10,7 @@ import { FilmInterface } from '@/types/film';
 
 import CustomCard from '../custom-card/CustomCard';
 import { GenreInterface } from '@/types/genre';
+import { useEffect, useState } from 'react';
 
 export interface CarouselProps<T> {
 	title?: string;
@@ -25,6 +27,21 @@ export function CustomCarousel<T>({
 	//disabledButtons = false,
 	loop = true,
 }: CarouselProps<T>) {
+	const [api, setApi] = useState<CarouselApi>();
+	const [current, setCurrent] = useState(0);
+
+	useEffect(() => {
+		if (!api) {
+			return;
+		}
+
+		setCurrent(api.selectedScrollSnap() + 1);
+
+		api.on('select', () => {
+			setCurrent(api.selectedScrollSnap() + 1);
+		});
+	}, [api]);
+
 	if (type == 'genres') {
 		return (
 			<div className="w-screen	 mt-10">
@@ -36,16 +53,17 @@ export function CustomCarousel<T>({
 					</div>
 				)}
 				<div className=" lg:max-w-screen-2xl mt-5 pl-5 pr-5">
-					<Carousel className="" opts={{ align: 'start', loop: loop }}>
+					<Carousel className="" opts={{ align: 'start', loop: loop }} setApi={setApi}>
 						<CarouselContent className="">
-							{data.map((item, index) => {
+							{data.map((item) => {
 								const genre = item as GenreInterface;
 								return (
 									<CustomCard
-										index={index}
+										current={current}
+										index={genre.id_genre}
 										genre={genre}
 										type="genres"
-										key={index}
+										key={genre.id_genre}
 									/>
 								);
 							})}
@@ -65,12 +83,19 @@ export function CustomCarousel<T>({
 				</div>
 			)}
 			<div className="w-full mx-auto flex  justify-center lg:max-w-screen-md mt-5 ">
-				<Carousel className="" opts={{ align: 'center', loop: loop }}>
+				<Carousel className="" opts={{ align: 'center', loop: loop }} setApi={setApi}>
 					<CarouselContent className="-ml-2 mr-2 ">
 						{data.map((item, index) => {
 							const film = item as FilmInterface;
+
 							return (
-								<CustomCard index={index} film={film} type="films" key={index} />
+								<CustomCard
+									current={current}
+									index={index}
+									film={film}
+									type="films"
+									key={film.id_film}
+								/>
 							);
 						})}
 					</CarouselContent>

@@ -18,6 +18,7 @@ import TableVoiceOverPage from './pages/admin/voiceover';
 import TableUserPage from './pages/admin/user';
 import ProfilePage from './pages/profile/ProfilePage';
 import AuthDialog from './components/dialog/AuthDialog';
+import RegistrationPage from './pages/registration/RegistrationPage';
 
 function App() {
 	const dispatch = useAppDispatch();
@@ -100,6 +101,7 @@ function App() {
 						)
 					}
 				/>
+				<Route path="/registration" element={<RegistrationPage />} />
 				<Route path="*" element={<NotFoundPage />} />
 			</Route>
 			{user?.role.role_name != 'Пользователь' && user && (

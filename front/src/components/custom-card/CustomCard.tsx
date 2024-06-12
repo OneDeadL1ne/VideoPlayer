@@ -5,7 +5,7 @@ import '@vidstack/react/player/styles/default/theme.css';
 import '@vidstack/react/player/styles/default/layouts/audio.css';
 import '@vidstack/react/player/styles/default/layouts/video.css';
 
-import { MediaPlayer, MediaPlayerInstance, MediaProvider, Poster } from '@vidstack/react';
+import { MediaPlayer, MediaPlayerInstance, MediaProvider } from '@vidstack/react';
 
 import { Card, CardContent } from '../ui/card';
 import { useAppSelector } from '@/hooks/reduxHooks';
@@ -18,11 +18,13 @@ import { motion } from 'framer-motion';
 export default function CustomCard({
 	index,
 	film,
+	current,
 	genre,
 	type,
 }: {
 	type: 'genres' | 'films';
 	index: number;
+	current: number;
 	film?: FilmInterface;
 	genre?: GenreInterface;
 }) {
@@ -30,53 +32,41 @@ export default function CustomCard({
 	const player = useRef<MediaPlayerInstance>(null);
 	const navigate = useNavigate();
 
-	const [isHovered, setIsHovered] = useState(false);
 	const [play, setPlay] = useState(false);
-	const [hoveredForFiveSeconds, setHoveredForFiveSeconds] = useState(false);
-	const timerRef = useRef<number | null>(null);
 
+	const variants = {
+		open: { opacity: 1 },
+		closed: { opacity: 0 },
+	};
+
+	//console.log(index);
 	useEffect(() => {
-		if (isHovered) {
-			timerRef.current = window.setTimeout(() => {
-				setHoveredForFiveSeconds(true);
-			}, 2000);
-		} else {
-			if (timerRef.current !== null) {
-				clearTimeout(timerRef.current);
-			}
-			setHoveredForFiveSeconds(false);
+		if (play) {
+			setPlay(!play);
+			player.current?.provider?.pause();
+			player.current?.provider?.setCurrentTime(0);
 		}
-
-		return () => {
-			if (timerRef.current !== null) {
-				clearTimeout(timerRef.current);
-			}
-		};
-	}, [isHovered]);
+	}, [current]);
 
 	useEffect(() => {
 		let time;
-		if (hoveredForFiveSeconds) {
+		if (play) {
 			player.current?.provider?.play();
-			time = setTimeout(() => {}, 2000);
 		}
-		if (!hoveredForFiveSeconds) {
+		if (!play) {
 			player.current?.provider?.pause();
 			player.current?.provider?.setCurrentTime(0);
 			return clearTimeout(time);
 		}
-	}, [hoveredForFiveSeconds]);
+	}, [play]);
 
-	const handleMouseEnter = () => {
-		setIsHovered(true);
-	};
+	// const handleMouseEnter = () => {
+	// 	setPlay(true);
+	// };
 
-	const handleMouseLeave = () => {
-		player.current?.provider?.pause();
-		//player.current?.provider?.setup();
-
-		setIsHovered(false);
-	};
+	// const handleMouseLeave = () => {
+	// 	setPlay(false);
+	// };
 
 	if (genre && type == 'genres') {
 		return (
@@ -100,73 +90,48 @@ export default function CustomCard({
 		return (
 			<CarouselItem
 				key={index}
-				//onMouseEnter={handleMouseEnter}
-				//onMouseLeave={handleMouseLeave}
-				//onMouseOver={handleMouseEnter}
-				//onMouseOut={handleMouseLeave}
-				//onFocus={handleMouseEnter}
-				//onBlur={handleMouseLeave}
-				//onTouchStart={handleMouseEnter}
-				//onTouchEnd={handleMouseLeave}
+				// onMouseEnter={() => {
+				// 	setPlay((prev) => !prev);
+				// }}
+				// onMouseLeave={() => {
+				// 	setPlay((prev) => !prev);
+				// }}
 				onClick={() => {
 					setPlay((prev) => !prev);
-					if (!play) {
-						player.current?.provider?.play();
-					}
-					if (play) {
-						player.current?.provider?.setup();
-					}
 				}}
-				className="relative h-full w-full bg-transparent     lg:basis-full "
+				className="relative h-full w-full bg-transparent    hover:cursor-pointer lg:basis-full "
 			>
-				<Card className="relative  bg-transparent border-0 ">
-					<div className="	">
-						{/* {!play && ( */}
-						<img
-							src={film.preview_path!}
-							alt={'1'}
-							className={`w-full  {}  @[500px]:h-full object-cover rounded-lg duration-700 
+				<Card className="relative h-full bg-transparent border-0 ">
+					<div className="absolute h-full z-50	">
+						<motion.div
+							className="h-full"
+							animate={!play ? 'open' : 'closed'}
+							variants={variants}
+						>
+							<img
+								src={film.preview_path!}
+								alt={'1'}
+								className={`w-full   @[500px]:h-full object-cover rounded-lg duration-700 
 								`}
-						/>
-						{/* )} */}
-						{/* {hoveredForFiveSeconds && ( */}
-						<div>
-							<MediaPlayer
-								//className={`  rounded-lg  ${!hoveredForFiveSeconds ? ' ' : ''}`}
-								viewType="video"
-								preferNativeHLS={true}
-								streamType="on-demand"
-								logLevel="silent"
-								crossOrigin
-								playsInline
-								ref={player}
-								src={film.trailer_path!}
-								volume={hoveredForFiveSeconds ? 0.3 : 0.0}
-							>
-								<MediaProvider>
-									{/* {film.preview_path && (
-										<Poster
-											className="absolute inset-0 block h-full w-full  rounded-md opacity-0 transition-opacity data-[visible]:opacity-100 [&>img]:h-full [&>img]:w-full [&>img]:object-cover"
-											src={film.preview_path}
-											alt="Girl walks into campfire with gnomes surrounding her friend ready for their next meal!"
-										/>
-									)} */}
-								</MediaProvider>
-
-								{/* Layouts */}
-								{/* <DefaultAudioLayout
-								icons={defaultLayoutIcons}
-								colorScheme="system"
-								smallLayoutWhen={smallAudioLayoutQuery}
 							/>
-							<DefaultVideoLayout
-								icons={defaultLayoutIcons}
-								colorScheme="system"
-								smallLayoutWhen={smallVideoLayoutQuery}
-							/> */}
-							</MediaPlayer>
-						</div>
-						{/* )} */}
+						</motion.div>
+					</div>
+
+					<div className={`h-1/6 `}>
+						<MediaPlayer
+							className={`rounded-lg `}
+							viewType="video"
+							preferNativeHLS={true}
+							streamType="on-demand"
+							logLevel="silent"
+							crossOrigin
+							playsInline
+							ref={player}
+							src={film.trailer_path!}
+							volume={play ? 0.3 : 0.0}
+						>
+							<MediaProvider />
+						</MediaPlayer>
 					</div>
 
 					<CardContent
@@ -176,19 +141,11 @@ export default function CustomCard({
 								: `absolute  top-0 h-full w-full rounded-lg`
 						}
 					>
-						{/* <div className="flex gap-3">
-							<p className="text-xl @[400px]:text-4xl">{film.film_title}</p>
-							<p className="">{film.release_year}</p>
-						</div>
-
-						<p className="text-[12px] mt-2">
-							{film.genres.map((genre) => `${genre.genre_name} `)}
-						</p> */}
-						<div className="absolute inset-0 flex items-center justify-center">
+						<div className="absolute inset-0 z-50 flex items-center justify-center">
 							{!play && (
 								<div className=" flex  w-full items-center justify-center  ">
 									<button className="text-primary bg-transparent hover:bg-transparent border-0 hover:border-0 hover:outline-none hover:outline-transparent hover:ring-transparent ">
-										{isHovered ? (
+										{play ? (
 											<LoadingSpinner className="text-primary" />
 										) : (
 											<Play
@@ -203,7 +160,7 @@ export default function CustomCard({
 						</div>
 
 						{play && (
-							<div className="absolute bottom-0 right-3 pb-5  @[400px]:pb-5">
+							<div className="absolute bottom-0 right-3 pb-5 z-50  @[400px]:pb-5">
 								<Button
 									onClick={() => {
 										navigate(`/film/${film.id_film}`);

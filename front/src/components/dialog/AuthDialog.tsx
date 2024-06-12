@@ -148,7 +148,7 @@ export default function AuthDialog({ active = false }: { active?: boolean }) {
 							)}
 						/>
 
-						<div className="relative h-8">
+						<div className="relative h-8 ">
 							<Button
 								type="submit"
 								className="rounded-xl h-[40px] text-white bg-primary "
@@ -156,6 +156,12 @@ export default function AuthDialog({ active = false }: { active?: boolean }) {
 							>
 								{isLoading ? <LoadingSpinner className="text-white" /> : 'Войти'}
 							</Button>
+						</div>
+						<div className="flex items-center text-accent-foreground gap-1 text-sm">
+							<p>Нет аккаунта?</p>
+							<a href="/registration" className="text-primary">
+								Зарегистироваться
+							</a>
 						</div>
 					</form>
 				</Form>

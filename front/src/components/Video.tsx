@@ -2,13 +2,16 @@ import '@vidstack/react/player/styles/default/theme.css';
 import '@vidstack/react/player/styles/default/layouts/audio.css';
 import '@vidstack/react/player/styles/default/layouts/video.css';
 
-import { MediaPlayer, MediaPlayerInstance, MediaProvider } from '@vidstack/react';
-import { useEffect, useRef } from 'react';
-
+import { MediaPlayer, MediaPlayerInstance, MediaPlayerQuery, MediaProvider } from '@vidstack/react';
+import { useCallback, useEffect, useRef } from 'react';
+import {
+	DefaultAudioLayout,
+	DefaultVideoLayout,
+	defaultLayoutIcons,
+} from '@vidstack/react/player/layouts/default';
 export const VideoPlayer = ({
 	src,
-	preview,
-	play = true,
+	play = false,
 }: {
 	src: string;
 	preview?: string;
@@ -30,26 +33,18 @@ export const VideoPlayer = ({
 		}
 	}, [play]);
 
-	// const smallAudioLayoutQuery = useCallback<MediaPlayerQuery>(({ width }) => {
-	// 	return width < 576;
-	// }, []);
+	const smallAudioLayoutQuery = useCallback<MediaPlayerQuery>(({ width }) => {
+		return width < 576;
+	}, []);
 
-	// const smallVideoLayoutQuery = useCallback<MediaPlayerQuery>(({ width, height }) => {
-	// 	return width < 576 || height < 380;
-	// }, []);
+	const smallVideoLayoutQuery = useCallback<MediaPlayerQuery>(({ width, height }) => {
+		return width < 576 || height < 380;
+	}, []);
 
 	return (
 		<div className="	">
-			{!play && (
-				<img
-					src={preview}
-					alt={'1'}
-					className={`w-full opacity-80  @[500px]:h-full object-cover rounded-lg duration-200 
-					`}
-				/>
-			)}
 			<MediaPlayer
-				className={`h-1/6  rounded-lg ${!play && ' hidden'}`}
+				className={`h-[600px] `}
 				viewType="video"
 				preferNativeHLS={true}
 				streamType="on-demand"
@@ -71,7 +66,7 @@ export const VideoPlayer = ({
 				</MediaProvider>
 
 				{/* Layouts */}
-				{/* <DefaultAudioLayout
+				<DefaultAudioLayout
 					icons={defaultLayoutIcons}
 					colorScheme="system"
 					smallLayoutWhen={smallAudioLayoutQuery}
@@ -80,7 +75,7 @@ export const VideoPlayer = ({
 					icons={defaultLayoutIcons}
 					colorScheme="system"
 					smallLayoutWhen={smallVideoLayoutQuery}
-				/> */}
+				/>
 			</MediaPlayer>
 		</div>
 	);

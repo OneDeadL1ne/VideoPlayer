@@ -37,7 +37,7 @@ const usersApi = api.injectEndpoints({
 				method: 'PATCH',
 				body,
 			}),
-			invalidatesTags: ['User'],
+			invalidatesTags: ['User', 'Film'],
 		}),
 
 		imageUser: builder.mutation<
