@@ -9,12 +9,17 @@ import {
 	DefaultVideoLayout,
 	defaultLayoutIcons,
 } from '@vidstack/react/player/layouts/default';
+import { cn } from '@/lib/utils';
 export const VideoPlayer = ({
 	src,
 	play = false,
+	className,
+	classNameVideo,
 }: {
 	src: string;
-	preview?: string;
+	classNameVideo?: string;
+	className?: string;
+
 	play?: boolean;
 }) => {
 	const player = useRef<MediaPlayerInstance>(null);
@@ -42,9 +47,9 @@ export const VideoPlayer = ({
 	}, []);
 
 	return (
-		<div className="	">
+		<div className={cn('@container	', className)}>
 			<MediaPlayer
-				className={`h-[600px] `}
+				className={cn(` `, classNameVideo)}
 				viewType="video"
 				preferNativeHLS={true}
 				streamType="on-demand"
@@ -55,15 +60,7 @@ export const VideoPlayer = ({
 				src={src}
 				volume={play ? 0.3 : 0.0}
 			>
-				<MediaProvider>
-					{/* {preview && (
-						<Poster
-							className="absolute inset-0 block h-full w-full  rounded-md opacity-0 transition-opacity data-[visible]:opacity-100 [&>img]:h-full [&>img]:w-full [&>img]:object-cover"
-							src={preview}
-							alt="Girl walks into campfire with gnomes surrounding her friend ready for their next meal!"
-						/>
-					)} */}
-				</MediaProvider>
+				<MediaProvider />
 
 				{/* Layouts */}
 				<DefaultAudioLayout

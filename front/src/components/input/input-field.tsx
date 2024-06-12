@@ -11,15 +11,29 @@ interface InputProps extends ComponentPropsWithoutRef<'input'> {
 	isRequired?: boolean;
 	className?: string;
 	classNameInput?: string;
+	classNameLabel?: string;
 }
 
 export const InputField = forwardRef<HTMLInputElement, InputProps>(function InputField(
-	{ type = 'text', label, suffixIcon, isRequired = false, className, classNameInput, ...props },
+	{
+		type = 'text',
+		label,
+		suffixIcon,
+		isRequired = false,
+		className,
+		classNameInput,
+		classNameLabel,
+		...props
+	},
 	ref
 ) {
 	return (
 		<FormItem className={cn(className)}>
-			{label && <FormLabel className={isRequired ? 'label-required' : ''}>{label}</FormLabel>}
+			{label && (
+				<FormLabel className={cn(isRequired ? 'label-required' : '', classNameLabelss)}>
+					{label}
+				</FormLabel>
+			)}
 			<FormControl>
 				<Input
 					type={type}

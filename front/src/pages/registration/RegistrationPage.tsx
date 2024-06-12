@@ -108,6 +108,54 @@ export default function RegistrationPage() {
 										</>
 									)}
 								/>
+								<FormField
+									control={form.control}
+									name="phone"
+									render={({ field }) => (
+										<>
+											<p className="text-primary ml-1 mt-3">{'Ник'}</p>
+											<InputField
+												className="text-primary ml-1   "
+												classNameInput="border border-2 text-accent-foreground	 border-primary"
+												{...field}
+												//disabled={isAdding || isUpdating}
+											/>
+										</>
+									)}
+								/>
+
+								<FormField
+									control={form.control}
+									name="email"
+									render={({ field }) => (
+										<>
+											<p className="text-primary ml-1 mt-3">{'Ник'}</p>
+											<InputField
+												label="Почта"
+												className="text-primary ml-1   "
+												type="email"
+												classNameInput="border border-2 text-accent-foreground	 border-primary"
+												{...field}
+												//disabled={isAdding || isUpdating}
+											/>
+										</>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name="password"
+									render={({ field }) => (
+										<>
+											<InputField
+												className="text-primary ml-1   "
+												label="Пароль"
+												classNameInput="border border-2 text-accent-foreground	 border-primary"
+												{...field}
+												//disabled={isAdding || isUpdating}
+											/>
+										</>
+									)}
+								/>
 							</div>
 
 							<div className="mt-5 flex items-center justify-center">

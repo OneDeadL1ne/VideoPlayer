@@ -101,7 +101,7 @@ function App() {
 						)
 					}
 				/>
-				<Route path="/registration" element={<RegistrationPage />} />
+				{!user && <Route path="/registration" element={<RegistrationPage />} />}
 				<Route path="*" element={<NotFoundPage />} />
 			</Route>
 			{user?.role.role_name != 'Пользователь' && user && (
