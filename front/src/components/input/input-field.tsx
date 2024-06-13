@@ -30,7 +30,7 @@ export const InputField = forwardRef<HTMLInputElement, InputProps>(function Inpu
 	return (
 		<FormItem className={cn(className)}>
 			{label && (
-				<FormLabel className={cn(isRequired ? 'label-required' : '', classNameLabelss)}>
+				<FormLabel className={cn(isRequired ? 'label-required' : '', classNameLabel)}>
 					{label}
 				</FormLabel>
 			)}

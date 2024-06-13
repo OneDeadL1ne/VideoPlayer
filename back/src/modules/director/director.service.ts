@@ -62,10 +62,6 @@ export class DirectorService {
   }
   async updateAvatarDirector(id_director: number, files: Array<Express.Multer.File>) {
     try {
-      const dir = `./upload/images/directors/${id_director}`
-      let photo
-      let avatar
-      console.log(files)
       if (files.length == 2) {
         for (const file of files) {
           if (file.filename.split('.')[1] && file.filename.split('-')[1] == 'photo') {
@@ -82,11 +78,6 @@ export class DirectorService {
             )
           }
         }
-        const foundActor = await this.directorRepository.findOne({
-          where: { id_director: id_director },
-        })
-        photo = foundActor.photo_url.split('/')[6]
-        avatar = foundActor.avatar_url.split('/')[6]
       }
       if (files.length == 1) {
         if (!files[0].filename.split('.')[1] && files[0].originalname == 'blob' && files[0].filename.split('-')[1] == 'avatar') {
@@ -94,20 +85,6 @@ export class DirectorService {
             { avatar_url: `${this.configService.get('API_URL')}/director/image/${id_director}/${files[0].filename}` },
             { where: { id_director: id_director } },
           )
-        }
-        const foundActor = await this.directorRepository.findOne({
-          where: { id_director: id_director },
-        })
-        photo = foundActor.photo_url.split('/')[6]
-        avatar = foundActor.avatar_url.split('/')[6]
-      }
-
-      if (fs.existsSync(dir)) {
-        const images = fs.readdirSync(dir)
-        for (const f of images) {
-          if (f != photo && f != avatar) {
-            fs.rmSync(`${dir}/${f}`)
-          }
         }
       }
 

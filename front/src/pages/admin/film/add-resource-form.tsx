@@ -261,9 +261,7 @@ export default function AddResourceForm({ film, setDialogOpen }: AddFilmFormProp
 						)}
 
 						<div className="mt-3">
-							{(film?.film_path || film?.trailer_path) && (
-								<VideoPlayer preview={film.preview_path!} src={value} />
-							)}
+							{(film?.film_path || film?.trailer_path) && <VideoPlayer src={value} />}
 						</div>
 					</div>
 				</div>

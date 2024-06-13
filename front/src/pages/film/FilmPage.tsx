@@ -73,7 +73,7 @@ export function FilmPage() {
 									</DialogContent>
 								</Dialog>
 							</div>
-							{(!open || !descOpen) && (
+							{!open && (
 								<div className="flex  @[900px]:items-center @[1000px]:items-start gap-1 mt-5 ">
 									<p className=" text-xl text-primary top-0">Жанры:</p>
 									<div className="items-center @[900px]:flex @[1000px]:inline-block ">

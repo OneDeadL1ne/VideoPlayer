@@ -72,10 +72,6 @@ export class ActorService {
   }
   async updateAvatarActor(id_actor: number, files: Array<Express.Multer.File>) {
     try {
-      const dir = `./upload/images/actors/${id_actor}`
-      let photo
-      let avatar
-
       if (files.length == 2) {
         for (const file of files) {
           if (file.filename.split('.')[1] && file.filename.split('-')[1] == 'photo') {
@@ -92,11 +88,6 @@ export class ActorService {
             )
           }
         }
-        const foundActor = await this.actorRepository.findOne({
-          where: { id_actor: id_actor },
-        })
-        photo = foundActor.photo_url.split('/')[6]
-        avatar = foundActor.avatar_url.split('/')[6]
       }
       if (files.length == 1) {
         if (!files[0].filename.split('.')[1] && files[0].originalname == 'blob' && files[0].filename.split('-')[1] == 'avatar') {
@@ -104,20 +95,6 @@ export class ActorService {
             { avatar_url: `${this.configService.get('API_URL')}/actor/image/${id_actor}/${files[0].filename}` },
             { where: { id_actor: id_actor } },
           )
-        }
-        const foundActor = await this.actorRepository.findOne({
-          where: { id_actor: id_actor },
-        })
-        photo = foundActor.photo_url.split('/')[6]
-        avatar = foundActor.avatar_url.split('/')[6]
-      }
-
-      if (fs.existsSync(dir)) {
-        const images = fs.readdirSync(dir)
-        for (const f of images) {
-          if (f != photo && f != avatar) {
-            fs.rmSync(`${dir}/${f}`)
-          }
         }
       }
 
