@@ -60,7 +60,7 @@ export class FilmController {
     FilesInterceptor('files', 3, {
       fileFilter: (req, file, callback) => {
         console.log(file)
-        if (!Boolean(file.mimetype.match(/(jpg|jpeg|png|gif|mp4|webp|video\/x-matroska)/))) callback(null, false)
+        if (!Boolean(file.mimetype.match(/(jpg|jpeg|png|gif|mp4|webp|video\/x-matroska)/)) || !file.originalname.match(/\.(mkv)$/)) callback(null, false)
         callback(null, true)
       },
       storage: diskStorage({
