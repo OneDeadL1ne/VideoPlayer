@@ -89,6 +89,7 @@ export class FilmController {
     @Query('type') type: 'trailer' | 'film' | 'preview',
     @UploadedFiles() files: Array<Express.Multer.File>,
   ) {
+    console.log(1)
     return await this.filmService.generateMedia(id_film, files, type)
   }
 }
