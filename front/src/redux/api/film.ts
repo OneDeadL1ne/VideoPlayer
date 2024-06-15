@@ -10,12 +10,12 @@ const filmApi = api.injectEndpoints({
 				url: `film/${id_user ? `?id_user=${id_user}` : ''}`,
 				method: 'GET',
 			}),
-			providesTags: ['Film'],
+			providesTags: ['Film', 'User'],
 		}),
 
 		getFilm: builder.query<FetchResultInterface<FilmInterface>, number>({
 			query: (id: number) => ({ url: `film/${id}`, method: 'GET' }),
-			providesTags: ['Film'],
+			providesTags: ['Film', 'User'],
 		}),
 		getActorFilm: builder.query<FetchResultInterface<FilmActorInterface[]>, number>({
 			query: (id: number) => ({ url: `film/${id}/actors`, method: 'GET' }),

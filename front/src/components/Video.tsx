@@ -10,6 +10,7 @@ import {
 	defaultLayoutIcons,
 } from '@vidstack/react/player/layouts/default';
 import { cn } from '@/lib/utils';
+
 export const VideoPlayer = ({
 	src,
 	play = false,

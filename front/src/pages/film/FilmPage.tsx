@@ -56,12 +56,12 @@ export function FilmPage() {
 
 								<Dialog open={open} onOpenChange={setOpen}>
 									<DialogTrigger>
-										<p
+										<div
 											className="inline-flex text-primary hover:cursor-pointer "
-											onClick={() => setOpen(!open)}
+											//onClick={() => setOpen(!open)}
 										>
 											Подробнее...
-										</p>
+										</div>
 									</DialogTrigger>
 									<DialogContent className="text-accent-foreground">
 										<DialogHeader>

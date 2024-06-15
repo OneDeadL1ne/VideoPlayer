@@ -19,6 +19,7 @@ import TableUserPage from './pages/admin/user';
 import ProfilePage from './pages/profile/ProfilePage';
 import AuthDialog from './components/dialog/AuthDialog';
 import RegistrationPage from './pages/registration/RegistrationPage';
+import FilmsPage from './pages/film/FilmsPage';
 
 function App() {
 	const dispatch = useAppDispatch();
@@ -86,7 +87,7 @@ function App() {
 			<Route path="/" element={<Layout />}>
 				<Route index element={<HomePage />} />
 				<Route>
-					<Route path="/film/:id" element={<FilmPage />} />
+					<Route path="/films" element={<FilmsPage />} />
 					<Route path="/film/:id" element={<FilmPage />} />
 				</Route>
 				<Route

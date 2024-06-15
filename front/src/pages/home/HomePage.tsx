@@ -21,8 +21,8 @@ export default function HomePage() {
 					)}
 				</div>
 			</div>
-			<div className="flex justify-start  items-center @container">
-				{/* <CustomCarousel data={items} type="default" title="Новинки" /> */}
+			<div className="flex justify-start mt-10  items-center @container">
+				<CustomCarousel data={films!} type="default" title="Новинки" path="/films" />
 			</div>
 			<div className="flex justify-start  items-center @container ">
 				{!isError && (
