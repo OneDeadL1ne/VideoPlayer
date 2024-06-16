@@ -34,6 +34,9 @@ export const VideoPlayer = ({
 			player.current?.provider?.setCurrentTime(0);
 		}
 	}, [play]);
+	useEffect(() => {
+		console.log(src);
+	}, []);
 
 	const smallAudioLayoutQuery = useCallback<MediaPlayerQuery>(({ width }) => {
 		return width < 576;
@@ -47,13 +50,15 @@ export const VideoPlayer = ({
 		<div className={cn('@container	', className)}>
 			<MediaPlayer
 				className={cn(` `, classNameVideo)}
+				viewType="video"
 				preferNativeHLS={true}
 				streamType="on-demand"
-				logLevel="debug"
+				logLevel="silent"
+				crossOrigin
 				playsInline
 				ref={player}
 				src={src}
-				volume={play ? 0.3 : 0.0}
+				volume={0.3}
 			>
 				<MediaProvider />
 
