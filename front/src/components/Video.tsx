@@ -1,6 +1,6 @@
-// import '@vidstack/react/player/styles/default/theme.css';
-// import '@vidstack/react/player/styles/default/layouts/audio.css';
-// import '@vidstack/react/player/styles/default/layouts/video.css';
+import '@vidstack/react/player/styles/default/theme.css';
+import '@vidstack/react/player/styles/default/layouts/audio.css';
+import '@vidstack/react/player/styles/default/layouts/video.css';
 
 // import { MediaPlayer, MediaPlayerInstance, MediaPlayerQuery, MediaProvider } from '@vidstack/react';
 // import { useCallback, useEffect, useRef, useState } from 'react';
@@ -114,6 +114,8 @@ const HLSVideoPlayer: React.FC<HLSVideoPlayerProps> = ({ src }) => {
 			<MediaProvider videoRef={videoRef}>
 				<video ref={videoRef} controls></video>
 			</MediaProvider>
+			<DefaultAudioLayout icons={defaultLayoutIcons} colorScheme="system" />
+			<DefaultVideoLayout icons={defaultLayoutIcons} colorScheme="system" />
 		</MediaPlayer>
 	);
 };
