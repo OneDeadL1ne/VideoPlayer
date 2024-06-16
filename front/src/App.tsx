@@ -21,6 +21,9 @@ import AuthDialog from './components/dialog/AuthDialog';
 import RegistrationPage from './pages/registration/RegistrationPage';
 import FilmsPage from './pages/film/FilmsPage';
 import HLSVideoPlayer from './components/Video';
+import HlsPlayer from './components/VideoTest';
+import Hls from 'hls.js';
+import VideoPlayer from './components/VideoTest';
 
 function App() {
 	const dispatch = useAppDispatch();
@@ -83,6 +86,7 @@ function App() {
 		document.querySelector('html')?.setAttribute('data-color-scheme', colorScheme);
 	}, []);
 
+	const supported = Hls.isSupported();
 	return (
 		// <Routes>
 		// 	<Route path="/" element={<Layout />}>
@@ -119,7 +123,16 @@ function App() {
 		// 	<Route path="*" element={<NotFoundPage />} />
 		// </Routes>
 		<>
-			<HLSVideoPlayer src="http://amoments.ru/api/video/stream/film/1/1.m3u8" />
+			{/* <HLSVideoPlayer src="http://localhost:4000/api/video/stream/film/1/1.m3u8" /> */}
+			{supported ? (
+				<VideoPlayer
+					selectorId="1"
+					videoSource="http://amoments.ru/api/video/stream/film/1/1.m3u8"
+					hlsSource="http://amoments.ru/api/video/stream/film/1/1.m3u8"
+				/>
+			) : (
+				'HLS is not supported in your browser'
+			)}
 		</>
 	);
 }

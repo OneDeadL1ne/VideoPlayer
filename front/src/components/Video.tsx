@@ -113,9 +113,10 @@ const HLSVideoPlayer: React.FC<HLSVideoPlayerProps> = ({ src }) => {
 		<MediaPlayer>
 			<MediaProvider videoRef={videoRef}>
 				<video ref={videoRef} controls></video>
+				{/* Layouts */}
+				<DefaultAudioLayout icons={defaultLayoutIcons} colorScheme="system" />
+				<DefaultVideoLayout icons={defaultLayoutIcons} colorScheme="system" />
 			</MediaProvider>
-			<DefaultAudioLayout icons={defaultLayoutIcons} colorScheme="system" />
-			<DefaultVideoLayout icons={defaultLayoutIcons} colorScheme="system" />
 		</MediaPlayer>
 	);
 };
