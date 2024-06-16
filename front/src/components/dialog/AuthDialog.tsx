@@ -99,7 +99,7 @@ export default function AuthDialog({ active = false }: { active?: boolean }) {
 							name="email"
 							render={({ field }) => (
 								<InputField
-									label="Логин"
+									label="Почта"
 									isRequired
 									type="email"
 									classNameInput="border border-input"

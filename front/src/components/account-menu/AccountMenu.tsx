@@ -63,6 +63,7 @@ export default function AccountMenu() {
 		const refreshToken = getJWTtokens().refreshToken;
 		removeCookieValue('accessToken');
 		dispatch(setLogout());
+
 		dispatch(api.util.resetApiState());
 
 		if (refreshToken) {

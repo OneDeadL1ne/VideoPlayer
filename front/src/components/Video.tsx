@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils';
 
 export const VideoPlayer = ({
 	src,
-	play = false,
+	play = true,
 	className,
 	classNameVideo,
 }: {

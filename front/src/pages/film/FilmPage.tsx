@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dialog';
 
 import { useGetFilmQuery } from '@/redux/api/film';
+import { X } from 'lucide-react';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -63,10 +64,15 @@ export function FilmPage() {
 											Подробнее...
 										</div>
 									</DialogTrigger>
-									<DialogContent className="text-accent-foreground">
+									<DialogContent
+										className="text-accent-foreground"
+										closeIcon={<X className="h-4 w-4" color="#ff6b00" />}
+									>
 										<DialogHeader>
-											<DialogTitle>Описание</DialogTitle>
-											<DialogDescription className="text-balance text-md mt-10">
+											<DialogTitle className="text-primary">
+												Описание
+											</DialogTitle>
+											<DialogDescription className="text-balance text-white text-md mt-10">
 												{film?.description}
 											</DialogDescription>
 										</DialogHeader>
@@ -95,9 +101,17 @@ export function FilmPage() {
 													<DialogTrigger className="inline-flex text-primary hover:cursor-pointer @[1000px]:hidden ">
 														Подробнее...
 													</DialogTrigger>
-													<DialogContent className="text-accent-foreground">
+													<DialogContent
+														className="text-accent-foreground"
+														closeIcon={
+															<X
+																className="h-4 w-4"
+																color="#ff6b00"
+															/>
+														}
+													>
 														<DialogHeader>
-															<DialogTitle className="text-xl">
+															<DialogTitle className="text-xl text-">
 																Жанры
 															</DialogTitle>
 															<DialogDescription className="text-balance mt-10 text-lg">
@@ -164,6 +178,7 @@ export function FilmPage() {
 						<div className="@container ">
 							{film?.film_path && (
 								<VideoPlayer
+									play
 									src={film.film_path}
 									classNameVideo="@[1000px]:h-full @[900px]"
 								/>

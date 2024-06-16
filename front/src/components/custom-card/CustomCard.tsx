@@ -91,7 +91,7 @@ export default function CustomCard({
 				className="bg-secondary cursor-pointer  border-0  h-[100px] flex justify-center items-center	"
 			>
 				<CardContent className={'  rounded-lg p-0'}>
-					<p className="text-accent-foreground text-xl @[450px]:text-2xl text-center ">
+					<p className="text-accent-foreground text-sm @[450px]:text-xl @[550px]:text-2xl text-center uppercase ">
 						{genre.genre_name}
 					</p>
 				</CardContent>
