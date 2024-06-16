@@ -187,37 +187,37 @@ export function FilmPage() {
 					</div>
 					<div className="mt-5 ">
 						<div className="@container ">
-							{film?.film_path && (
+							{
 								// <VideoPlayer
 								// 	play
 								// 	src={film.film_path}
 								// 	classNameVideo="@[1000px]:h-full @[900px]"
 								// />
-								<MediaPlayer
-									className={cn(` `, '@[1000px]:h-full @[900px]')}
-									viewType="video"
-									preferNativeHLS={true}
-									streamType="on-demand"
-									logLevel="silent"
-									crossOrigin
-									playsInline
-									ref={player}
-									src={film.film_path!}
-									volume={0.3}
-								>
-									<MediaProvider />
+							}
+							<MediaPlayer
+								className={cn(` `, '@[1000px]:h-full @[900px]')}
+								viewType="video"
+								preferNativeHLS={true}
+								streamType="on-demand"
+								logLevel="silent"
+								crossOrigin
+								playsInline
+								ref={player}
+								src={film?.film_path ? film.film_path : ''}
+								volume={0.3}
+							>
+								<MediaProvider />
 
-									{/* Layouts */}
-									<DefaultAudioLayout
-										icons={defaultLayoutIcons}
-										colorScheme="system"
-									/>
-									<DefaultVideoLayout
-										icons={defaultLayoutIcons}
-										colorScheme="system"
-									/>
-								</MediaPlayer>
-							)}
+								{/* Layouts */}
+								<DefaultAudioLayout
+									icons={defaultLayoutIcons}
+									colorScheme="system"
+								/>
+								<DefaultVideoLayout
+									icons={defaultLayoutIcons}
+									colorScheme="system"
+								/>
+							</MediaPlayer>
 						</div>
 					</div>
 				</Card>
