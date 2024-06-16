@@ -24,13 +24,14 @@ import {
 } from '@vidstack/react/player/layouts/default';
 import { MediaPlayer, MediaPlayerInstance, MediaProvider } from '@vidstack/react';
 import { cn } from '@/lib/utils';
+import { useToast } from '@/components/ui/use-toast';
 
 export function FilmPage() {
 	const { id } = useParams();
 	const { data } = useGetFilmQuery(Number(id));
 	const film = data?.data;
 	const [open, setOpen] = useState(false);
-
+	const { toast } = useToast();
 	const [genreOpen, setGenreOpen] = useState(false);
 	const player = useRef<MediaPlayerInstance>(null);
 
@@ -201,6 +202,14 @@ export function FilmPage() {
 								logLevel="warn"
 								preferNativeHLS={false}
 								crossOrigin
+								playsInline
+								onHlsError={(e) =>
+									toast({
+										duration: 50000,
+										title: `Error ${e.error.name}`,
+										description: e.error.message,
+									})
+								}
 								ref={player}
 								src={{
 									src: film?.film_path ? film.film_path : '',

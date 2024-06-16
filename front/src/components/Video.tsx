@@ -1,14 +1,14 @@
 import '@vidstack/react/player/styles/default/theme.css';
 import '@vidstack/react/player/styles/default/layouts/audio.css';
 import '@vidstack/react/player/styles/default/layouts/video.css';
-
-import { MediaPlayer, MediaPlayerInstance, MediaPlayerQuery, MediaProvider } from '@vidstack/react';
-import { useCallback, useEffect, useRef, useState } from 'react';
 import {
 	DefaultAudioLayout,
 	DefaultVideoLayout,
 	defaultLayoutIcons,
 } from '@vidstack/react/player/layouts/default';
+import { MediaPlayer, MediaPlayerInstance, MediaPlayerQuery, MediaProvider } from '@vidstack/react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+
 import { cn } from '@/lib/utils';
 
 export const VideoPlayer = ({
