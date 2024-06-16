@@ -1,4 +1,4 @@
-import { VideoPlayer } from '@/components/Video';
+//import { VideoPlayer } from '@/components/Video';
 import { CustomAvatar } from '@/components/custom-avatar/CustomAvatar';
 import { Card } from '@/components/ui/card';
 import {
@@ -12,8 +12,18 @@ import {
 
 import { useGetFilmQuery } from '@/redux/api/film';
 import { X } from 'lucide-react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import '@vidstack/react/player/styles/default/theme.css';
+import '@vidstack/react/player/styles/default/layouts/audio.css';
+import '@vidstack/react/player/styles/default/layouts/video.css';
+import {
+	DefaultAudioLayout,
+	DefaultVideoLayout,
+	defaultLayoutIcons,
+} from '@vidstack/react/player/layouts/default';
+import { MediaPlayer, MediaPlayerInstance, MediaProvider } from '@vidstack/react';
+import { cn } from '@/lib/utils';
 
 export function FilmPage() {
 	const { id } = useParams();
@@ -22,6 +32,7 @@ export function FilmPage() {
 	const [open, setOpen] = useState(false);
 
 	const [genreOpen, setGenreOpen] = useState(false);
+	const player = useRef<MediaPlayerInstance>(null);
 
 	document.title = film?.film_title || '';
 	return (
@@ -177,11 +188,35 @@ export function FilmPage() {
 					<div className="mt-5 ">
 						<div className="@container ">
 							{film?.film_path && (
-								<VideoPlayer
-									play
-									src={film.film_path}
-									classNameVideo="@[1000px]:h-full @[900px]"
-								/>
+								// <VideoPlayer
+								// 	play
+								// 	src={film.film_path}
+								// 	classNameVideo="@[1000px]:h-full @[900px]"
+								// />
+								<MediaPlayer
+									className={cn(` `, '@[1000px]:h-full @[900px]')}
+									viewType="video"
+									preferNativeHLS={true}
+									streamType="on-demand"
+									logLevel="silent"
+									crossOrigin
+									playsInline
+									ref={player}
+									src={film.film_path!}
+									volume={0.3}
+								>
+									<MediaProvider />
+
+									{/* Layouts */}
+									<DefaultAudioLayout
+										icons={defaultLayoutIcons}
+										colorScheme="system"
+									/>
+									<DefaultVideoLayout
+										icons={defaultLayoutIcons}
+										colorScheme="system"
+									/>
+								</MediaPlayer>
 							)}
 						</div>
 					</div>
