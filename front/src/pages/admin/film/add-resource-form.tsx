@@ -17,9 +17,10 @@ import { useUploadFilmMutation } from '@/redux/api/film';
 
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { VideoPlayer } from '@/components/Video';
+
 import { Select, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import { SelectTrigger } from '@radix-ui/react-select';
+import VideoPlayer from '@/components/Video';
 
 const formSchema = z.object({
 	genre_name: z.string().min(1, ''),
