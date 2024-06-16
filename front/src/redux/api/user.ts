@@ -13,7 +13,20 @@ const usersApi = api.injectEndpoints({
 			query: () => ({ url: `user/my/:id`, method: 'GET' }),
 			invalidatesTags: ['User'],
 		}),
-		createUser: builder.mutation<FetchResultInterface<UserInterface>, Partial<UserInterface>>({
+		createUser: builder.mutation<
+			FetchResultInterface<UserInterface>,
+			Partial<{
+				last_name: string;
+				first_name: string;
+				patronymic: string;
+				nickname: string;
+				phone: string;
+				id_role: 1;
+				email: string;
+				password: string;
+				id_gender: number;
+			}>
+		>({
 			query: (body) => ({
 				url: 'user',
 				method: 'POST',

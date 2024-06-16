@@ -75,11 +75,12 @@ export class FilmController {
           callback(null, `${directory}`)
         },
         filename: (req, file, callback) => {
-          const randomName = Array(32)
-            .fill(null)
-            .map(() => Math.round(Math.random() * 16).toString(16))
-            .join('')
-          return callback(null, `${req.query.type}-${randomName}${extname(file.originalname)}`)
+          console.log(file)
+          // const randomName = Array(32)
+          //   .fill(null)
+          //   .map(() => Math.round(Math.random() * 16).toString(16))
+          //   .join('')
+          return callback(null, `${req.query.type}-${file.filename}${extname(file.originalname)}`)
         },
       }),
     }),
@@ -89,7 +90,6 @@ export class FilmController {
     @Query('type') type: 'trailer' | 'film' | 'preview',
     @UploadedFiles() files: Array<Express.Multer.File>,
   ) {
-    console.log(1)
     return await this.filmService.generateMedia(id_film, files, type)
   }
 }
