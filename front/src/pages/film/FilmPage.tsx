@@ -199,6 +199,7 @@ export function FilmPage() {
 								viewType="video"
 								streamType="on-demand"
 								logLevel="warn"
+								preferNativeHLS={false}
 								crossOrigin
 								ref={player}
 								src={{
