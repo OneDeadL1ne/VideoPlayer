@@ -24,27 +24,16 @@ export const VideoPlayer = ({
 	play?: boolean;
 }) => {
 	const player = useRef<MediaPlayerInstance>(null);
-	const [source, setSrc] = useState(src);
+
 	useEffect(() => {
-		let time;
 		if (play) {
-			time = setTimeout(() => {
-				player.current?.provider?.play();
-			}, 2000);
+			player.current?.provider?.play();
 		}
 		if (!play) {
 			player.current?.provider?.pause();
 			player.current?.provider?.setCurrentTime(0);
-			return clearTimeout(time);
 		}
 	}, [play]);
-	useEffect(() => {
-		const time = setTimeout(() => {
-			setSrc(src);
-
-			return clearTimeout(time);
-		}, 2000);
-	}, []);
 
 	const smallAudioLayoutQuery = useCallback<MediaPlayerQuery>(({ width }) => {
 		return width < 576;
@@ -58,12 +47,12 @@ export const VideoPlayer = ({
 		<div className={cn('@container	', className)}>
 			<MediaPlayer
 				className={cn(` `, classNameVideo)}
-				//preferNativeHLS={true}
-				//streamType="on-demand"
-				logLevel="warn"
+				preferNativeHLS={true}
+				streamType="on-demand"
+				logLevel="debug"
 				playsInline
 				ref={player}
-				src={source}
+				src={src}
 				volume={play ? 0.3 : 0.0}
 			>
 				<MediaProvider />
