@@ -203,7 +203,10 @@ export function FilmPage() {
 								crossOrigin
 								playsInline
 								ref={player}
-								src={film?.film_path ? film.film_path : ''}
+								src={{
+									src: film?.film_path ? film.film_path : '',
+									type: 'application/x-mpegurl',
+								}}
 								volume={0.3}
 							>
 								<MediaProvider />
