@@ -201,7 +201,6 @@ export function FilmPage() {
 								streamType="on-demand"
 								logLevel="silent"
 								crossOrigin
-								playsInline
 								ref={player}
 								src={{
 									src: film?.film_path ? film.film_path : '',
