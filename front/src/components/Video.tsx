@@ -52,8 +52,8 @@ export const VideoPlayer = ({
 			<MediaPlayer
 				className={cn(` `, classNameVideo)}
 				viewType="video"
-				preferNativeHLS={true}
-				streamType="on-demand"
+				//preferNativeHLS={true}
+				//streamType="on-demand"
 				logLevel="warn"
 				crossOrigin
 				playsInline
