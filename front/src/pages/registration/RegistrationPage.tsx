@@ -164,7 +164,7 @@ export default function RegistrationPage() {
 									name="phone"
 									render={({ field }) => (
 										<>
-											<p className="text-primary ml-1 mt-3">{'Ник'}</p>
+											<p className="text-primary ml-1 mt-3">{'Телефон'}</p>
 											<InputField
 												className="text-primary ml-1   "
 												isRequired
