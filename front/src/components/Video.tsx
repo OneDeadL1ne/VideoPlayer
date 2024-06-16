@@ -64,16 +64,8 @@ export const VideoPlayer = ({
 				<MediaProvider />
 
 				{/* Layouts */}
-				<DefaultAudioLayout
-					icons={defaultLayoutIcons}
-					colorScheme="system"
-					smallLayoutWhen={smallAudioLayoutQuery}
-				/>
-				<DefaultVideoLayout
-					icons={defaultLayoutIcons}
-					colorScheme="system"
-					smallLayoutWhen={smallVideoLayoutQuery}
-				/>
+				<DefaultAudioLayout icons={defaultLayoutIcons} colorScheme="system" />
+				<DefaultVideoLayout icons={defaultLayoutIcons} colorScheme="system" />
 			</MediaPlayer>
 		</div>
 	);
