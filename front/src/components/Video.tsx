@@ -3,7 +3,7 @@ import '@vidstack/react/player/styles/default/layouts/audio.css';
 import '@vidstack/react/player/styles/default/layouts/video.css';
 
 import { MediaPlayer, MediaPlayerInstance, MediaPlayerQuery, MediaProvider } from '@vidstack/react';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
 	DefaultAudioLayout,
 	DefaultVideoLayout,
@@ -24,7 +24,7 @@ export const VideoPlayer = ({
 	play?: boolean;
 }) => {
 	const player = useRef<MediaPlayerInstance>(null);
-
+	const [source, setSrc] = useState(src);
 	useEffect(() => {
 		let time;
 		if (play) {
@@ -38,6 +38,13 @@ export const VideoPlayer = ({
 			return clearTimeout(time);
 		}
 	}, [play]);
+	useEffect(() => {
+		const time = setTimeout(() => {
+			setSrc(src);
+
+			return clearTimeout(time);
+		}, 2000);
+	}, []);
 
 	const smallAudioLayoutQuery = useCallback<MediaPlayerQuery>(({ width }) => {
 		return width < 576;
@@ -51,14 +58,12 @@ export const VideoPlayer = ({
 		<div className={cn('@container	', className)}>
 			<MediaPlayer
 				className={cn(` `, classNameVideo)}
-				viewType="video"
 				//preferNativeHLS={true}
 				//streamType="on-demand"
 				logLevel="warn"
-				crossOrigin
 				playsInline
 				ref={player}
-				src={src}
+				src={source}
 				volume={play ? 0.3 : 0.0}
 			>
 				<MediaProvider />
