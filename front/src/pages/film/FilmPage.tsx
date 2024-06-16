@@ -197,9 +197,8 @@ export function FilmPage() {
 							<MediaPlayer
 								className={cn(` `, '@[1000px]:h-full @[900px]')}
 								viewType="video"
-								preferNativeHLS={true}
 								streamType="on-demand"
-								logLevel="silent"
+								logLevel="warn"
 								crossOrigin
 								ref={player}
 								src={{
