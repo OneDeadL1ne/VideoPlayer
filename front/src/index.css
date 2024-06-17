@@ -161,7 +161,7 @@ media-player {
 	--media-menu-top-bar-bg: rgb(10 10 10);
 
 	/* menu items */
-	--media-menu-item-color: #f5f5f5;
+	--media-menu-item-color: #ff6b00;
 	--media-menu-item-border-radius: 2px;
 	--media-menu-item-padding: 12px;
 	--media-menu-item-hover-bg: rgb(245 245 245 / 0.08);
@@ -173,6 +173,34 @@ media-player {
 	--media-menu-radio-check-size: 10px;
 	--media-menu-radio-check-inner-size: 4px;
 	--media-menu-radio-check-border: 2px solid rgb(245 245 245 / 0.5);
-	--media-menu-radio-check-active-color: #f5f5f5;
-	--media-menu-radio-check-active-border: 2px solid #f5f5f5;
+	--media-menu-radio-check-active-color: #ff6b00;
+	--media-menu-radio-check-active-border: 2px solid #ff6b00;
+}
+
+.plyr--full-ui input[type='range'] {
+	color: #ff6b00;
+}
+
+.plyr__control--overlaid {
+	background: rgba(#ff6b00, 0.8);
+}
+
+.plyr--video .plyr__control.plyr__tab-focus,
+.plyr--video .plyr__control:hover,
+.plyr--video .plyr__control[aria-expanded='true'] {
+	background: #ff6b00;
+}
+
+.plyr__control.plyr__tab-focus {
+	box-shadow: 0 0 0 5px rgba(#ff6b00, 0.5);
+}
+
+.plyr__menu__container .plyr__control[role='menuitemradio'][aria-checked='true']::before {
+	background: #ff6b00;
+}
+
+.plyr--audio .plyr__control.plyr__tab-focus,
+.plyr--audio .plyr__control:hover,
+.plyr--audio .plyr__control[aria-expanded='true'] {
+	background: #ff6b00;
 }

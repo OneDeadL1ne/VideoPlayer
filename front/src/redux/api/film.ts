@@ -12,6 +12,13 @@ const filmApi = api.injectEndpoints({
 			}),
 			providesTags: ['Film', 'User'],
 		}),
+		getFilmsUser: builder.mutation<Array<FilmInterface>, { id_user?: number }>({
+			query: ({ id_user }) => ({
+				url: `film/${id_user ? `?id_user=${id_user}` : ''}`,
+				method: 'GET',
+			}),
+			invalidatesTags: ['Film', 'User'],
+		}),
 
 		getFilm: builder.query<FetchResultInterface<FilmInterface>, number>({
 			query: (id: number) => ({ url: `film/${id}`, method: 'GET' }),
@@ -77,4 +84,5 @@ export const {
 	useUpdateFilmMutation,
 	useUploadFilmMutation,
 	useGetActorFilmQuery,
+	useGetFilmsUserMutation,
 } = filmApi;

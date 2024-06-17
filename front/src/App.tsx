@@ -86,54 +86,41 @@ function App() {
 		document.querySelector('html')?.setAttribute('data-color-scheme', colorScheme);
 	}, []);
 
-	const supported = Hls.isSupported();
 	return (
-		// <Routes>
-		// 	<Route path="/" element={<Layout />}>
-		// 		<Route index element={<HomePage />} />
-		// 		<Route>
-		// 			<Route path="/films" element={<FilmsPage />} />
-		// 			<Route path="/film/:id" element={<FilmPage />} />
-		// 		</Route>
-		// 		<Route
-		// 			path="/profile"
-		// 			element={
-		// 				user ? (
-		// 					<ProfilePage />
-		// 				) : (
-		// 					<div className="opacity-0">
-		// 						<AuthDialog active />
-		// 					</div>
-		// 				)
-		// 			}
-		// 		/>
-		// 		{!user && <Route path="/registration" element={<RegistrationPage />} />}
-		// 		<Route path="*" element={<NotFoundPage />} />
-		// 	</Route>
-		// 	{user?.role.role_name != 'Пользователь' && user && (
-		// 		<Route path="/admin" element={<AdminLayout />}>
-		// 			<Route path="films" element={<TableFilmPage />} />
-		// 			<Route path="directors" element={<TableDirectorPage />} />
-		// 			<Route path="actors" element={<TableActorPage />} />
-		// 			<Route path="genres" element={<TableGenrePage />} />
-		// 			<Route path="voiceovers" element={<TableVoiceOverPage />} />
-		// 			<Route path="users" element={<TableUserPage />} />
-		// 		</Route>
-		// 	)}
-		// 	<Route path="*" element={<NotFoundPage />} />
-		// </Routes>
-		<>
-			{/* <HLSVideoPlayer src="http://localhost:4000/api/video/stream/film/1/1.m3u8" /> */}
-			{supported ? (
-				<VideoPlayer
-					selectorId="1"
-					videoSource="http://amoments.ru/api/video/stream/film/1/1.m3u8"
-					hlsSource="http://amoments.ru/api/video/stream/film/1/1.m3u8"
+		<Routes>
+			<Route path="/" element={<Layout />}>
+				<Route index element={<HomePage />} />
+				<Route>
+					<Route path="/films" element={<FilmsPage />} />
+					<Route path="/film/:id" element={<FilmPage />} />
+				</Route>
+				<Route
+					path="/profile"
+					element={
+						user ? (
+							<ProfilePage />
+						) : (
+							<div className="opacity-0">
+								<AuthDialog active />
+							</div>
+						)
+					}
 				/>
-			) : (
-				'HLS is not supported in your browser'
+				{!user && <Route path="/registration" element={<RegistrationPage />} />}
+				<Route path="*" element={<NotFoundPage />} />
+			</Route>
+			{user?.role.role_name != 'Пользователь' && user && (
+				<Route path="/admin" element={<AdminLayout />}>
+					<Route path="films" element={<TableFilmPage />} />
+					<Route path="directors" element={<TableDirectorPage />} />
+					<Route path="actors" element={<TableActorPage />} />
+					<Route path="genres" element={<TableGenrePage />} />
+					<Route path="voiceovers" element={<TableVoiceOverPage />} />
+					<Route path="users" element={<TableUserPage />} />
+				</Route>
 			)}
-		</>
+			<Route path="*" element={<NotFoundPage />} />
+		</Routes>
 	);
 }
 

@@ -54,7 +54,7 @@ export function CustomCarousel<T>({
 			<div className="w-screen	 mt-10">
 				{title && (
 					<div className="flex @[450px]:inline-block   justify-center items-center ">
-						<p className="text-primary text-2xl @[450px]:text-5xl @[450px]:ml-7  font-semibold ">
+						<p className="text-primary text-4xl @[450px]:text-5xl @[450px]:ml-7  font-semibold ">
 							{title}
 						</p>
 					</div>
@@ -67,7 +67,7 @@ export function CustomCarousel<T>({
 								return (
 									<CarouselItem
 										key={genre.id_genre}
-										className=" basis-1/2  md:basis-1/3 lg:basis-1/4 "
+										className=" basis-1/2  md:basis-1/3 lg:basis-4/12 "
 									>
 										<CustomCard
 											current={current}
@@ -122,18 +122,19 @@ export function CustomCarousel<T>({
 		<div className="w-screen">
 			{title && (
 				<div
-					className="flex @[450px]:inline-block   justify-center items-center hover:cursor-pointer group"
+					className="flex @[450px]:inline-block justify-center items-center hover:cursor-pointer group underline decoration-[#ff6b00]/50 hover:decoration-[#ff6b00]"
 					onClick={() => {
 						if (path) {
 							navigate('/films');
 						}
 					}}
 				>
-					<p className="flex flex-row text-primary items-center text-2xl @[450px]:text-5xl @[450px]:ml-7  font-semibold ">
-						{title}
-
-						<ChevronRight className="hidden group-hover:opacity-100 opacity-0 duration-100 text-primary size-10  @[450px]:inline-block" />
-					</p>
+					<div className="flex">
+						<p className="flex flex-row text-primary items-center text-4xl @[450px]:text-5xl @[450px]:ml-7  font-semibold ">
+							{title}
+						</p>
+						<ChevronRight className="hidden  group-hover:opacity-100  opacity-0 duration-100 text-primary size-14  @[450px]:inline-block" />
+					</div>
 				</div>
 			)}
 			<div className="w-full mx-auto flex  justify-center lg:max-w-max mt-5 ">

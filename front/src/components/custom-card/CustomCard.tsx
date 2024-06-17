@@ -28,7 +28,7 @@ export default function CustomCard({
 	index: number;
 	current: number;
 	videoId?: string;
-
+	disable?: boolean;
 	film?: FilmInterface;
 	genre?: GenreInterface;
 }) {
@@ -88,10 +88,10 @@ export default function CustomCard({
 				onClick={() => {
 					navigate(`/genre/${genre.id_genre}`);
 				}}
-				className="bg-secondary cursor-pointer  border-0  h-[100px] flex justify-center items-center	"
+				className="bg-secondary cursor-pointer  border-0 h-[70px]  @[450px]:h-[100px] flex justify-center items-center	"
 			>
 				<CardContent className={'  rounded-lg p-0'}>
-					<p className="text-accent-foreground text-sm @[450px]:text-xl @[550px]:text-2xl text-center uppercase ">
+					<p className="text-accent-foreground text-sm @[450px]:text-lg @[550px]:text-xl text-center uppercase ">
 						{genre.genre_name}
 					</p>
 				</CardContent>
@@ -100,82 +100,78 @@ export default function CustomCard({
 	}
 	if (film && type == 'films')
 		return (
-			<Card
+			<div
+				className="relative h-full  bg-transparent border-0 "
 				key={index}
 				onClick={handlePlay}
-				className="relative h-full bg-transparent border-0 "
 			>
-				<div className="absolute h-full z-50	">
-					<motion.div
-						className="h-full"
-						animate={!play ? 'open' : 'closed'}
-						variants={variants}
-					>
-						<img
-							src={film.preview_path!}
-							alt={'1'}
-							className={`w-full   @[500px]:h-full object-cover rounded-lg duration-700 
-								`}
-						/>
-					</motion.div>
-				</div>
-
-				<div className={`h-1/6 `}>
-					<MediaPlayer
-						className={`rounded-lg `}
-						viewType="video"
-						preferNativeHLS={true}
-						streamType="on-demand"
-						logLevel="silent"
-						crossOrigin
-						playsInline
-						ref={player}
-						src={film.trailer_path!}
-						volume={0.3}
-					>
-						<MediaProvider />
-					</MediaPlayer>
-				</div>
-
-				<CardContent
-					className={
-						theme == 'dark'
-							? `absolute  top-0 h-full w-full rounded-lg`
-							: `absolute  top-0 h-full w-full rounded-lg`
-					}
+				<MediaPlayer
+					className={`rounded-lg `}
+					viewType="video"
+					preferNativeHLS={true}
+					streamType="on-demand"
+					logLevel="silent"
+					crossOrigin
+					playsInline
+					ref={player}
+					src={film.trailer_path!}
+					volume={0.3}
 				>
-					<div className="absolute inset-0 z-50 flex items-center justify-center">
-						{!play && (
-							<div className=" flex  w-full items-center justify-center  ">
-								<button className="text-primary bg-transparent hover:bg-transparent border-0 hover:border-0 hover:outline-none hover:outline-transparent hover:ring-transparent ">
-									{play ? (
-										<LoadingSpinner className="text-primary" />
-									) : (
-										<Play
-											className="h-10 w-10"
-											fill="#ff6b00"
-											strokeWidth={3.5}
-										/>
-									)}
-								</button>
+					<div className="absolute h-full z-50	">
+						<motion.div
+							className="h-full"
+							animate={!play ? 'open' : 'closed'}
+							variants={variants}
+						>
+							<img
+								src={film.preview_path!}
+								alt={'1'}
+								className={`w-full   @[500px]:h-full object-cover rounded-lg duration-700 
+								`}
+							/>
+						</motion.div>
+					</div>
+					<div
+						className={
+							theme == 'dark'
+								? `absolute  top-0 h-full w-full rounded-lg`
+								: `absolute  top-0 h-full w-full rounded-lg`
+						}
+					>
+						<div className="absolute inset-0 z-50 flex items-center justify-center">
+							{!play && (
+								<div className=" flex  w-full items-center justify-center  ">
+									<button className="text-primary bg-transparent hover:bg-transparent border-0 hover:border-0 hover:outline-none hover:outline-transparent hover:ring-transparent ">
+										{play ? (
+											<LoadingSpinner className="text-primary" />
+										) : (
+											<Play
+												className="h-10 w-10"
+												fill="#ff6b00"
+												strokeWidth={3.5}
+											/>
+										)}
+									</button>
+								</div>
+							)}
+						</div>
+
+						{play && (
+							<div className="absolute bottom-0 right-3 pb-5 z-50  @[400px]:pb-3">
+								<Button
+									onClick={() => {
+										navigate(`/film/${film.id_film}`);
+									}}
+									size="sm"
+									className="text-white"
+								>
+									Подробонее...
+								</Button>
 							</div>
 						)}
 					</div>
-
-					{play && (
-						<div className="absolute bottom-0 right-3 pb-5 z-50  @[400px]:pb-5">
-							<Button
-								onClick={() => {
-									navigate(`/film/${film.id_film}`);
-								}}
-								size="sm"
-								className="text-white"
-							>
-								Подробонее...
-							</Button>
-						</div>
-					)}
-				</CardContent>
-			</Card>
+					<MediaProvider />
+				</MediaPlayer>
+			</div>
 		);
 }
