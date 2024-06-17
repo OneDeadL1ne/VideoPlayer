@@ -16,9 +16,7 @@ export default function HomePage() {
 	} = useGetFilmsQuery({ id_user: user?.id_user });
 	const films = data?.filter((x) => x.preview_path != null && x.trailer_path?.length != null);
 	document.title = 'Ностальгия';
-	if (isFilmLoading && isGenreLoading) {
-		return;
-	}
+
 	return (
 		<div className="grid grid-flow-row  ">
 			<div className="flex justify-center  items-center @container">
