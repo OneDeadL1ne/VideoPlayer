@@ -10,7 +10,7 @@ module.exports = {
       },
       {
         id_genre: 2,
-        genre_name: 'биографический',
+        genre_name: 'биография',
       },
       {
         id_genre: 3,

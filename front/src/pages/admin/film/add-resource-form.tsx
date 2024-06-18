@@ -80,7 +80,7 @@ export default function AddResourceForm({ film, setDialogOpen }: AddFilmFormProp
 		return '';
 	};
 	const [value, setValue] = useState(play());
-
+	console.log(value);
 	return (
 		<CustomForm className="mt-3 px-8 pb-8 border-0" form={form} onSubmit={handleSubmit}>
 			<ScrollArea className="w-full h-[400px]   border-0 ">
@@ -231,6 +231,7 @@ export default function AddResourceForm({ film, setDialogOpen }: AddFilmFormProp
 								</Label>
 								<Select
 									onValueChange={(value) => {
+										console.log(value);
 										setValue(value);
 									}}
 									defaultValue={play()}
@@ -262,7 +263,20 @@ export default function AddResourceForm({ film, setDialogOpen }: AddFilmFormProp
 						)}
 
 						<div className="mt-3">
-							{(film?.film_path || film?.trailer_path) && <VideoPlayer src={value} />}
+							{film?.film_path == value && film.id_film && (
+								<VideoPlayer
+									selectorId={film.id_film?.toString()}
+									videoSource={film.film_path}
+									hlsSource={film.film_path}
+								/>
+							)}
+							{film?.trailer_path == value && film.id_film && (
+								<VideoPlayer
+									selectorId={film.id_film?.toString()}
+									videoSource={film.trailer_path}
+									hlsSource={film.trailer_path}
+								/>
+							)}
 						</div>
 					</div>
 				</div>

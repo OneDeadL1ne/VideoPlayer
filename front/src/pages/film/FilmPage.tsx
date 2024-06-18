@@ -53,36 +53,41 @@ export function FilmPage() {
 							</div>
 							<div>
 								<div
-									className={`h-[120px] overflow-y-hidden 
+									className={`h-[${
+										film?.description && film?.description.length > 200
+											? '120px'
+											: '100%'
+									}] overflow-y-hidden 
 										@[1000px]:h-[130px] @[1100px]:h-[150px] 
 									`}
 								>
 									<p className="text-sm mt-5 ">{film?.description}</p>
 								</div>
-
-								<Dialog open={open} onOpenChange={setOpen}>
-									<DialogTrigger>
-										<div
-											className="inline-flex text-primary hover:cursor-pointer "
-											//onClick={() => setOpen(!open)}
+								{film?.description && film?.description.length > 200 && (
+									<Dialog open={open} onOpenChange={setOpen}>
+										<DialogTrigger>
+											<div
+												className="inline-flex text-primary hover:cursor-pointer "
+												//onClick={() => setOpen(!open)}
+											>
+												Подробнее...
+											</div>
+										</DialogTrigger>
+										<DialogContent
+											className="text-accent-foreground"
+											closeIcon={<X className="h-4 w-4" color="#ff6b00" />}
 										>
-											Подробнее...
-										</div>
-									</DialogTrigger>
-									<DialogContent
-										className="text-accent-foreground"
-										closeIcon={<X className="h-4 w-4" color="#ff6b00" />}
-									>
-										<DialogHeader>
-											<DialogTitle className="text-primary">
-												Описание
-											</DialogTitle>
-											<DialogDescription className="text-balance text-accent-foreground text-md mt-10">
-												{film?.description}
-											</DialogDescription>
-										</DialogHeader>
-									</DialogContent>
-								</Dialog>
+											<DialogHeader>
+												<DialogTitle className="text-primary">
+													Описание
+												</DialogTitle>
+												<DialogDescription className="text-balance text-accent-foreground text-md mt-10">
+													{film?.description}
+												</DialogDescription>
+											</DialogHeader>
+										</DialogContent>
+									</Dialog>
+								)}
 							</div>
 
 							<div className="flex  @[900px]:items-center @[1000px]:items-start gap-1 mt-5 ">
@@ -144,51 +149,55 @@ export function FilmPage() {
 							</div>
 						</div>
 					</div>
-					<div className=" items-center gap-1 mt-3">
-						<p className="text-xl text-primary">Режиссер</p>
-						<div className="flex items-center mt-3">
-							{film?.directors.map((director, i) => (
-								<TooltipProvider key={i}>
-									<Tooltip>
-										<TooltipTrigger>
-											<CustomAvatar
-												avatar_url={director.avatar_url}
-												key={i}
-												className="h-14 w-14  border-primary border-[2px] outline-primary"
-											/>
-										</TooltipTrigger>
-										<TooltipContent>
-											<p>
-												{director.first_name} {director.last_name}
-											</p>
-										</TooltipContent>
-									</Tooltip>
-								</TooltipProvider>
-							))}
+					{film?.directors.length != 0 && (
+						<div className=" items-center gap-1 mt-3">
+							<p className="text- xl text-primary">Режиссер</p>
+							<div className="flex items-center mt-3">
+								{film?.directors.map((director, i) => (
+									<TooltipProvider key={i}>
+										<Tooltip>
+											<TooltipTrigger>
+												<CustomAvatar
+													avatar_url={director.avatar_url}
+													key={i}
+													className="h-14 w-14  border-primary border-[2px] outline-primary"
+												/>
+											</TooltipTrigger>
+											<TooltipContent>
+												<p>
+													{director.first_name} {director.last_name}
+												</p>
+											</TooltipContent>
+										</Tooltip>
+									</TooltipProvider>
+								))}
+							</div>
 						</div>
-					</div>
-					<div className=" items-center gap-1 mt-3">
-						<p className="text-xl text-primary">Актеры</p>
-						<div className="flex items-center gap-2 mt-3">
-							{film?.actors.map((actor, i) => (
-								<TooltipProvider key={i}>
-									<Tooltip>
-										<TooltipTrigger>
-											<CustomAvatar
-												avatar_url={actor.avatar_url}
-												className="h-14 w-14  border-primary border-[2px] outline-primary"
-											/>
-										</TooltipTrigger>
-										<TooltipContent>
-											<p>
-												{actor.first_name} {actor.last_name}
-											</p>
-										</TooltipContent>
-									</Tooltip>
-								</TooltipProvider>
-							))}
+					)}
+					{film?.actors.length != 0 && (
+						<div className=" items-center gap-1 mt-3">
+							<p className="text-xl text-primary">Актеры</p>
+							<div className="flex items-center gap-2 mt-3">
+								{film?.actors.map((actor, i) => (
+									<TooltipProvider key={i}>
+										<Tooltip>
+											<TooltipTrigger>
+												<CustomAvatar
+													avatar_url={actor.avatar_url}
+													className="h-14 w-14  border-primary border-[2px] outline-primary"
+												/>
+											</TooltipTrigger>
+											<TooltipContent>
+												<p>
+													{actor.first_name} {actor.last_name}
+												</p>
+											</TooltipContent>
+										</Tooltip>
+									</TooltipProvider>
+								))}
+							</div>
 						</div>
-					</div>
+					)}
 					<div className="mt-5 ">
 						<div className="@container flex justify-center ">
 							{supported && film?.film_path && id && (

@@ -1,5 +1,4 @@
 import { CustomCarousel } from '@/components/carousel';
-import { Skeleton } from '@/components/ui/skeleton';
 
 import { useAppSelector } from '@/hooks/reduxHooks';
 import { useGetFilmsQuery } from '@/redux/api/film';
@@ -8,10 +7,10 @@ import { useGetGenresQuery } from '@/redux/api/genre';
 export default function HomePage() {
 	const { user } = useAppSelector((s) => s.auth);
 
-	const { data: genres, isLoading: isGenreLoading, error: isGenreError } = useGetGenresQuery();
+	const { data: genres, error: isGenreError } = useGetGenresQuery();
 	const {
 		data,
-		isLoading: isFilmLoading,
+
 		error: isFilmError,
 	} = useGetFilmsQuery({ id_user: user?.id_user });
 	const films = data?.filter((x) => x.preview_path != null && x.trailer_path?.length != null);

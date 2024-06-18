@@ -75,7 +75,9 @@ export class VideoController {
     @Headers() headers,
     @Res() res: Response,
   ) {
-    const fileStream = this.videoService.getHlsFileStream(id, type, playlist)
-    fileStream.pipe(res)
+    try {
+      const fileStream = await this.videoService.getHlsFileStream(id, type, playlist)
+      return fileStream.pipe(res)
+    } catch (error) {}
   }
 }

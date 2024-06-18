@@ -31,6 +31,9 @@ export default function FilmsPage() {
 					<div className="grid grid-flow-row grid-cols-3 ">
 						{films?.length != 0 &&
 							films?.map((film, index) => {
+								if (!film.trailer_path || !film.preview_path || !film.film_path) {
+									return;
+								}
 								return (
 									<div className="h-[230px] w-[400px] " key={index}>
 										<CustomCard
@@ -52,6 +55,13 @@ export default function FilmsPage() {
 						<div>
 							{filmsIsSubscribe?.length != 0 &&
 								filmsIsSubscribe?.map((film, index) => {
+									if (
+										!film.trailer_path ||
+										!film.preview_path ||
+										!film.film_path
+									) {
+										return;
+									}
 									return (
 										<div className="h-[250px] w-[430px]" key={index}>
 											<CustomCard

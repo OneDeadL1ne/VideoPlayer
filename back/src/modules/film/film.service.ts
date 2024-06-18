@@ -268,6 +268,7 @@ export class FilmService {
       for (const file of files) {
         await this.filmRepository.update({ is_processed: 2 }, { where: { id_film: id_film } })
         if (type == 'film' || type == 'trailer') {
+          console.log('generate')
           await generateVideo({ path: file.path, id_film, type })
         }
         if (type == 'preview') {

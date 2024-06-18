@@ -59,7 +59,6 @@ export class FilmController {
   @UseInterceptors(
     FilesInterceptor('files', 3, {
       fileFilter: (req, file, callback) => {
-        console.log(file)
         if (!Boolean(file.mimetype.match(/(jpg|jpeg|png|gif|mp4|webp|video\/x-matroska)/))) callback(null, false)
         callback(null, true)
       },
@@ -76,11 +75,11 @@ export class FilmController {
         },
         filename: (req, file, callback) => {
           console.log(file)
-          // const randomName = Array(32)
-          //   .fill(null)
-          //   .map(() => Math.round(Math.random() * 16).toString(16))
-          //   .join('')
-          return callback(null, `${req.query.type}-${file.filename}${extname(file.originalname)}`)
+          const randomName = Array(32)
+            .fill(null)
+            .map(() => Math.round(Math.random() * 16).toString(16))
+            .join('')
+          return callback(null, `${req.query.type}-${randomName}${extname(file.originalname)}`)
         },
       }),
     }),

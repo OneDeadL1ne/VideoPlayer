@@ -27,9 +27,12 @@ export const genresTableColumns: ColumnDef<FilmInterface>[] = [
 		accessorKey: 'directors',
 		header: 'Режиссеры',
 		cell: ({ row }) => {
-			const avatar = row.original.directors[0].avatar_url;
+			const director = row.original.directors[0];
+			if (!director) {
+				return <></>;
+			}
 
-			return <CustomAvatar avatar_url={avatar} />;
+			return <CustomAvatar avatar_url={director.avatar_url} />;
 		},
 	},
 	{
@@ -38,18 +41,24 @@ export const genresTableColumns: ColumnDef<FilmInterface>[] = [
 
 		cell: ({ row }) => {
 			const actors = row.original.actors;
-
+			if (!actors) {
+				return <></>;
+			}
 			return (
 				<div className="flex gap-2">
-					{actors.map((actor) => {
-						if (actor.avatar_url) {
-							return (
-								<CustomAvatar key={actor.id_actor} avatar_url={actor.avatar_url} />
-							);
-						}
+					{actors &&
+						actors.map((actor) => {
+							if (actor.avatar_url) {
+								return (
+									<CustomAvatar
+										key={actor.id_actor}
+										avatar_url={actor.avatar_url}
+									/>
+								);
+							}
 
-						return <CustomAvatar key={actor.id_actor} avatar_url={null} />;
-					})}
+							return <CustomAvatar key={actor.id_actor} avatar_url={null} />;
+						})}
 				</div>
 			);
 		},
