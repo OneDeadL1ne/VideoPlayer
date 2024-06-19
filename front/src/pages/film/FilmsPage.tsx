@@ -24,18 +24,26 @@ export default function FilmsPage() {
 	}, [user]);
 
 	return (
-		<div className="@container flex">
-			<div className=" gap-10">
-				<div>
-					<p>Список фильмов</p>
-					<div className="grid grid-flow-row grid-cols-3 ">
+		<div className="@container flex  justify-center">
+			<div className="flex justify-center items-center gap-10">
+				<div className="flex flex-col justify-center items-center mt-5 ">
+					<div className="flex">
+						<p className="flex flex-row text-primary items-center text-4xl @[450px]:text-5xl   font-semibold ">
+							Список фильмов
+						</p>
+					</div>
+
+					<div className="grid grid-flow-row mt-3 @[900px]:grid-cols-2 @[1300px]:grid-cols-3 ">
 						{films?.length != 0 &&
 							films?.map((film, index) => {
-								if (!film.trailer_path || !film.preview_path || !film.film_path) {
+								if (!film.trailer_path || !film.preview_path) {
 									return;
 								}
 								return (
-									<div className="h-[230px] w-[400px] " key={index}>
+									<div
+										className="@[350px]:h-[200px] @[450px]:h-[230px] @[350px]:w-[340px]  @[450px]:w-[400px] p-2 "
+										key={index}
+									>
 										<CustomCard
 											videoId={film.id_film?.toString()}
 											current={0}
@@ -48,36 +56,40 @@ export default function FilmsPage() {
 								);
 							})}
 					</div>
-				</div>
-				{filmsIsSubscribe.length != 0 && (
-					<div>
-						<p>Список фильмов с подпиской</p>
-						<div>
-							{filmsIsSubscribe?.length != 0 &&
-								filmsIsSubscribe?.map((film, index) => {
-									if (
-										!film.trailer_path ||
-										!film.preview_path ||
-										!film.film_path
-									) {
-										return;
-									}
-									return (
-										<div className="h-[250px] w-[430px]" key={index}>
-											<CustomCard
-												videoId={film.id_film?.toString()}
-												current={0}
-												index={index}
-												film={film}
-												type="films"
-												key={film.id_film}
-											/>
-										</div>
-									);
-								})}
+					{filmsIsSubscribe.length != 0 && (
+						<div className="flex flex-col justify-center items-center mt-5 ">
+							<div className="flex justify-center">
+								<p className="text-primary text-balance text-center text-4xl @[450px]:text-5xl   font-semibold ">
+									Список фильмов с подпиской
+								</p>
+							</div>
+
+							<div className="grid grid-flow-row mt-3 @[900px]:grid-cols-2 @[1300px]:grid-cols-3 ">
+								{filmsIsSubscribe?.length != 0 &&
+									filmsIsSubscribe?.map((film, index) => {
+										if (!film.trailer_path || !film.preview_path) {
+											return;
+										}
+										return (
+											<div
+												className="@[350px]:h-[200px] @[450px]:h-[230px] @[350px]:w-[340px]  @[450px]:w-[400px] p-2 "
+												key={index}
+											>
+												<CustomCard
+													videoId={film.id_film?.toString()}
+													current={0}
+													index={index}
+													film={film}
+													type="films"
+													key={film.id_film}
+												/>
+											</div>
+										);
+									})}
+							</div>
 						</div>
-					</div>
-				)}
+					)}
+				</div>
 			</div>
 		</div>
 	);

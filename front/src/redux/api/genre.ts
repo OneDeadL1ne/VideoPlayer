@@ -12,6 +12,10 @@ const genreApi = api.injectEndpoints({
 			query: (id: number) => ({ url: `genre/${id}`, method: 'GET' }),
 			invalidatesTags: ['Genre'],
 		}),
+		getGenreId: builder.query<GenreInterface, number>({
+			query: (id: number) => ({ url: `genre/${id}`, method: 'GET' }),
+			providesTags: ['Genre'],
+		}),
 		createGenre: builder.mutation<
 			FetchResultInterface<GenreInterface>,
 			Partial<GenreInterface>
@@ -48,5 +52,6 @@ export const {
 	useCreateGenreMutation,
 	useGetGenreMutation,
 	useGetGenresQuery,
+	useGetGenreIdQuery,
 	useUpdateGenreMutation,
 } = genreApi;

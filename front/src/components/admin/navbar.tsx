@@ -68,12 +68,12 @@ export function Navbar({ open }: NavbarProps) {
 			childrenLight: <Voice />,
 			childrenDark: <VoiceDark />,
 		},
-		{
-			title: 'Пользователи',
-			path: '/admin/users',
-			childrenLight: <User />,
-			childrenDark: <UserDark />,
-		},
+		// {
+		// 	title: 'Пользователи',
+		// 	path: '/admin/users',
+		// 	childrenLight: <User />,
+		// 	childrenDark: <UserDark />,
+		// },
 	];
 
 	useEffect(() => {

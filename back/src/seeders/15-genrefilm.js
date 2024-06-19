@@ -28,14 +28,7 @@ module.exports = {
         id_film: 3,
         id_genre: 17,
       },
-      {
-        id_film: 4,
-        id_genre: 9,
-      },
-      {
-        id_film: 4,
-        id_genre: 15,
-      },
+
       {
         id_film: 5,
         id_genre: 16,

@@ -25,16 +25,16 @@ export default function HomePage() {
 					)}
 				</div>
 			</div>
-			<div className="flex justify-start mt-10  items-center @container">
+			<div className="flex justify-start mt-10 mb-5  items-center @container">
 				{!isFilmError && films && (
 					<CustomCarousel data={films} type="default" title="Фильмы" path="/films" />
 				)}
 			</div>
-			<div className="flex justify-start  items-center @container ">
+			{/* <div className="flex justify-start  items-center @container ">
 				{!isGenreError && (
 					<CustomCarousel data={genres!} type="genres" title="Жанры" loop={false} />
 				)}
-			</div>
+			</div> */}
 		</div>
 	);
 }

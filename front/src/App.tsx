@@ -20,10 +20,8 @@ import ProfilePage from './pages/profile/ProfilePage';
 import AuthDialog from './components/dialog/AuthDialog';
 import RegistrationPage from './pages/registration/RegistrationPage';
 import FilmsPage from './pages/film/FilmsPage';
-import HLSVideoPlayer from './components/Video';
-import HlsPlayer from './components/VideoTest';
-import Hls from 'hls.js';
-import VideoPlayer from './components/VideoTest';
+
+import { GenrePage } from './pages/genre/GenrePage';
 
 function App() {
 	const dispatch = useAppDispatch();
@@ -107,6 +105,10 @@ function App() {
 					}
 				/>
 				{!user && <Route path="/registration" element={<RegistrationPage />} />}
+				<Route>
+					<Route path="/genre" element={<GenrePage />} />
+					<Route path="/genre/:id" element={<GenrePage />} />
+				</Route>
 				<Route path="*" element={<NotFoundPage />} />
 			</Route>
 			{user?.role.role_name != 'Пользователь' && user && (

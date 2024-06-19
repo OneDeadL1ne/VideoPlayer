@@ -18,6 +18,7 @@ import { useParams } from 'react-router-dom';
 import VideoPlayer from '@/components/Video';
 import Hls from 'hls.js';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
 export function FilmPage() {
 	const { id } = useParams();
@@ -177,25 +178,28 @@ export function FilmPage() {
 					{film?.actors.length != 0 && (
 						<div className=" items-center gap-1 mt-3">
 							<p className="text-xl text-primary">Актеры</p>
-							<div className="flex items-center gap-2 mt-3">
-								{film?.actors.map((actor, i) => (
-									<TooltipProvider key={i}>
-										<Tooltip>
-											<TooltipTrigger>
-												<CustomAvatar
-													avatar_url={actor.avatar_url}
-													className="h-14 w-14  border-primary border-[2px] outline-primary"
-												/>
-											</TooltipTrigger>
-											<TooltipContent>
-												<p>
-													{actor.first_name} {actor.last_name}
-												</p>
-											</TooltipContent>
-										</Tooltip>
-									</TooltipProvider>
-								))}
-							</div>
+							<ScrollArea>
+								<ScrollBar orientation="horizontal" className="h-2" />
+								<div className="flex items-center gap-2 mt-3">
+									{film?.actors.map((actor, i) => (
+										<TooltipProvider key={i}>
+											<Tooltip>
+												<TooltipTrigger>
+													<CustomAvatar
+														avatar_url={actor.avatar_url}
+														className="h-14 w-14  border-primary border-[2px] outline-primary"
+													/>
+												</TooltipTrigger>
+												<TooltipContent>
+													<p>
+														{actor.first_name} {actor.last_name}
+													</p>
+												</TooltipContent>
+											</Tooltip>
+										</TooltipProvider>
+									))}
+								</div>
+							</ScrollArea>
 						</div>
 					)}
 					<div className="mt-5 ">

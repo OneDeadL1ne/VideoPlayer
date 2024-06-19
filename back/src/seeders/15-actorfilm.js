@@ -28,16 +28,6 @@ module.exports = {
       { id_film: 3, id_actor: 20, position_role: 8 }, // Лакит Стэнфилд - Достать ножи
       { id_film: 3, id_actor: 21, position_role: 9 }, // Кристофер Пламмер - Достать ножи
 
-      { id_film: 4, id_actor: 22, position_role: 1 }, // Брайан Крэнстон - Во все тяжкое
-      { id_film: 4, id_actor: 23, position_role: 2 }, // Аарон Пол - Во все тяжкое
-      { id_film: 4, id_actor: 24, position_role: 3 }, // Анна Ганн - Во все тяжкое
-      { id_film: 4, id_actor: 25, position_role: 4 }, // Дин Норрис - Во все тяжкое
-      { id_film: 4, id_actor: 26, position_role: 5 }, // Бетси Брандт - Во все тяжкое
-      { id_film: 4, id_actor: 27, position_role: 6 }, // Ар Джей Митт - Во все тяжкое
-      { id_film: 4, id_actor: 28, position_role: 7 }, // Боб Оденкерк - Во все тяжкое
-      { id_film: 4, id_actor: 29, position_role: 8 }, // Джонатан Бэнкс - Во все тяжкое
-      { id_film: 4, id_actor: 30, position_role: 9 }, // Джанкарло Эспозито - Во все тяжкое
-
       { id_film: 5, id_actor: 31, position_role: 1 }, // Джесси Айзенберг - Иллюзия обмана
       { id_film: 5, id_actor: 32, position_role: 2 }, // Марк Руффало - Иллюзия обмана
       { id_film: 5, id_actor: 33, position_role: 3 }, // Вуди Харрельсон - Иллюзия обмана

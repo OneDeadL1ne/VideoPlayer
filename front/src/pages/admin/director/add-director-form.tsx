@@ -76,11 +76,11 @@ const AddDirectorForm = ({ director, setDialogOpen }: AddDirectorFormProps) => {
 	};
 
 	const addSuccessMsg = useMemo(() => {
-		return 'Актер добавлен';
+		return 'Режиссер добавлен';
 	}, []);
 
 	const updateSuccessMsg = useMemo(() => {
-		return 'Актер изменен';
+		return 'Режиссер изменен';
 	}, []);
 
 	useEffect(() => {
